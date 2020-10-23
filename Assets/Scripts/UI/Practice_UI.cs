@@ -12,7 +12,14 @@ public class Practice_UI : MonoBehaviour
     public GameObject[] LakiaroBtns;
     public GameObject startBtn;
 
+    private CanvasGroup cg;
+
     public Text[] currDifficultyText;
+
+    void Awake()
+    {
+        cg = GetComponent<CanvasGroup>();
+    }
 
     void Start()
     {
@@ -137,6 +144,8 @@ public class Practice_UI : MonoBehaviour
     public CanvasGroup playBtnCG;
     public GameObject playText;
 
+    public LakiaroManager lm;
+
     public void OnClickPlayBtn()
     {
         if(currLakiaro == -1 && currManos == -1) Debug.Log("Setting" + currLakiaro + currManos);
@@ -144,8 +153,9 @@ public class Practice_UI : MonoBehaviour
         else if (currManos == -1) Debug.Log("Manos" + currLakiaro + currManos);
         else
         {
-
-
+            lm.GenerateRoot();
+            gameObject.SetActive(false);
+            UIManager.Instance.CallInGameUI();
             Init();
         }
     }

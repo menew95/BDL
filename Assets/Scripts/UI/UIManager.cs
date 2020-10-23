@@ -35,10 +35,24 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public GameObject practiceMenu;
+    public CanvasGroup main_UI_CG;
+    public CanvasGroup practice_UI_CG;
+    public CanvasGroup inGame_UI_CG;
 
     public void CallPracticeMenu()
     {
-        practiceMenu.SetActive(true);
+        practice_UI_CG.gameObject.SetActive(true);
+    }
+
+    public void CallInGameUI()
+    {
+        main_UI_CG.gameObject.SetActive(false);
+        inGame_UI_CG.gameObject.SetActive(true);
+    }
+
+    public void CallMainUI()
+    {
+        main_UI_CG.gameObject.SetActive(true);
+        inGame_UI_CG.gameObject.SetActive(false);
     }
 }
