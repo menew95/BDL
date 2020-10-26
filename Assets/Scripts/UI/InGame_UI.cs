@@ -20,9 +20,10 @@ public class InGame_UI : MonoBehaviour
         
     }
 
-    public void UpdateRemainText()
+    public void UpdateRemainText(int remainDirt, int remainRoot, int remainPebble)
     {
-
-
+        remain[0].text = remainDirt.ToString();
+        remain[1].text = remainRoot.ToString();
+        remain[2].text = remainPebble.ToString();
     }
 }
