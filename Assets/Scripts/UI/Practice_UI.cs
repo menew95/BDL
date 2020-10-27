@@ -153,7 +153,7 @@ public class Practice_UI : MonoBehaviour
         else if (currManos == -1) Debug.Log("Manos" + currLakiaro + currManos);
         else
         {
-            lm.GenerateRoot();
+            lm.GenerateLakiaro();
             gameObject.SetActive(false);
             UIManager.Instance.CallInGameUI();
             Init();
