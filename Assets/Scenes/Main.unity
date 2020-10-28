@@ -5766,6 +5766,59 @@ MonoBehaviour:
   pebbleTile:
   - {fileID: 11400000, guid: c29bafe1e1ed2a74e918487a1f827f50, type: 2}
   inGame_UI: {fileID: 1820001489}
+  right_Upper:
+  - {fileID: 11400000, guid: 3efe0b570a897eb40aa32358d11c306e, type: 2}
+  - {fileID: 11400000, guid: 3462a3ea38278d540b443b7b8b52aa1f, type: 2}
+  - {fileID: 11400000, guid: dc352377539f2cd4a986f0d8c7c9689f, type: 2}
+  right_Left:
+  - {fileID: 11400000, guid: aa06b4e6f0e416941be1a9ea664dbcd9, type: 2}
+  - {fileID: 11400000, guid: 05c4d5b166a13264c92a29a001f9dc90, type: 2}
+  - {fileID: 11400000, guid: 26ecea82062bde549a95281744f4eeae, type: 2}
+  right_Lower:
+  - {fileID: 11400000, guid: 27e503305fa482a43979e3ae923f62ea, type: 2}
+  - {fileID: 11400000, guid: ddccd82b215b2cb46a15ba3b4e77dd14, type: 2}
+  - {fileID: 11400000, guid: 25c290f3dbbd58f42ac08701a4359e76, type: 2}
+  upper_Left:
+  - {fileID: 11400000, guid: bcd2bf5e8e2e6e840b84be68b924cd5a, type: 2}
+  - {fileID: 11400000, guid: 31624eaa737ef8c4b9a41e8e3dbf920a, type: 2}
+  - {fileID: 11400000, guid: 070045fc4e42eb04ea596a657ffc97c3, type: 2}
+  upper_Lower:
+  - {fileID: 11400000, guid: ca818692203aac34ca30a59ca6d33db9, type: 2}
+  - {fileID: 11400000, guid: 369843ad7e7656848b6bb1f302b2aedd, type: 2}
+  - {fileID: 11400000, guid: 367804da1c741ff42a12c472a3655d81, type: 2}
+  upper_Right:
+  - {fileID: 11400000, guid: 6431c78c98efae543932fd4814b9c2ff, type: 2}
+  - {fileID: 11400000, guid: cf55f8f4a6ba54f40b77e0aa94fbef6a, type: 2}
+  - {fileID: 11400000, guid: 119614fbb814c7241afc00198ec2fe22, type: 2}
+  left_Lower:
+  - {fileID: 11400000, guid: d810762bd5294a84695f05e4699d4753, type: 2}
+  - {fileID: 11400000, guid: 965a8ce1822f7804090599fea88d5d21, type: 2}
+  - {fileID: 11400000, guid: c4e33e6b3d409594f89ab208b40f5297, type: 2}
+  left_Right:
+  - {fileID: 11400000, guid: aa06b4e6f0e416941be1a9ea664dbcd9, type: 2}
+  - {fileID: 11400000, guid: 02d00b5f0aedb2f45ac32ce059b4e116, type: 2}
+  - {fileID: 11400000, guid: 26ecea82062bde549a95281744f4eeae, type: 2}
+  left_Upper:
+  - {fileID: 11400000, guid: 32dcae423389d4e4b96c5d0a42638262, type: 2}
+  - {fileID: 11400000, guid: 1f29f7d0e0f0e1940b9323f643e862a2, type: 2}
+  - {fileID: 11400000, guid: d25acfbb656966445a3750c52c5bb8d2, type: 2}
+  lower_Right:
+  - {fileID: 11400000, guid: 145637877cea01e43a4c4f6328b57214, type: 2}
+  - {fileID: 11400000, guid: 1c080cb74112598428a99082ebe3d50c, type: 2}
+  - {fileID: 11400000, guid: 25c290f3dbbd58f42ac08701a4359e76, type: 2}
+  lower_Left:
+  - {fileID: 11400000, guid: 22e4112ad1ce625459ab161a0674baa8, type: 2}
+  - {fileID: 11400000, guid: c8157dfc82edc1849a7c53feee7a10f1, type: 2}
+  - {fileID: 11400000, guid: de69a98b12b57ad48a3a7472f28fd6fa, type: 2}
+  lower_Upper:
+  - {fileID: 11400000, guid: ca818692203aac34ca30a59ca6d33db9, type: 2}
+  - {fileID: 11400000, guid: b6543b4a5a534104e849793425738035, type: 2}
+  - {fileID: 11400000, guid: 367804da1c741ff42a12c472a3655d81, type: 2}
+  end:
+  - {fileID: 11400000, guid: 5f55c439017694342bd0367276897abb, type: 2}
+  - {fileID: 11400000, guid: 22689c6ec12722a4ebef7de8cca4cd58, type: 2}
+  - {fileID: 11400000, guid: 10c58626704e3b34684c2bc434616e32, type: 2}
+  - {fileID: 11400000, guid: bf7510f5c8f028c4da9e99d2bb49e45f, type: 2}
 --- !u!4 &1472398053
 Transform:
   m_ObjectHideFlags: 0

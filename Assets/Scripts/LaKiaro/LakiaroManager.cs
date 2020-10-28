@@ -43,14 +43,24 @@ public class Dirt : Lakiaro
 [System.Serializable]
 public class Root : Lakiaro
 {
-    public Root()
+    public Root(int _rootState = 0, Direction _direction = Direction.아래쪽_오른쪽, int _startPoint = 0, int _finishPoint = 0, int _preRootx = 0, int _preRooty = 0, int _currRootx = 0, int _currRooty = 0, int _nextRootx = 0, int _nextRooty = 0)
     {
         this.type = Type.Root;
+
+        rootState = _rootState;
+        direction = _direction;
+        startPoint = _startPoint;
+        finishPoint = _finishPoint;
+        preRootx = _preRootx;
+        preRooty = _preRooty;
+        currRootx = _currRootx;
+        currRooty = _currRooty;
+        nextRootx = _nextRootx;
+        nextRooty = _nextRooty;
     }
 
-    public bool isFirstRoot = false;
-    public bool isFinishRoot = false;
-    enum Direction // 시작_끝
+    public int rootState = 0;//0 > start 1 > middle 2 > finish
+    public enum Direction // 시작_끝
     {
         오른쪽_위쪽,
         오른쪽_왼쪽,
@@ -66,11 +76,26 @@ public class Root : Lakiaro
         아래쪽_왼쪽
     }
     private Direction direction;
+    public Direction GetDirection { get => direction; }
 
     private int startPoint;
     private int finishPoint;
 
+    public Vector3Int GetPreRoot()
+    {
+        return new Vector3Int(preRootx, preRooty, 0);
+    }
+    public Vector3Int GetCurrRoot()
+    {
+        return new Vector3Int(currRootx, currRooty, 0);
+    }
+    public Vector3Int GetNextRoot()
+    {
+        return new Vector3Int(nextRootx, nextRooty, 0);
+    }
+
     private int preRootx, preRooty;
+    private int currRootx, currRooty;
     private int nextRootx, nextRooty;
 }
 
@@ -99,6 +124,21 @@ public class LakiaroManager : MonoBehaviour
     public List<TileBase> basicTile2 = new List<TileBase>();
     public List<TileBase> pebbleTile = new List<TileBase>();
     public InGame_UI inGame_UI;
+
+    [Header("Lakiaro Root TileBase")]
+    public TileBase[] right_Upper; //오른쪽_위쪽,
+    public TileBase[] right_Left;//오른쪽_왼쪽,
+    public TileBase[] right_Lower;//오른쪽_아래쪽,
+    public TileBase[] upper_Left;//위쪽_왼쪽,
+    public TileBase[] upper_Lower;//위쪽_아래쪽,
+    public TileBase[] upper_Right;//위쪽_오른쪽,
+    public TileBase[] left_Lower;//왼쪽_아래쪽,
+    public TileBase[] left_Right;//왼쪽_오른쪽,
+    public TileBase[] left_Upper;//왼쪽_위쪽,
+    public TileBase[] lower_Right;//아래쪽_오른쪽,
+    public TileBase[] lower_Left;//아래쪽_위쪽,
+    public TileBase[] lower_Upper;//아래쪽_왼쪽
+    public TileBase[] end;//아래쪽_왼쪽
     // Start is called before the first frame update
     void Start()
     {
@@ -333,9 +373,17 @@ public class LakiaroManager : MonoBehaviour
         }
     }
 
+    Dictionary<int, Vector3Int> startPos = new Dictionary<int, Vector3Int>
+        {
+            {1, new Vector3Int(4,8,0)},{1, new Vector3Int(5,8,0)},{1, new Vector3Int(6,8,0)},{1, new Vector3Int(7,8,0)},
+            {1, new Vector3Int(8,7,0)},{1, new Vector3Int(8,6,0)},{1, new Vector3Int(8,5,0)},{1, new Vector3Int(8,4,0)},
+            {1, new Vector3Int(7,3,0)},{1, new Vector3Int(6,3,0)},{1, new Vector3Int(5,3,0)},{1, new Vector3Int(4,3,0)},
+            {1, new Vector3Int(3,4,0)},{1, new Vector3Int(3,5,0)},{1, new Vector3Int(3,6,0)},{1, new Vector3Int(3,7,0)},
+        };
+
     public void GenerateRoot(int root = 1)
     {
-        for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
+        /*for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
         {
             for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
             {
@@ -351,9 +399,89 @@ public class LakiaroManager : MonoBehaviour
                     lakiaroRootTileMap.SetTile(vector3Int, temp);
                 }
             }
+        }*/
+        int currRootCount = 0,rootCount = Random.Range(5, 9); // 생성될 뿌리 5~9개 랜덤
+        List<int> startList = new List<int>();
+
+        List<Root> roots = new List<Root>();
+
+        while(currRootCount < rootCount)
+        {
+            bool makeFinish = false, canMake = true;
+
+            int start = Random.Range(0, 16); // 상단 좌측 모서리를 기준으로 시계방향
+            if (startList.Contains(start)) continue; // 이미 뿌리가 있을 경우 다시 뽑음
+            else startList.Add(start);
+
+            int currLength = 0; // 현재까지 생성된 뿌리 길이
+            Root.Direction dir = Root.Direction.오른쪽_왼쪽;
+            switch (start)
+            {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    dir = Root.Direction.아래쪽_위쪽;
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    dir = Root.Direction.왼쪽_오른쪽;
+                    break;
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    dir = Root.Direction.위쪽_아래쪽;
+                    break;
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                    dir = Root.Direction.오른쪽_왼쪽;
+                    break;
+            }
+
+            roots.Add(new Root(0, dir, 0, 0, 0, 0, startPos[start].x, startPos[start].y));
+
+            while (!makeFinish && canMake)
+            {
+                if(CheckDir(ref dir, roots[currLength]))
+
+                if (currLength == 8) makeFinish = true;
+            }
+
+            currRootCount++;
         }
-        
-        //gamePause = false;
+    }
+
+    bool CheckDir(ref Root.Direction dir, Root root)
+    {
+        bool canMake = true;
+
+
+        switch (root.GetDirection)
+        {
+            case Root.Direction.왼쪽_위쪽:
+            case Root.Direction.오른쪽_위쪽:
+            case Root.Direction.아래쪽_위쪽:
+                break;
+            case Root.Direction.왼쪽_오른쪽:
+            case Root.Direction.아래쪽_오른쪽:
+            case Root.Direction.위쪽_오른쪽:
+                break;
+            case Root.Direction.위쪽_아래쪽:
+            case Root.Direction.오른쪽_아래쪽:
+            case Root.Direction.왼쪽_아래쪽:
+                break;
+            case Root.Direction.아래쪽_왼쪽:
+            case Root.Direction.오른쪽_왼쪽:
+            case Root.Direction.위쪽_왼쪽:
+                break;
+        }
+
+        return canMake;
     }
 
     public void GeneratePebble(int pebble = 0)
