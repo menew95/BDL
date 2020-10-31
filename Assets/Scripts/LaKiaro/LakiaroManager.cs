@@ -6,6 +6,8 @@ using DataInfo;
 
 public class LakiaroManager : MonoBehaviour
 {
+    [Header("Lakiaro Hard Root")]
+    public RootDataInfo rootDataInfo;
 
     [Header("Lakiaro Tilemap")]
     public Tilemap lakiaroRootTileMap;
@@ -48,6 +50,32 @@ public class LakiaroManager : MonoBehaviour
     void Start()
     {
         
+    }
+
+    void dataCheck()
+    {
+        for (int i = 0; i < rootDataInfo.up_RootDataList.Count; i++)
+        {
+            Debug.Log((i + 1) + "번째 뿌리");
+            string s = "";
+            for (int j = 0; j < rootDataInfo.up_RootDataList[i].third.Count; j++)
+            {
+                s += rootDataInfo.up_RootDataList[i].third[j].ToString() + ", ";
+            }
+            Debug.Log("Third(" + rootDataInfo.up_RootDataList[i].third.Count + ") : " + s);
+            s = "";
+            for (int j = 0; j < rootDataInfo.up_RootDataList[i].fourth.Count; j++)
+            {
+                s += rootDataInfo.up_RootDataList[i].fourth[j].ToString() + ", ";
+            }
+            Debug.Log("Fourth(" + rootDataInfo.up_RootDataList[i].fourth.Count + ") : " + s);
+            s = "";
+            for (int j = 0; j < rootDataInfo.up_RootDataList[i].fifth.Count; j++)
+            {
+                s += rootDataInfo.up_RootDataList[i].fifth[j].ToString() + ", ";
+            }
+            Debug.Log("Fifth(" + rootDataInfo.up_RootDataList[i].fifth.Count + ") : " + s);
+        }
     }
 
     void Awake()
@@ -366,6 +394,141 @@ public class LakiaroManager : MonoBehaviour
 
             currRootCount++;
         }
+    }
+
+    List<int> tempIndexList = new List<int>();
+    bool CheckCanMakeHardRoot(Vector3Int checkPoint, int dir) // 해당 포인트에 들어 갈 수 있는 뿌리 확인
+    {
+        /// 1~24형태의 뿌리중 가능한 뿌리 인덱스를 출력
+        /// 
+        bool canMake = false;
+
+        int randomIndex = 0, x = 0, y = 0;
+        while (!canMake)
+        {
+            if (tempIndexList.Count == 24) break;
+
+            randomIndex = Random.Range(0, 24);
+
+            if (tempIndexList.Contains(randomIndex)) continue;
+
+            bool cantMake = false;
+
+            for(int i = 2; i < 5; i++)
+            {
+                switch (dir)
+                {
+                    case 0: // up
+                        x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i].x;
+                        y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i].y;
+                        break;
+                    case 1:// right
+                        x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i].y;
+                        y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i].x;
+                        break;
+                    case 2:// down
+                        x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i].x;
+                        y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i].y;
+                        break;
+                    case 3:// left
+                        x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i].y;
+                        y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i].x;
+                        break;
+                }
+
+                if (lakiaroRoot[x, y].type != Lakiaro.Type.Dirt)
+                {
+                    cantMake = true;
+
+                    if (i == 2)
+                    {
+                        tempIndexList.Add(randomIndex + 1);
+                        for (int j = 0; j < rootDataInfo.up_RootDataList[randomIndex].third.Count; j++)
+                        {
+                            if (!tempIndexList.Contains(rootDataInfo.up_RootDataList[randomIndex].third[j])) tempIndexList.Add(rootDataInfo.up_RootDataList[randomIndex].third[j]);
+                        }
+                        break;
+                    }
+                    else if (i == 3)
+                    {
+                        tempIndexList.Add(randomIndex + 1);
+                        for (int j = 0; j < rootDataInfo.up_RootDataList[randomIndex].fourth.Count; j++)
+                        {
+                            if (!tempIndexList.Contains(rootDataInfo.up_RootDataList[randomIndex].third[j])) tempIndexList.Add(rootDataInfo.up_RootDataList[randomIndex].third[j]);
+                        }
+                        break;
+                    }
+                    else if (i == 4)
+                    {
+                        tempIndexList.Add(randomIndex + 1);
+                        for (int j = 0; j < rootDataInfo.up_RootDataList[randomIndex].fifth.Count; j++)
+                        {
+                            if (!tempIndexList.Contains(rootDataInfo.up_RootDataList[randomIndex].third[j])) tempIndexList.Add(rootDataInfo.up_RootDataList[randomIndex].third[j]);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (!cantMake) canMake = true;
+
+        }
+        
+        if (canMake)
+        {
+            Root root;
+
+            for (int i = 0; i < 5; i++)
+            {
+                root = rootPool.Dequeue();
+
+                switch (dir)
+                {
+                    case 0: // up
+                        vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i].x;
+                        vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i].y;
+                        break;
+                    case 1:// right
+                        vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i].y;
+                        vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i].x;
+                        break;
+                    case 2:// down
+                        vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i].x;
+                        vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i].y;
+                        break;
+                    case 3:// left
+                        vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i].y;
+                        vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i].x;
+                        break;
+                }
+
+                root.SetCurrRoot(vector3Int);
+
+                if(i == 0)
+                {
+                    root.rootState = 0;
+
+                    root.SetNextRoot();
+                }
+                else if(i == 4)
+                {
+                    root.rootState = 2;
+
+                    root.SetNextRoot();
+                }
+                else
+                {
+                    root.rootState = 1;
+                    root.SetPreRoot();
+                    root.SetNextRoot();
+                }
+
+            }
+        }
+
+        tempIndexList.Clear();
+
+        return canMake;
     }
 
     bool MakeHardRoot(int _rootCount)

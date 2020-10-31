@@ -5743,6 +5743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9c6b5ededd647a43b9dcdf27c3afefd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rootDataInfo: {fileID: 11400000, guid: c8dd8ba5786d40547adad28dfb1bbc40, type: 2}
   lakiaroRootTileMap: {fileID: 1271091969}
   lakiaroDirtTileMap_Lower: {fileID: 116797652}
   lakiaroDirtTilemap_Upper: {fileID: 1184733578}
