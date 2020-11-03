@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using DataInfo;
-
 public class LakiaroManager : MonoBehaviour
 {
     [Header("Lakiaro Hard Root")]
@@ -96,9 +95,8 @@ public class LakiaroManager : MonoBehaviour
         {
             for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
             {
-                if (i < 8 && i > 3 && j > 3 && j < 8) continue;
-
-                lakiaroRoot[i, j] = dirtPool.Dequeue();
+                if (i < 8 && i > 3 && j > 3 && j < 8) lakiaroRoot[i, j] = new Flower();
+                else lakiaroRoot[i, j] = dirtPool.Dequeue();
             }
         }
     }
@@ -169,6 +167,7 @@ public class LakiaroManager : MonoBehaviour
             else if (vector3Int.y == 8 && vector3Int.x > 3 && vector3Int.x < 8) dir = 0;
             else return;
             CheckCanMakeHardRoot(vector3Int, dir);
+            inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
         }
     }
 
@@ -270,8 +269,8 @@ public class LakiaroManager : MonoBehaviour
     public void GenerateLakiaro(int level = 0)
     {
         GenerateDirt(level); // 단계에 맞게 흙 설정
-        GenerateRoot(level); // 뿌리 생성
-        GeneratePebble(Random.Range(0, 16)); // 뿌리가 안지나가는 공간에 랜덤으로 자갈 생성
+        //GenerateRoot(level); // 뿌리 생성
+        //GeneratePebble(Random.Range(0, 16)); // 뿌리가 안지나가는 공간에 랜덤으로 자갈 생성
 
         inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
     }
@@ -422,7 +421,7 @@ public class LakiaroManager : MonoBehaviour
 
             randomIndex = Random.Range(0, 24);
 
-            if (tempIndexList.Contains(randomIndex)) continue;
+            if (tempIndexList.Contains(randomIndex + 1)) continue;
 
             bool cantMake = false;
 
@@ -450,8 +449,10 @@ public class LakiaroManager : MonoBehaviour
 
                 if (lakiaroRoot[x, y].type != Lakiaro.Type.Dirt)
                 {
-                    cantMake = true;
 
+                    Debug.LogWarning("["+x+","+ y + "] "+ + (randomIndex + 1) + "형태의 "+ (i + 1) + "번째 뿌리 위치");
+
+                    cantMake = true;
                     if (i == 2)
                     {
                         tempIndexList.Add(randomIndex + 1);
@@ -466,7 +467,7 @@ public class LakiaroManager : MonoBehaviour
                         tempIndexList.Add(randomIndex + 1);
                         for (int j = 0; j < rootDataInfo.up_RootDataList[randomIndex].fourth.Count; j++)
                         {
-                            if (!tempIndexList.Contains(rootDataInfo.up_RootDataList[randomIndex].third[j])) tempIndexList.Add(rootDataInfo.up_RootDataList[randomIndex].third[j]);
+                            if (!tempIndexList.Contains(rootDataInfo.up_RootDataList[randomIndex].fourth[j])) tempIndexList.Add(rootDataInfo.up_RootDataList[randomIndex].fourth[j]);
                         }
                         break;
                     }
@@ -475,12 +476,20 @@ public class LakiaroManager : MonoBehaviour
                         tempIndexList.Add(randomIndex + 1);
                         for (int j = 0; j < rootDataInfo.up_RootDataList[randomIndex].fifth.Count; j++)
                         {
-                            if (!tempIndexList.Contains(rootDataInfo.up_RootDataList[randomIndex].third[j])) tempIndexList.Add(rootDataInfo.up_RootDataList[randomIndex].third[j]);
+                            if (!tempIndexList.Contains(rootDataInfo.up_RootDataList[randomIndex].fifth[j])) tempIndexList.Add(rootDataInfo.up_RootDataList[randomIndex].fifth[j]);
                         }
                         break;
                     }
                 }
+
+                cantMake = false;
             }
+            if (cantMake)
+            {
+                Debug.Log("continue");
+                continue;
+            }
+
             sixth.Clear();
             // 6번째 뿌리 확인
             for (int i = 0; i < rootDataInfo.up_RootDataList[randomIndex].lastRootList.Count; i++)
@@ -504,6 +513,7 @@ public class LakiaroManager : MonoBehaviour
                         y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].lastRootList[i].x;
                         break;
                 }
+                Debug.Log(x + " " + y);
                 if (lakiaroRoot[x, y].type == Lakiaro.Type.Dirt)
                 {
                     sixth.Add(i);
@@ -516,11 +526,15 @@ public class LakiaroManager : MonoBehaviour
                 ranSixth = Random.Range(0, sixth.Count);
                 canMake = true;
             }
+
+            if(canMake) Debug.Log(randomIndex + "가능");
         }
 
+        Debug.Log(canMake);
         if (canMake)
         {
             Root root;
+            
 
             for (int i = 0; i < 5; i++)
             {
@@ -552,33 +566,116 @@ public class LakiaroManager : MonoBehaviour
                 if (i == 0)
                 {
                     root.rootState = 0;
-
-                    vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
-                    vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                    switch (dir)
+                    {
+                        case 0: // up
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i +1].x;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                            break;
+                        case 1:// right
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
+                            break;
+                        case 2:// down
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                            break;
+                        case 3:// left
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
+                            break;
+                    }
                     root.SetNextRoot(vector3Int);
                 }
                 else if (i == 4)
                 {
                     root.rootState = 1;
 
-                    vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
-                    vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                    switch (dir)
+                    {
+                        case 0: // up
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                            break;
+                        case 1:// right
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
+                            break;
+                        case 2:// down
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                            break;
+                        case 3:// left
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
+                            break;
+                    }
                     root.SetPreRoot(vector3Int);
 
-                    vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].x;
-                    vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].y;
+                    switch (dir)
+                    {
+                        case 0: // up
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].x;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].y;
+                            break;
+                        case 1:// right
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].y;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].x;
+                            break;
+                        case 2:// down
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].x;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].y;
+                            break;
+                        case 3:// left
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].y;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].x;
+                            break;
+                    }
                     root.SetNextRoot(vector3Int);
                 }
                 else
                 {
-                    root.rootState = 1;
-
-                    vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
-                    vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                    root.rootState = 0;
+                    switch (dir)
+                    {
+                        case 0: // up
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                            break;
+                        case 1:// right
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
+                            break;
+                        case 2:// down
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                            break;
+                        case 3:// left
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].y;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i - 1].x;
+                            break;
+                    }
                     root.SetPreRoot(vector3Int);
 
-                    vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
-                    vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                    switch (dir)
+                    {
+                        case 0: // up
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                            break;
+                        case 1:// right
+                            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
+                            break;
+                        case 2:// down
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
+                            vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                            break;
+                        case 3:// left
+                            vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].y;
+                            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[i + 1].x;
+                            break;
+                    }
                     root.SetNextRoot(vector3Int);
                 }
             }
@@ -602,16 +699,51 @@ public class LakiaroManager : MonoBehaviour
                     vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].lastRootList[ranSixth].x;
                     break;
             }
-
+            Debug.Log(vector3Int);
             root = rootPool.Dequeue();
             root.SetCurrRoot(vector3Int);
             lakiaroRoot[vector3Int.x, vector3Int.y] = root;
 
-            vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[4].x;
-            vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[4].y;
+            root.rootState = 3;
+            switch (dir)
+            {
+                case 0: // up
+                    vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[4].x;
+                    vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[4].y;
+                    break;
+                case 1:// right
+                    vector3Int.x = checkPoint.x + rootDataInfo.up_RootDataList[randomIndex].rootList[4].y;
+                    vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[4].x;
+                    Debug.Log(rootDataInfo.up_RootDataList[randomIndex].rootList[4]);
+                    break;
+                case 2:// down
+                    vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[4].x;
+                    vector3Int.y = checkPoint.y - rootDataInfo.up_RootDataList[randomIndex].rootList[4].y;
+                    break;
+                case 3:// left
+                    vector3Int.x = checkPoint.x - rootDataInfo.up_RootDataList[randomIndex].rootList[4].y;
+                    vector3Int.y = checkPoint.y + rootDataInfo.up_RootDataList[randomIndex].rootList[4].x;
+                    break;
+            }
             root.SetPreRoot(vector3Int);
-        }
 
+            Root temp = lakiaroRoot[checkPoint.x, checkPoint.y] as Root;
+            Debug.Log(lakiaroRoot[checkPoint.x, checkPoint.y].type);
+            for(int i = 0; i < 6; i++)
+            {
+                Debug.Log(i + " " + temp.GetCurrRoot());
+                temp = lakiaroRoot[temp.GetNextRoot().x, temp.GetNextRoot().y] as Root;
+            }
+        }
+        else
+        {
+            tempIndexList.Sort();
+            string s = "";
+            for(int i = 0; i < tempIndexList.Count; i++)
+            {
+                s += tempIndexList[i] + " ";
+            }
+        }
         tempIndexList.Clear();
 
         /*
@@ -623,26 +755,29 @@ public class LakiaroManager : MonoBehaviour
 
         Root currRoot, nextRoot;
         int tempX, tempY;
-        switch (dir)
-        {
-            case 0:
-                (lakiaroRoot[checkPoint.x, checkPoint.y] as Root).GetDirection = Root.Direction.아래쪽_위쪽;
-                break;
-            case 1:
-                (lakiaroRoot[checkPoint.x, checkPoint.y] as Root).GetDirection = Root.Direction.왼쪽_오른쪽;
-                break;
-            case 2:
-                (lakiaroRoot[checkPoint.x, checkPoint.y] as Root).GetDirection = Root.Direction.위쪽_아래쪽;
-                break;
-            case 3:
-                (lakiaroRoot[checkPoint.x, checkPoint.y] as Root).GetDirection = Root.Direction.오른쪽_왼쪽;
-                break;
-        }
-
         if (canMake)
         {
             currRoot = lakiaroRoot[checkPoint.x, checkPoint.y] as Root;
-            for (int i = 1; i < 5; i++)
+
+            switch (dir)
+            {
+                case 0:
+                    currRoot.GetDirection = Root.Direction.아래쪽_위쪽;
+                    break;
+                case 1:
+                    currRoot.GetDirection = Root.Direction.왼쪽_오른쪽;
+                    break;
+                case 2:
+                    currRoot.GetDirection = Root.Direction.위쪽_아래쪽;
+                    break;
+                case 3:
+                    currRoot.GetDirection = Root.Direction.오른쪽_왼쪽;
+                    break;
+            }
+            RootTileSet(currRoot.GetCurrRoot());
+            currRoot = lakiaroRoot[currRoot.GetNextRoot().x, currRoot.GetNextRoot().y] as Root;
+
+            for (int i = 0; i < 4; i++)
             {
 
                 tempX = currRoot.GetCurrRoot().x - currRoot.GetPreRoot().x;
@@ -680,7 +815,7 @@ public class LakiaroManager : MonoBehaviour
                     else if (tempX == -1) currRoot.GetDirection = Root.Direction.위쪽_왼쪽;
                     else if (tempY == -1) currRoot.GetDirection = Root.Direction.위쪽_아래쪽;
                 }
-
+                RootTileSet(currRoot.GetCurrRoot());
 
                 currRoot = lakiaroRoot[currRoot.GetNextRoot().x, currRoot.GetNextRoot().y] as Root;
             }
@@ -688,37 +823,103 @@ public class LakiaroManager : MonoBehaviour
             // 마지막 뿌리
             tempX = currRoot.GetCurrRoot().x - currRoot.GetPreRoot().x;
             tempY = currRoot.GetCurrRoot().y - currRoot.GetPreRoot().y;
-            if (tempX == 1)
-            {
-                currRoot.GetDirection = Root.Direction.왼쪽_오른쪽; lakiaroRootTileMap.SetTile(currRoot.GetCurrRoot(), end[0]);
-            }
-            else if (tempX == -1)
-            {
-                currRoot.GetDirection = Root.Direction.오른쪽_왼쪽; lakiaroRootTileMap.SetTile(currRoot.GetCurrRoot(), end[1]);
-            }
-            else if (tempY == 1)
-            {
-                currRoot.GetDirection = Root.Direction.아래쪽_위쪽; lakiaroRootTileMap.SetTile(currRoot.GetCurrRoot(), end[2]);
-            }
-            else if (tempY == -1)
-            {
-                currRoot.GetDirection = Root.Direction.위쪽_아래쪽;lakiaroRootTileMap.SetTile(currRoot.GetCurrRoot(), end[3]);
-            }
+            if (tempX == 1) currRoot.GetDirection = Root.Direction.왼쪽_오른쪽;
+            else if (tempX == -1) currRoot.GetDirection = Root.Direction.오른쪽_왼쪽;
+            else if (tempY == 1) currRoot.GetDirection = Root.Direction.아래쪽_위쪽;
+            else if (tempY == -1) currRoot.GetDirection = Root.Direction.위쪽_아래쪽;
+            Debug.Log("kk");
+            RootTileSet(currRoot.GetCurrRoot());
         }
+
         return canMake;
     }
 
-    void RootTileSet()
+    void RootTileSet(Vector3Int pos)
     {
-        for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
+
+        if(lakiaroRoot[pos.x, pos.y].type != Lakiaro.Type.Root)
         {
-            for(int j =0; j < lakiaroRoot.GetLength(1); j++)
+            Debug.Log(pos + " : 에러 "+ lakiaroRoot[pos.x, pos.y].type);
+            return;
+        }
+        Root root = lakiaroRoot[pos.x, pos.y] as Root;
+        TileBase[] tileBaseList;
+        
+
+        if(root.rootState == 3)
+        {
+            switch (root.GetDirection)
             {
-                if(lakiaroRoot[i, j].type == Lakiaro.Type.Root)
-                {
-                    //(lakiaroRoot[i, j] as Root).GetDirection
-                }
+                case Root.Direction.아래쪽_위쪽:
+                    Debug.Log(pos);
+                    lakiaroRootTileMap.SetTile(pos, end[2]);
+                    break;
+                case Root.Direction.왼쪽_오른쪽:
+                    Debug.Log(pos);
+                    lakiaroRootTileMap.SetTile(pos, end[0]);
+                    break;
+                case Root.Direction.위쪽_아래쪽:
+                    Debug.Log(pos);
+                    lakiaroRootTileMap.SetTile(pos, end[3]);
+                    break;
+                case Root.Direction.오른쪽_왼쪽:
+                    Debug.Log(pos);
+                    lakiaroRootTileMap.SetTile(pos, end[1]);
+                    break;
             }
+        }
+        else
+        {
+            switch (root.GetDirection)
+            {
+                case Root.Direction.아래쪽_오른쪽:
+                    tileBaseList = lower_Right;
+                    break;
+                case Root.Direction.아래쪽_위쪽:
+                    tileBaseList = lower_Upper;
+                    break;
+                case Root.Direction.아래쪽_왼쪽:
+                    tileBaseList = lower_Left;
+                    break;
+                case Root.Direction.왼쪽_위쪽:
+                    tileBaseList = left_Upper;
+                    break;
+                case Root.Direction.왼쪽_오른쪽:
+                    tileBaseList = left_Right;
+                    break;
+                case Root.Direction.왼쪽_아래쪽:
+                    tileBaseList = left_Lower;
+                    break;
+                case Root.Direction.위쪽_오른쪽:
+                    tileBaseList = upper_Right;
+                    break;
+                case Root.Direction.위쪽_아래쪽:
+                    tileBaseList = upper_Lower;
+                    break;
+                case Root.Direction.위쪽_왼쪽:
+                    tileBaseList = upper_Left;
+                    break;
+                case Root.Direction.오른쪽_아래쪽:
+                    tileBaseList = right_Lower;
+                    break;
+                case Root.Direction.오른쪽_왼쪽:
+                    tileBaseList = right_Left;
+                    break;
+                case Root.Direction.오른쪽_위쪽:
+                    tileBaseList = right_Upper;
+                    break;
+                default:
+                    tileBaseList = right_Upper;
+                    break;
+            }
+
+            TileBase tileBase = null; ;
+            if (root.rootState == 0) tileBase = tileBaseList[0];
+            if (root.rootState == 1) tileBase = tileBaseList[1];
+            if (root.rootState == 2) tileBase = tileBaseList[2];
+
+            lakiaroRootTileMap.SetTile(pos, tileBase);
+            Debug.Log(pos);
         }
     }
 
