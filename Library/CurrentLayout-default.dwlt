@@ -116,10 +116,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 948
-  m_MinSize: {x: 1075, y: 444}
-  m_MaxSize: {x: 22010, y: 10022}
+  m_MinSize: {x: 1077, y: 444}
+  m_MaxSize: {x: 22012, y: 10022}
   vertical: 0
-  controlID: 201
+  controlID: 77
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -189,10 +189,10 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 948
-  m_MinSize: {x: 1075, y: 444}
-  m_MaxSize: {x: 22010, y: 10022}
+  m_MinSize: {x: 1077, y: 444}
+  m_MaxSize: {x: 22012, y: 10022}
   vertical: 0
-  controlID: 202
+  controlID: 78
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -608,23 +608,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
+      m_SelectedIDs: 76350000
+      m_LastClickedID: 13686
       m_ExpandedIDs: 72fbffffb6340000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: Lakiaro Root
-        m_OriginalName: Lakiaro Root
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 13722
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 11}
       m_SearchString: 
@@ -779,7 +779,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: fc0a0100386900003a7d0000aeea00004484000086a402002c7e00002c120100a82401001e1001004a7f0000a805010072da00003c7f0000467f0000785d0000587f000006690000da1f0500167b0500687f00007c7a000038080100769c000064640000f8f000005aca0000b86300008e840000d0f702004215010068ca000084b000007e3700007a38000030680000b8030100bc030100da850100ea7e0000ba2f0000000000000a2e00000e2e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
