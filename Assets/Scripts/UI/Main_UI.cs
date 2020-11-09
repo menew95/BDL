@@ -7,6 +7,8 @@ public class Main_UI : MonoBehaviour
     public void OnClickStartBtn()
     {
         UIManager.Instance.CallPracticeMenu();
+
+        GameManager.Instance.audioManager.CallAudioClip(1);
     }
 
     public void OnClickExitBtn()

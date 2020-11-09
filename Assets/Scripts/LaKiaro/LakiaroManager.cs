@@ -27,13 +27,18 @@ public class LakiaroManager : MonoBehaviour
 
     [SerializeField]
     private int currRemainDirt = 128, currRemainRoot = 0, currRemainPebble = 0;
-
+    private int lakiaroLevel, currLakiaroLevel = 0, manosHoeLevel, currRemainTryTime;
     public TileBase temp;
 
     public bool gamePause = true;
 
-    public List<TileBase> basicTile = new List<TileBase>();
+    public List<List<TileBase>> basicTile = new List<List<TileBase>>();
+    public List<TileBase> basicTile1 = new List<TileBase>();
     public List<TileBase> basicTile2 = new List<TileBase>();
+    public List<TileBase> basicTile3 = new List<TileBase>();
+    public List<TileBase> basicTile4 = new List<TileBase>();
+    public List<TileBase> basicTile5 = new List<TileBase>();
+    public List<TileBase> basicTile6 = new List<TileBase>();
     public List<TileBase> pebbleTile = new List<TileBase>();
     public InGame_UI inGame_UI;
 
@@ -54,7 +59,15 @@ public class LakiaroManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        basicTile.Add(basicTile1);
+        basicTile.Add(basicTile2);
+        basicTile.Add(basicTile3);
+        basicTile.Add(basicTile4);
+        basicTile.Add(basicTile5);
+        basicTile.Add(basicTile6);
 
+        min = Camera.main.WorldToViewportPoint(Vector3.zero);
+        max = Camera.main.WorldToViewportPoint(Vector3.one * 11);
     }
 
     void dataCheck()
@@ -139,67 +152,292 @@ public class LakiaroManager : MonoBehaviour
 
     Vector3 mousePosition;
 
+    float oldTouchDis = 0;
+    Vector2 oldTouchPos;
+    float cameraSize = 11f;
+
+    bool touchs = false;
+    bool moved = false;
+    Vector3 min, max;
+    Vector3 vtowMin, vtowMax, cen;
+    float xSize, ySize;
+    Vector3 initPos = new Vector3(6f, 7f, -10f);
     // Update is called once per frame
     void Update()
     {
         if (gamePause) return;
-        if (Input.GetMouseButtonUp(1))
+        if (Application.platform == RuntimePlatform.Android)
         {
-            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
 
-            if (CheckRoot(mousePosition)) ;
-            inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
+            }
+            else if (Input.GetKeyDown(KeyCode.Home))
+            {
+
+            }
+            else if (Input.GetKeyDown(KeyCode.Menu))
+            {
+
+            }
+            if (Input.touchCount == 1)
+            {
+                if (touchs)
+                {
+                    /*min = Camera.main.WorldToViewportPoint(Vector3.zero);
+                    max = Camera.main.WorldToViewportPoint(Vector3.one * 11);*/
+
+                    vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
+                    vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
+                    cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
+                    xSize = vtowMax.x - vtowMin.x;
+                    ySize = vtowMax.y - vtowMin.y;
+
+                    touchs = false;
+
+                    oldTouchPos = Input.GetTouch(0).position;
+                }
+                else
+                {
+                    if (Input.GetTouch(0).phase == TouchPhase.Began)
+                    {
+                        oldTouchPos = Input.GetTouch(0).position;
+                    }
+                    else if (Input.GetTouch(0).phase == TouchPhase.Moved)
+                    {
+                        Vector3 cPos = oldTouchPos - Input.GetTouch(0).position;
+                        if (cPos.sqrMagnitude > 100)
+                        {
+                            moved = true;
+
+                            if (Camera.main.orthographicSize >= 11) return;
+                            Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
+
+                            cMin.x = xSize / 2;
+                            cMin.y = ySize / 2 + 0.5f;
+                            cMax.x = 12 - xSize / 2;
+                            cMax.y = 12.5f - ySize / 2;
+                            Debug.Log(cMin + " " + cMax);
+                            Vector3 pos = Camera.main.transform.position;
+                            pos += cPos * 0.01f;
+                            pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
+                            pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
+
+                            Debug.Log(pos);
+                            Camera.main.transform.position = pos;
+                            
+                            /*min = Camera.main.WorldToViewportPoint(Vector3.zero);
+                            max = Camera.main.WorldToViewportPoint(Vector3.one * 11);
+                            
+                            Vector3 vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
+                            Vector3 vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
+                            if (vtowMin.x < 0 && cPos.x < 0) { cPos.x = 0; }
+                            if (vtowMax.x > 12 && cPos.x > 0) { cPos.x = 0; }
+                            if (vtowMin.y < 0 && cPos.y < 0) { cPos.y = 0; }
+                            if (vtowMax.y > 12 && cPos.y > 0) { cPos.y = 0; }
+
+                            Camera.main.transform.position += cPos * 0.005f;
+
+                            Vector3 pos = Camera.main.transform.position;
+                            if (vtowMin.x < 0) pos.x -= vtowMin.x;
+                            if (vtowMin.y < 0) pos.y -= vtowMin.y;
+                            if (vtowMax.x > 12) pos.x -= vtowMax.x;
+                            if (vtowMax.y > 12) pos.y -= vtowMax.y;
+
+                            Camera.main.transform.position = pos;*/
+
+
+                            oldTouchPos = Input.GetTouch(0).position;
+                        }
+                    }
+                    else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                    {
+                        if (moved) moved = false;
+                        else
+                        {
+                            if (inGame_UI.currDig == 0)
+                            {
+                                if (currRemainTryTime != 0)
+                                {
+                                    mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                                    SwallowlyDig(mousePosition);
+                                    inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
+                                }
+                            }
+                            else
+                            {
+                                mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                                DeeplyDig(mousePosition);
+                                inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (Input.touchCount == 2)
+            {
+                touchs = true;
+                if (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved)
+                {
+                    float touchDis = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
+                    float fDis = (touchDis - oldTouchDis) * 0.00001f;
+                    cameraSize -= fDis;
+                    cameraSize = Mathf.Clamp(cameraSize, 4f, 11f);
+                    Camera.main.orthographicSize = cameraSize;//Mathf.Lerp(Camera.main.orthographicSize, cameraSize, Time.deltaTime);
+                    oldTouchDis = touchDis;
+
+
+                    if(Camera.main.orthographicSize == 11)
+                    {
+                        Camera.main.transform.position = initPos;
+                    }
+                    else
+                    {
+                        vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
+                        vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
+                        cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
+                        xSize = vtowMax.x - vtowMin.x;
+                        ySize = vtowMax.y - vtowMin.y;
+
+                        Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
+
+                        cMin.x = xSize / 2;
+                        cMin.y = ySize / 2 + 0.5f;
+                        cMax.x = 12 - xSize / 2;
+                        cMax.y = 12.5f - ySize / 2;
+
+                        Vector3 pos = Camera.main.transform.position;
+
+                        pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
+                        pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
+
+                        Camera.main.transform.position = pos;
+                    }
+                }
+            }
         }
-        if (Input.GetMouseButtonUp(0))
+        else
         {
-            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            CheckRoot2(mousePosition);
-            inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
-            /*mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            vector3Int.x = (int)mousePosition.x;
-            vector3Int.y = (int)mousePosition.y;
-            CanMakeRoot(vector3Int);*/
+            if (Input.GetMouseButtonUp(0))
+            {
+                if (inGame_UI.currDig == 0)
+                {
+                    if (currRemainTryTime != 0)
+                    {
+                        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        SwallowlyDig(mousePosition);
+                        inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
+                    }
+                }
+                else
+                {
+                    mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    DeeplyDig(mousePosition);
+                    inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
+                }
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                min = Camera.main.ViewportToWorldPoint(Vector3.zero);
+                max = Camera.main.ViewportToWorldPoint(Vector3.one);
+                
+                oldTouchPos = Input.mousePosition;
+            }
+            if (Input.GetMouseButton(1))
+            {
+                Vector3 cPos = (Vector3)oldTouchPos - Input.mousePosition;
+
+                if (cPos.sqrMagnitude > 100)
+                {
+                    
+                    //min = Camera.main.ViewportToWorldPoint(Vector3.zero);
+                    //max = Camera.main.ViewportToWorldPoint(Vector3.one);
+
+                    Vector3 vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
+                    Vector3 vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
+                    Vector3 cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
+                    float xSize = vtowMax.x - vtowMin.x;
+                    float ySize = vtowMax.y - vtowMin.y;
+                    
+
+                    Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
+
+                    cMin.x = xSize / 2;
+                    cMin.y = ySize / 2 + 0.5f;
+                    cMax.x = 12 - xSize / 2;
+                    cMax.y = 12.5f - ySize / 2;
+                    Debug.Log(cMin + " " + cMax);
+                    Vector3 pos = Camera.main.transform.position;
+                    pos += cPos * 0.01f;
+                    pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
+                    pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
+
+                    Debug.Log(pos);
+                    Camera.main.transform.position = pos;
+                     /*Vector3 pos = Camera.main.transform.position;
+
+
+                     if (vtowMin.x < 0 && cPos.x < 0) { cPos.x = 0; }
+                     if (vtowMax.x > 12 && cPos.x > 0) { cPos.x = 0; }
+                     if (vtowMin.y < 0 && cPos.y < 0) { cPos.y = 0; }
+                     if (vtowMax.y > 12 && cPos.y > 0) { cPos.y = 0; }
+
+                     pos += cPos * 0.01f;
+                     Vector3 vtowCen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
+
+                     if (vtowMin.x < 0) pos.x -= vtowMin.x;
+                     if (vtowMin.y < 0) pos.y -= vtowMin.y;
+                     if (vtowMax.x > 12) pos.x -= vtowMax.x;
+                     if (vtowMax.y > 12) pos.y -= vtowMax.y;
+
+                     Camera.main.transform.position = pos;*/
+
+                     oldTouchPos = Input.mousePosition;
+                }
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha0))
+            {
+                Debug.Log("0");
+                GenerateLakiaro(0);
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha1))
+            {
+                Debug.Log("1");
+                GenerateLakiaro(1);
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha2))
+            {
+                Debug.Log("2");
+                GenerateLakiaro(2);
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha3))
+            {
+                Debug.Log("3");
+                GenerateLakiaro(3);
+            }
+            if (Input.GetKeyUp(KeyCode.Alpha4))
+            {
+                Debug.Log("4");
+                GenerateLakiaro(4);
+            }
+            if (Input.GetKeyUp(KeyCode.I))
+            {
+                Debug.Log("i");
+                InitGame();
+            }
         }
-        if (Input.GetKeyUp(KeyCode.Alpha0))
-        {
-            Debug.Log("0");
-            GenerateLakiaro(0);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha1))
-        {
-            Debug.Log("1");
-            GenerateLakiaro(1);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha2))
-        {
-            Debug.Log("2");
-            GenerateLakiaro(2);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha3))
-        {
-            Debug.Log("3");
-            GenerateLakiaro(3);
-        }
-        if (Input.GetKeyUp(KeyCode.Alpha4))
-        {
-            Debug.Log("4");
-            GenerateLakiaro(4);
-        }
-        if (Input.GetKeyUp(KeyCode.I))
-        {
-            Debug.Log("i");
-            InitGame();
-        }
+
     }
 
     Vector3Int vector3Int = new Vector3Int();
-    public bool CheckRoot(Vector2 point)
+    public bool SwallowlyDig(Vector2 point)
     {
         if (0 > (int)point.x || (int)point.x > 11 || 0 > (int)point.y || (int)point.y > 11) return false;
         if (lakiaroRoot[(int)point.x, (int)point.y].isChecked) return false; // 이미 확인한 곳이면 스킾
 
         bool isRoot = false;
 
+        GameManager.Instance.audioManager.CallAudioClip(2);
         if (lakiaroRoot[(int)point.x, (int)point.y] != null)
         {
             if (lakiaroRoot[(int)point.x, (int)point.y].type == Lakiaro.Type.Root)
@@ -212,28 +450,54 @@ public class LakiaroManager : MonoBehaviour
                 lakiaroDirtTilemap_Upper.SetTile(vector3Int, null);
                 lakiaroRoot[vector3Int.x, vector3Int.y].isChecked = true;
                 Debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 뿌리이다.");
+                
             }
             else if (lakiaroRoot[(int)point.x, (int)point.y].type == Lakiaro.Type.Pebble)
             {
                 Debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 자갈이다.");
             }
+
+            if (lakiaroRoot[(int)point.x, (int)point.y].type != Lakiaro.Type.Flower) currRemainTryTime--;
         }
         else
         {
             Debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 흙이다.");
         }
+        
+        inGame_UI.UpdateRemainTryTime(currRemainTryTime);
 
         return isRoot;
     }
 
-    public bool CheckRoot2(Vector2 point)
+    public bool DeeplyDig(Vector2 point)
     {
         if (0 > (int)point.x || (int)point.x > 11 || 0 > (int)point.y || (int)point.y > 11) return false;
         if (lakiaroRoot[(int)point.x, (int)point.y].isChecked) return false; // 이미 확인한 곳이면 스킾
 
         bool isDirt = false;
 
-        int manosHoeLevel = 9, currCheck = 0;
+        int manos = 9, currCheck = 0;
+
+        switch (manosHoeLevel)
+        {
+            case 1:
+                manos = 6;
+                break;
+            case 2:
+                manos = 7;
+                break;
+            case 3:
+                manos = 8;
+                break;
+            case 4:
+                manos = 9;
+                break;
+            default:
+                manos = 5;
+                break;
+        }
+
+        GameManager.Instance.audioManager.CallAudioClip(0);
 
         for (int y = 1; y > -2; y--)
         {
@@ -273,18 +537,85 @@ public class LakiaroManager : MonoBehaviour
                     }
                 }
 
-                if (manosHoeLevel == currCheck) break;
+                if (manos == currCheck) break;
             }
         }
 
         if (currRemainDirt == 0)
         {
-            UIManager.Instance.CallMainUI();
-            InitGame();
-            gamePause = true;
+            if(currLakiaroLevel < lakiaroLevel)
+            {
+                currLakiaroLevel++;
+                InitGame();
+                NextGame(currLakiaroLevel, manosHoeLevel);
+            }
+            else
+            {
+                UIManager.Instance.CallMainUI();
+                InitGame();
+                gamePause = true;
+            }
         }
 
         return isDirt;
+    }
+
+    public void StartGame(int _lakiaroLevel, int _manosHoeLevel)
+    {
+        lakiaroLevel = _lakiaroLevel;
+        manosHoeLevel = _manosHoeLevel;
+
+        switch (manosHoeLevel)
+        {
+            case 0:
+                currRemainTryTime = 18;
+                break;
+            case 1:
+                currRemainTryTime = 20;
+                break;
+            case 2:
+                currRemainTryTime = 22;
+                break;
+            case 3:
+                currRemainTryTime = 25;
+                break;
+            case 4:
+                currRemainTryTime = 28;
+                break;
+        }
+
+        inGame_UI.UpdateLevel(lakiaroLevel);
+        inGame_UI.UpdateRemainTryTime(currRemainTryTime);
+        currLakiaroLevel = 0;
+        GenerateLakiaro(0);
+
+        gamePause = false;
+    }
+
+    void NextGame(int nextLevel, int _manosHoeLevel)
+    {
+        switch (manosHoeLevel)
+        {
+            case 0:
+                currRemainTryTime = 18;
+                break;
+            case 1:
+                currRemainTryTime = 20;
+                break;
+            case 2:
+                currRemainTryTime = 22;
+                break;
+            case 3:
+                currRemainTryTime = 25;
+                break;
+            case 4:
+                currRemainTryTime = 28;
+                break;
+        }
+
+        inGame_UI.UpdateLevel(lakiaroLevel);
+        inGame_UI.UpdateRemainTryTime(currRemainTryTime);
+        GenerateLakiaro(nextLevel);
     }
 
     public void GenerateLakiaro(int level = 0)
@@ -316,12 +647,13 @@ public class LakiaroManager : MonoBehaviour
                     if (i < 8 && i > 3 && j > 3 && j < 8) continue;
                     vector3Int.x = i;
                     vector3Int.y = j;
-                    lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[Random.Range(0, basicTile.Count)]);
+                    lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[0][Random.Range(0, basicTile.Count)]);
                 }
             }
         }
         else
         {
+            Debug.Log(level);
             for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
             {
                 for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
@@ -330,6 +662,7 @@ public class LakiaroManager : MonoBehaviour
                     vector3Int.x = i;
                     vector3Int.y = j;
                     lakiaroDirtTilemap_Upper.SetTile(vector3Int, lakiaroDirtTileMap_Lower.GetTile(vector3Int));
+                    Debug.Log(lakiaroDirtTileMap_Lower.GetTile(vector3Int).name + " " + lakiaroDirtTilemap_Upper.GetTile(vector3Int).name);
                 }
             }
         }
@@ -339,9 +672,11 @@ public class LakiaroManager : MonoBehaviour
             for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
             {
                 if (i < 8 && i > 3 && j > 3 && j < 8) continue;
+                
                 vector3Int.x = i;
                 vector3Int.y = j;
-                lakiaroDirtTileMap_Lower.SetTile(vector3Int, basicTile2[Random.Range(0, basicTile2.Count)]);
+                lakiaroDirtTileMap_Lower.SetTile(vector3Int, basicTile[level + 1][Random.Range(0, basicTile2.Count)]);
+                Debug.Log(lakiaroDirtTileMap_Lower.GetTile(vector3Int).name + " " + lakiaroDirtTilemap_Upper.GetTile(vector3Int).name);
             }
         }
     }
@@ -365,8 +700,16 @@ public class LakiaroManager : MonoBehaviour
         while (currRootCount != rootCount)
         {
             int startPosIndex = Random.Range(0, 16); // 상단 좌측 모서리를 기준으로 시계방향
+
+            if (checkedStartPosList.Count >= 16)
+            {
+                Debug.LogWarning("뿌리를 전부다 생성 실패");
+                break;
+            }
+
             if (checkedStartPosList.Contains(startPosIndex)) continue; // 이미 뿌리가 있을 경우 다시 뽑음
             else checkedStartPosList.Add(startPosIndex);
+            
 
             Debug.Log(startPosIndex + " " + startPos[startPosIndex] + " " + startPosIndex / 4);
             if (!CheckCanMakeThickRoot(startPos[startPosIndex], startPosIndex / 4))
@@ -414,7 +757,7 @@ public class LakiaroManager : MonoBehaviour
         List<int> sixth = new List<int>();
         while (!canMake)
         {
-            if (tempIndexList.Count == 24) break;
+            if (tempIndexList.Count >= 24) break;
 
             randomIndex = Random.Range(0, 24);
 
@@ -1169,8 +1512,6 @@ public class LakiaroManager : MonoBehaviour
                     }
                 }
             }
-            lakiaroDirtTilemap_Upper.ClearAllTiles();
-            lakiaroDirtTileMap_Lower.ClearAllTiles();
             lakiaroRootTileMap.ClearAllTiles();
 
             rootLists.Clear();
