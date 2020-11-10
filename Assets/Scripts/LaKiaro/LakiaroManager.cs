@@ -184,9 +184,6 @@ public class LakiaroManager : MonoBehaviour
             {
                 if (touchs)
                 {
-                    /*min = Camera.main.WorldToViewportPoint(Vector3.zero);
-                    max = Camera.main.WorldToViewportPoint(Vector3.one * 11);*/
-
                     vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
                     vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
                     cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
@@ -217,35 +214,13 @@ public class LakiaroManager : MonoBehaviour
                             cMin.y = ySize / 2 + 0.5f;
                             cMax.x = 12 - xSize / 2;
                             cMax.y = 12.5f - ySize / 2;
-                            Debug.Log(cMin + " " + cMax);
+
                             Vector3 pos = Camera.main.transform.position;
                             pos += cPos * 0.01f;
                             pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
                             pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
 
-                            Debug.Log(pos);
                             Camera.main.transform.position = pos;
-                            
-                            /*min = Camera.main.WorldToViewportPoint(Vector3.zero);
-                            max = Camera.main.WorldToViewportPoint(Vector3.one * 11);
-                            
-                            Vector3 vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
-                            Vector3 vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
-                            if (vtowMin.x < 0 && cPos.x < 0) { cPos.x = 0; }
-                            if (vtowMax.x > 12 && cPos.x > 0) { cPos.x = 0; }
-                            if (vtowMin.y < 0 && cPos.y < 0) { cPos.y = 0; }
-                            if (vtowMax.y > 12 && cPos.y > 0) { cPos.y = 0; }
-
-                            Camera.main.transform.position += cPos * 0.005f;
-
-                            Vector3 pos = Camera.main.transform.position;
-                            if (vtowMin.x < 0) pos.x -= vtowMin.x;
-                            if (vtowMin.y < 0) pos.y -= vtowMin.y;
-                            if (vtowMax.x > 12) pos.x -= vtowMax.x;
-                            if (vtowMax.y > 12) pos.y -= vtowMax.y;
-
-                            Camera.main.transform.position = pos;*/
-
 
                             oldTouchPos = Input.GetTouch(0).position;
                         }
@@ -261,14 +236,12 @@ public class LakiaroManager : MonoBehaviour
                                 {
                                     mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
                                     SwallowlyDig(mousePosition);
-                                    inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
                                 }
                             }
                             else
                             {
                                 mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
                                 DeeplyDig(mousePosition);
-                                inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
                             }
                         }
                     }
@@ -295,7 +268,7 @@ public class LakiaroManager : MonoBehaviour
                     {
                         vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
                         vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
-                        cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
+
                         xSize = vtowMax.x - vtowMin.x;
                         ySize = vtowMax.y - vtowMin.y;
 
@@ -326,21 +299,16 @@ public class LakiaroManager : MonoBehaviour
                     {
                         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         SwallowlyDig(mousePosition);
-                        inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
                     }
                 }
                 else
                 {
                     mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     DeeplyDig(mousePosition);
-                    inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
                 }
             }
             if (Input.GetMouseButtonDown(1))
             {
-                min = Camera.main.ViewportToWorldPoint(Vector3.zero);
-                max = Camera.main.ViewportToWorldPoint(Vector3.one);
-                
                 oldTouchPos = Input.mousePosition;
             }
             if (Input.GetMouseButton(1))
@@ -349,16 +317,11 @@ public class LakiaroManager : MonoBehaviour
 
                 if (cPos.sqrMagnitude > 100)
                 {
-                    
-                    //min = Camera.main.ViewportToWorldPoint(Vector3.zero);
-                    //max = Camera.main.ViewportToWorldPoint(Vector3.one);
-
                     Vector3 vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
                     Vector3 vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
                     Vector3 cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
                     float xSize = vtowMax.x - vtowMin.x;
                     float ySize = vtowMax.y - vtowMin.y;
-                    
 
                     Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
 
@@ -366,31 +329,13 @@ public class LakiaroManager : MonoBehaviour
                     cMin.y = ySize / 2 + 0.5f;
                     cMax.x = 12 - xSize / 2;
                     cMax.y = 12.5f - ySize / 2;
-                    Debug.Log(cMin + " " + cMax);
+
                     Vector3 pos = Camera.main.transform.position;
                     pos += cPos * 0.01f;
                     pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
                     pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
 
-                    Debug.Log(pos);
                     Camera.main.transform.position = pos;
-                     /*Vector3 pos = Camera.main.transform.position;
-
-
-                     if (vtowMin.x < 0 && cPos.x < 0) { cPos.x = 0; }
-                     if (vtowMax.x > 12 && cPos.x > 0) { cPos.x = 0; }
-                     if (vtowMin.y < 0 && cPos.y < 0) { cPos.y = 0; }
-                     if (vtowMax.y > 12 && cPos.y > 0) { cPos.y = 0; }
-
-                     pos += cPos * 0.01f;
-                     Vector3 vtowCen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
-
-                     if (vtowMin.x < 0) pos.x -= vtowMin.x;
-                     if (vtowMin.y < 0) pos.y -= vtowMin.y;
-                     if (vtowMax.x > 12) pos.x -= vtowMax.x;
-                     if (vtowMax.y > 12) pos.y -= vtowMax.y;
-
-                     Camera.main.transform.position = pos;*/
 
                      oldTouchPos = Input.mousePosition;
                 }
@@ -432,7 +377,8 @@ public class LakiaroManager : MonoBehaviour
     Vector3Int vector3Int = new Vector3Int();
     public bool SwallowlyDig(Vector2 point)
     {
-        if (0 > (int)point.x || (int)point.x > 11 || 0 > (int)point.y || (int)point.y > 11) return false;
+        Debug.Log(point);
+        if (0 > point.x || point.x > 12 || 0 > point.y || point.y > 12) return false;
         if (lakiaroRoot[(int)point.x, (int)point.y].isChecked) return false; // 이미 확인한 곳이면 스킾
 
         bool isRoot = false;
@@ -450,7 +396,8 @@ public class LakiaroManager : MonoBehaviour
                 lakiaroDirtTilemap_Upper.SetTile(vector3Int, null);
                 lakiaroRoot[vector3Int.x, vector3Int.y].isChecked = true;
                 Debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 뿌리이다.");
-                
+
+                inGame_UI.UpdateRemainLakiaroText(1 ,currRemainRoot);
             }
             else if (lakiaroRoot[(int)point.x, (int)point.y].type == Lakiaro.Type.Pebble)
             {
@@ -471,7 +418,7 @@ public class LakiaroManager : MonoBehaviour
 
     public bool DeeplyDig(Vector2 point)
     {
-        if (0 > (int)point.x || (int)point.x > 11 || 0 > (int)point.y || (int)point.y > 11) return false;
+        if (0 > point.x || point.x > 12 || 0 > point.y || point.y > 12) return false;
         if (lakiaroRoot[(int)point.x, (int)point.y].isChecked) return false; // 이미 확인한 곳이면 스킾
 
         bool isDirt = false;
@@ -498,7 +445,7 @@ public class LakiaroManager : MonoBehaviour
         }
 
         GameManager.Instance.audioManager.CallAudioClip(0);
-
+        bool dirt = false, root = false, pebble = false;
         for (int y = 1; y > -2; y--)
         {
             for (int x = -1; x < 2; x++)
@@ -517,6 +464,8 @@ public class LakiaroManager : MonoBehaviour
                     lakiaroDirtTilemap_Upper.SetTile(vector3Int, null);
 
                     lakiaroRoot[vector3Int.x, vector3Int.y].isChecked = true;
+
+                    dirt = true;
                 }
                 else
                 {
@@ -526,10 +475,12 @@ public class LakiaroManager : MonoBehaviour
                         if (lakiaroRoot[vector3Int.x, vector3Int.y].type == Lakiaro.Type.Pebble)
                         {
                             currRemainPebble--;
+                            pebble = true;
                         }
                         else if (lakiaroRoot[vector3Int.x, vector3Int.y].type == Lakiaro.Type.Root)
                         {
                             currRemainRoot--;
+                            root = true;
                         }
 
                         lakiaroDirtTilemap_Upper.SetTile(vector3Int, null);
@@ -541,12 +492,16 @@ public class LakiaroManager : MonoBehaviour
             }
         }
 
+        if (dirt) inGame_UI.UpdateRemainLakiaroText(0, currRemainDirt);
+        if (root) inGame_UI.UpdateRemainLakiaroText(1, currRemainRoot);
+        if (pebble) inGame_UI.UpdateRemainLakiaroText(2, currRemainPebble);
+
         if (currRemainDirt == 0)
         {
             if(currLakiaroLevel < lakiaroLevel)
             {
-                currLakiaroLevel++;
                 InitGame();
+                currLakiaroLevel++;`
                 NextGame(currLakiaroLevel, manosHoeLevel);
             }
             else
@@ -564,6 +519,7 @@ public class LakiaroManager : MonoBehaviour
     {
         lakiaroLevel = _lakiaroLevel;
         manosHoeLevel = _manosHoeLevel;
+        currLakiaroLevel = 0;
 
         switch (manosHoeLevel)
         {
@@ -583,11 +539,9 @@ public class LakiaroManager : MonoBehaviour
                 currRemainTryTime = 28;
                 break;
         }
-
-        inGame_UI.UpdateLevel(lakiaroLevel);
-        inGame_UI.UpdateRemainTryTime(currRemainTryTime);
-        currLakiaroLevel = 0;
         GenerateLakiaro(0);
+        
+        inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
 
         gamePause = false;
     }
@@ -613,9 +567,9 @@ public class LakiaroManager : MonoBehaviour
                 break;
         }
 
-        inGame_UI.UpdateLevel(lakiaroLevel);
-        inGame_UI.UpdateRemainTryTime(currRemainTryTime);
         GenerateLakiaro(nextLevel);
+        
+        inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
     }
 
     public void GenerateLakiaro(int level = 0)
@@ -629,8 +583,6 @@ public class LakiaroManager : MonoBehaviour
             currRemainRoot += rootLists[i].rootList.Count;
             currRemainDirt -= rootLists[i].rootList.Count;
         }
-
-        inGame_UI.UpdateRemainText(currRemainDirt, currRemainRoot, currRemainPebble);
     }
 
     public void GenerateDirt(int level = 0)

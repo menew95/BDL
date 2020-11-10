@@ -39,21 +39,31 @@ public class InGame_UI : MonoBehaviour
         //Debug.Log(Camera.main.ViewportToScreenPoint(Vector3.one) + " " +yMax + " " + min + " " + max + " " + viewMin + " " + viewMax + " " + Camera.main.ViewportToWorldPoint(viewMin) + " " + Camera.main.ViewportToWorldPoint(viewMax));
     }
 
-    public void UpdateRemainText(int remainDirt, int remainRoot, int remainPebble)
+    public void UpdateRemainTexts(int remainDirt, int remainRoot, int remainPebble, int _remainTryTime, int _currlevel, int _lakiaroLevel)
     {
         remain[0].text = remainDirt.ToString();
         remain[1].text = remainRoot.ToString();
         remain[2].text = remainPebble.ToString();
+
+        remainTryTime.text = _remainTryTime.ToString();
+        level.text = (_currlevel + 1).ToString() + " / " + (_lakiaroLevel + 1);
+    }
+
+    public void UpdateRemainLakiaroText(int index, int remainNum)
+    {
+        remain[index].text = remainNum.ToString();
+        StartCoroutine(TextGlowEffect(remain[index].GetComponentInChildren<Image>()));
     }
 
     public void UpdateRemainTryTime(int _remainTryTime)
     {
         remainTryTime.text = _remainTryTime.ToString();
+        StartCoroutine(TextGlowEffect(remainTryTime.GetComponentInChildren<Image>()));
     }
 
-    public void UpdateLevel(int _level)
+    public void UpdateLevel(int _currlevel, int _lakiaroLevel)
     {
-        level.text = (_level + 1).ToString() + " / 5";
+        level.text = (_currlevel + 1).ToString() + " / " + (_lakiaroLevel + 1);
     }
 
     public void ChangeDigType()
@@ -73,5 +83,24 @@ public class InGame_UI : MonoBehaviour
         button[currDig].enabled = false;
         block[currDig].SetActive(false);
 
+    }
+
+    public int effect = 0;
+
+    IEnumerator TextGlowEffect(Image glowEffect)
+    {
+        Color color = Color.white;
+        glowEffect.color = color;
+
+        effect++;
+        while (glowEffect.color.a > 0)
+        {
+            color.a = Mathf.Lerp(color.a, 0f, Time.deltaTime);
+            if (color.a < 0.1f) color.a = 0;
+            glowEffect.color = color;
+            
+            yield return null;
+        }
+        effect--;
     }
 }

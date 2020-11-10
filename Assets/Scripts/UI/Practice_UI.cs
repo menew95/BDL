@@ -157,9 +157,9 @@ public class Practice_UI : MonoBehaviour
         else if (currManos == -1) Debug.Log("Manos" + currLakiaro + currManos);
         else
         {
-            lm.StartGame(currLakiaro, currManos);
-            gameObject.SetActive(false);
             UIManager.Instance.CallInGameUI();
+            gameObject.SetActive(false);
+            lm.StartGame(currLakiaro, currManos);
             Init();
         }
 
