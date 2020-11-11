@@ -15,6 +15,7 @@ public class LakiaroManager : MonoBehaviour
     public RootDataInfo rootDataInfo;
 
     [Header("Lakiaro Tilemap")]
+    public Tilemap lakiaroFlowerTileMap;
     public Tilemap lakiaroRootTileMap;
     public Tilemap lakiaroDirtTileMap_Lower;
     public Tilemap lakiaroDirtTilemap_Upper;
@@ -32,6 +33,11 @@ public class LakiaroManager : MonoBehaviour
 
     public bool gamePause = true;
 
+    [Header("Lakiaro Flower TileBase")]
+    public List<TileBase> lakiaro_Flower_TileBase = new List<TileBase>();
+
+
+    [Header("Lakiaro Dirt TileBase")]
     public List<List<TileBase>> basicTile = new List<List<TileBase>>();
     public List<TileBase> basicTile1 = new List<TileBase>();
     public List<TileBase> basicTile2 = new List<TileBase>();
@@ -501,7 +507,7 @@ public class LakiaroManager : MonoBehaviour
             if(currLakiaroLevel < lakiaroLevel)
             {
                 InitGame();
-                currLakiaroLevel++;`
+                currLakiaroLevel++;
                 NextGame(currLakiaroLevel, manosHoeLevel);
             }
             else
@@ -568,7 +574,7 @@ public class LakiaroManager : MonoBehaviour
         }
 
         GenerateLakiaro(nextLevel);
-        
+
         inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
     }
 
@@ -577,12 +583,39 @@ public class LakiaroManager : MonoBehaviour
         GenerateDirt(level); // 단계에 맞게 흙 설정
         GenerateRoot(); // 뿌리 생성
         GeneratePebble(level); // 뿌리가 안지나가는 공간에 랜덤으로 자갈 생성
-        
-        for(int i = 0; i < rootLists.Count; i++)
+        SetFlowerTile(level);
+        for (int i = 0; i < rootLists.Count; i++)
         {
             currRemainRoot += rootLists[i].rootList.Count;
             currRemainDirt -= rootLists[i].rootList.Count;
         }
+    }
+
+    public void SetFlowerTile(int _currLevel)
+    {
+        int index = 0;
+
+        switch (lakiaroLevel)
+        {
+            case 1:
+                index = 1;
+                break;
+            case 2:
+                index = 3;
+                break;
+            case 3:
+                index = 6;
+                break;
+            case 4:
+                index = 10;
+                break;
+            default:
+                index = 0;
+                break;
+        }
+        Debug.LogWarning(index.ToString() + " "  + currLakiaroLevel.ToString());
+
+        lakiaroFlowerTileMap.SetTile(new Vector3Int(4,7,0), lakiaro_Flower_TileBase[index + currLakiaroLevel]);
     }
 
     public void GenerateDirt(int level = 0)
@@ -605,7 +638,7 @@ public class LakiaroManager : MonoBehaviour
         }
         else
         {
-            Debug.Log(level);
+
             for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
             {
                 for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
