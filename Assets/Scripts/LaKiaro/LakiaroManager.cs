@@ -504,17 +504,14 @@ public class LakiaroManager : MonoBehaviour
 
         if (currRemainDirt == 0)
         {
-            if(currLakiaroLevel < lakiaroLevel)
+            if(lakiaroLevel == currLakiaroLevel)
             {
-                InitGame();
-                currLakiaroLevel++;
-                NextGame(currLakiaroLevel, manosHoeLevel);
+                StartCoroutine(FinishDig(currLakiaroLevel, manosHoeLevel, true));
             }
             else
             {
-                UIManager.Instance.CallMainUI();
-                InitGame();
-                gamePause = true;
+                currLakiaroLevel++;
+                StartCoroutine(FinishDig(currLakiaroLevel, manosHoeLevel, false));
             }
         }
 
@@ -576,6 +573,59 @@ public class LakiaroManager : MonoBehaviour
         GenerateLakiaro(nextLevel);
 
         inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
+    }
+
+    IEnumerator FinishDig(int nextLevel, int _manosHoeLevel, bool lastRound)
+    {
+        switch (manosHoeLevel)
+        {
+            case 0:
+                currRemainTryTime = 18;
+                break;
+            case 1:
+                currRemainTryTime = 20;
+                break;
+            case 2:
+                currRemainTryTime = 22;
+                break;
+            case 3:
+                currRemainTryTime = 25;
+                break;
+            case 4:
+
+
+                currRemainTryTime = 28;
+                break;
+        }
+
+        float timer = 0f;
+        
+        inGame_UI.EnableRound((lastRound) ? true : false);
+
+        lakiaroDirtTilemap_Upper.ClearAllTiles();
+
+        while (timer < 5f)
+        {
+            yield return null;
+            timer += Time.deltaTime;
+        }
+        inGame_UI.DisableRound();
+
+        InitGame();
+
+        if (lastRound)
+        {
+            UIManager.Instance.CallMainUI();
+            gamePause = true;
+        }
+        else
+        {
+            GenerateLakiaro(nextLevel);
+
+            inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
+        }
+
+
     }
 
     public void GenerateLakiaro(int level = 0)

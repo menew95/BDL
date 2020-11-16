@@ -10,6 +10,9 @@ public class InGame_UI : MonoBehaviour
     public Text level;
     public Text remainTryTime;
 
+    public GameObject round;
+    public Text roundText;
+
     public Button[] button;
     public GameObject[] block;
     public int currDig = 0; // 0=> swallowly, 1=> deeply
@@ -102,5 +105,18 @@ public class InGame_UI : MonoBehaviour
             yield return null;
         }
         effect--;
+    }
+
+    public void EnableRound(bool lastRound)
+    {
+        if (!round.activeSelf) round.SetActive(true);
+
+        roundText.text = (!lastRound) ? "흙을 모두 찾는데 성공했습니다." : "라키아로를 수확하였습니다.";
+    }
+
+    public void DisableRound()
+    {
+        if (round.activeSelf) round.SetActive(false);
+
     }
 }
