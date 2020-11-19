@@ -39,19 +39,40 @@ public class UIManager : MonoBehaviour
     public CanvasGroup practice_UI_CG;
     public CanvasGroup inGame_UI_CG;
 
+    public enum UIState
+    {
+        Main,
+        Practice,
+        InGame
+    }
+    public UIState currUIState = UIState.Main;
+
     public void CallPracticeMenu()
     {
+        currUIState = UIState.Practice;
+
         practice_UI_CG.gameObject.SetActive(true);
+    }
+
+    public void ExitPracticeMenu()
+    {
+        currUIState = UIState.Main;
+
+        practice_UI_CG.GetComponent<Practice_UI>().OnExitPlayBtn();
     }
 
     public void CallInGameUI()
     {
+        currUIState = UIState.InGame;
+
         main_UI_CG.gameObject.SetActive(false);
         inGame_UI_CG.gameObject.SetActive(true);
     }
 
     public void CallMainUI()
     {
+        currUIState = UIState.Main;
+
         main_UI_CG.gameObject.SetActive(true);
         inGame_UI_CG.gameObject.SetActive(false);
     }

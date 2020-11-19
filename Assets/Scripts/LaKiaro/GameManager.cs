@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
 
+
+
     public static GameManager Instance
     {
         get
@@ -38,4 +40,57 @@ public class GameManager : MonoBehaviour
     public AudioManager audioManager;
 
     public LakiaroManager lakiaroManager;
+
+    void Update()
+    {
+        if (UIManager.Instance.currUIState == UIManager.UIState.Main)
+        {
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+            }
+        }
+        else if (UIManager.Instance.currUIState == UIManager.UIState.Practice)
+        {
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                UIManager.Instance.ExitPracticeMenu();
+            }
+
+        }
+        else if (UIManager.Instance.currUIState == UIManager.UIState.InGame)
+        {
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                if (lakiaroManager.gamePause)
+                {
+                    SaveGame();
+                }
+                else
+                {
+                    Pause();
+                }
+            }
+        }
+    }
+
+    public void Resume()
+    {
+        lakiaroManager.gamePause = false;
+    }
+
+    public void Pause()
+    {
+        lakiaroManager.gamePause = true;
+        lakiaroManager.inGame_UI.Pause();
+    }
+
+    void SaveGame()
+    {
+        UIManager.Instance.CallMainUI();
+    }
 }

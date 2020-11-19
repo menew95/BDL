@@ -10,8 +10,11 @@ public class InGame_UI : MonoBehaviour
     public Text level;
     public Text remainTryTime;
 
+    public Level_UI level_UI;
     public GameObject round;
     public Text roundText;
+
+    public GameObject resumeBtn;
 
     public Button[] button;
     public GameObject[] block;
@@ -50,6 +53,7 @@ public class InGame_UI : MonoBehaviour
 
         remainTryTime.text = _remainTryTime.ToString();
         level.text = (_currlevel + 1).ToString() + " / " + (_lakiaroLevel + 1);
+        level_UI.SetLevel(_currlevel);
     }
 
     public void UpdateRemainLakiaroText(int index, int remainNum)
@@ -67,6 +71,7 @@ public class InGame_UI : MonoBehaviour
     public void UpdateLevel(int _currlevel, int _lakiaroLevel)
     {
         level.text = (_currlevel + 1).ToString() + " / " + (_lakiaroLevel + 1);
+        level_UI.SetLevel(_currlevel);
     }
 
     public void ChangeDigType()
@@ -118,5 +123,14 @@ public class InGame_UI : MonoBehaviour
     {
         if (round.activeSelf) round.SetActive(false);
 
+    }
+    public void Resume()
+    {
+        resumeBtn.SetActive(false);
+        GameManager.Instance.Resume();
+    }
+    public void Pause()
+    {
+        resumeBtn.SetActive(true);
     }
 }

@@ -171,49 +171,106 @@ public class LakiaroManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gamePause) return;
-        if (Application.platform == RuntimePlatform.Android)
+        if (gamePause)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            return;
+        }
+        else
+        {
+            if (Application.platform == RuntimePlatform.Android)
             {
-
-            }
-            else if (Input.GetKeyDown(KeyCode.Home))
-            {
-
-            }
-            else if (Input.GetKeyDown(KeyCode.Menu))
-            {
-
-            }
-            if (Input.touchCount == 1)
-            {
-                if (touchs)
+                if (Input.touchCount == 1)
                 {
-                    vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
-                    vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
-                    cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
-                    xSize = vtowMax.x - vtowMin.x;
-                    ySize = vtowMax.y - vtowMin.y;
-
-                    touchs = false;
-
-                    oldTouchPos = Input.GetTouch(0).position;
-                }
-                else
-                {
-                    if (Input.GetTouch(0).phase == TouchPhase.Began)
+                    if (touchs)
                     {
+                        vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
+                        vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
+                        cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
+                        xSize = vtowMax.x - vtowMin.x;
+                        ySize = vtowMax.y - vtowMin.y;
+
+                        touchs = false;
+
                         oldTouchPos = Input.GetTouch(0).position;
                     }
-                    else if (Input.GetTouch(0).phase == TouchPhase.Moved)
+                    else
                     {
-                        Vector3 cPos = oldTouchPos - Input.GetTouch(0).position;
-                        if (cPos.sqrMagnitude > 100)
+                        if (Input.GetTouch(0).phase == TouchPhase.Began)
                         {
-                            moved = true;
+                            oldTouchPos = Input.GetTouch(0).position;
+                        }
+                        else if (Input.GetTouch(0).phase == TouchPhase.Moved)
+                        {
+                            Vector3 cPos = oldTouchPos - Input.GetTouch(0).position;
+                            if (cPos.sqrMagnitude > 100)
+                            {
+                                moved = true;
 
-                            if (Camera.main.orthographicSize >= 11) return;
+                                if (Camera.main.orthographicSize >= 11) return;
+                                Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
+
+                                cMin.x = xSize / 2;
+                                cMin.y = ySize / 2 + 0.5f;
+                                cMax.x = 12 - xSize / 2;
+                                cMax.y = 12.5f - ySize / 2;
+
+                                Vector3 pos = Camera.main.transform.position;
+                                pos += cPos * 0.01f;
+                                pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
+                                pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
+
+                                Camera.main.transform.position = pos;
+
+                                oldTouchPos = Input.GetTouch(0).position;
+                            }
+                        }
+                        else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                        {
+                            if (moved) moved = false;
+                            else
+                            {
+                                if (inGame_UI.currDig == 0)
+                                {
+                                    if (currRemainTryTime != 0)
+                                    {
+                                        mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                                        SwallowlyDig(mousePosition);
+                                    }
+                                }
+                                else
+                                {
+                                    mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                                    DeeplyDig(mousePosition);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (Input.touchCount == 2)
+                {
+                    touchs = true;
+                    if (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved)
+                    {
+                        float touchDis = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
+                        float fDis = (touchDis - oldTouchDis) * 0.00001f;
+                        cameraSize -= fDis;
+                        cameraSize = Mathf.Clamp(cameraSize, 4f, 11f);
+                        Camera.main.orthographicSize = cameraSize;//Mathf.Lerp(Camera.main.orthographicSize, cameraSize, Time.deltaTime);
+                        oldTouchDis = touchDis;
+
+
+                        if (Camera.main.orthographicSize == 11)
+                        {
+                            Camera.main.transform.position = initPos;
+                        }
+                        else
+                        {
+                            vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
+                            vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
+
+                            xSize = vtowMax.x - vtowMin.x;
+                            ySize = vtowMax.y - vtowMin.y;
+
                             Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
 
                             cMin.x = xSize / 2;
@@ -222,61 +279,48 @@ public class LakiaroManager : MonoBehaviour
                             cMax.y = 12.5f - ySize / 2;
 
                             Vector3 pos = Camera.main.transform.position;
-                            pos += cPos * 0.01f;
+
                             pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
                             pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
 
                             Camera.main.transform.position = pos;
-
-                            oldTouchPos = Input.GetTouch(0).position;
-                        }
-                    }
-                    else if (Input.GetTouch(0).phase == TouchPhase.Ended)
-                    {
-                        if (moved) moved = false;
-                        else
-                        {
-                            if (inGame_UI.currDig == 0)
-                            {
-                                if (currRemainTryTime != 0)
-                                {
-                                    mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                                    SwallowlyDig(mousePosition);
-                                }
-                            }
-                            else
-                            {
-                                mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                                DeeplyDig(mousePosition);
-                            }
                         }
                     }
                 }
             }
-            else if (Input.touchCount == 2)
+            else
             {
-                touchs = true;
-                if (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved)
+                if (Input.GetMouseButtonUp(0))
                 {
-                    float touchDis = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
-                    float fDis = (touchDis - oldTouchDis) * 0.00001f;
-                    cameraSize -= fDis;
-                    cameraSize = Mathf.Clamp(cameraSize, 4f, 11f);
-                    Camera.main.orthographicSize = cameraSize;//Mathf.Lerp(Camera.main.orthographicSize, cameraSize, Time.deltaTime);
-                    oldTouchDis = touchDis;
-
-
-                    if(Camera.main.orthographicSize == 11)
+                    if (inGame_UI.currDig == 0)
                     {
-                        Camera.main.transform.position = initPos;
+                        if (currRemainTryTime != 0)
+                        {
+                            mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                            SwallowlyDig(mousePosition);
+                        }
                     }
                     else
                     {
-                        vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
-                        vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
+                        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        DeeplyDig(mousePosition);
+                    }
+                }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    oldTouchPos = Input.mousePosition;
+                }
+                if (Input.GetMouseButton(1))
+                {
+                    Vector3 cPos = (Vector3)oldTouchPos - Input.mousePosition;
 
-                        xSize = vtowMax.x - vtowMin.x;
-                        ySize = vtowMax.y - vtowMin.y;
+                    if (cPos.sqrMagnitude > 100)
+                    {
+                        Vector3 vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
+                        Vector3 vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
+                        Vector3 cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
+                        float xSize = vtowMax.x - vtowMin.x;
+                        float ySize = vtowMax.y - vtowMin.y;
 
                         Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
 
@@ -286,95 +330,15 @@ public class LakiaroManager : MonoBehaviour
                         cMax.y = 12.5f - ySize / 2;
 
                         Vector3 pos = Camera.main.transform.position;
-
+                        pos += cPos * 0.01f;
                         pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
                         pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
 
                         Camera.main.transform.position = pos;
+
+                        oldTouchPos = Input.mousePosition;
                     }
                 }
-            }
-        }
-        else
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                if (inGame_UI.currDig == 0)
-                {
-                    if (currRemainTryTime != 0)
-                    {
-                        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                        SwallowlyDig(mousePosition);
-                    }
-                }
-                else
-                {
-                    mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    DeeplyDig(mousePosition);
-                }
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                oldTouchPos = Input.mousePosition;
-            }
-            if (Input.GetMouseButton(1))
-            {
-                Vector3 cPos = (Vector3)oldTouchPos - Input.mousePosition;
-
-                if (cPos.sqrMagnitude > 100)
-                {
-                    Vector3 vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
-                    Vector3 vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
-                    Vector3 cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
-                    float xSize = vtowMax.x - vtowMin.x;
-                    float ySize = vtowMax.y - vtowMin.y;
-
-                    Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
-
-                    cMin.x = xSize / 2;
-                    cMin.y = ySize / 2 + 0.5f;
-                    cMax.x = 12 - xSize / 2;
-                    cMax.y = 12.5f - ySize / 2;
-
-                    Vector3 pos = Camera.main.transform.position;
-                    pos += cPos * 0.01f;
-                    pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
-                    pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
-
-                    Camera.main.transform.position = pos;
-
-                     oldTouchPos = Input.mousePosition;
-                }
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha0))
-            {
-                Debug.Log("0");
-                GenerateLakiaro(0);
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha1))
-            {
-                Debug.Log("1");
-                GenerateLakiaro(1);
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha2))
-            {
-                Debug.Log("2");
-                GenerateLakiaro(2);
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha3))
-            {
-                Debug.Log("3");
-                GenerateLakiaro(3);
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha4))
-            {
-                Debug.Log("4");
-                GenerateLakiaro(4);
-            }
-            if (Input.GetKeyUp(KeyCode.I))
-            {
-                Debug.Log("i");
-                InitGame();
             }
         }
 
@@ -593,8 +557,7 @@ public class LakiaroManager : MonoBehaviour
                 break;
             case 4:
 
-
-                currRemainTryTime = 28;
+           currRemainTryTime = 28;
                 break;
         }
 
