@@ -124,6 +124,24 @@ public class LakiaroManager : MonoBehaviour
                 else lakiaroRoot[i, j] = dirtPool.Dequeue();
             }
         }
+        SetCam();
+    }
+
+    float maxCamSzie;
+    void SetCam()
+    {
+        Vector3 min, max;
+        bool finish = false;
+
+        while (!finish)
+        {
+            Camera.main.orthographicSize += 0.01f;
+            min = Camera.main.WorldToViewportPoint(Vector3.zero);
+            max = Camera.main.WorldToViewportPoint(Vector3.one * 12);
+
+            if (min.x > 0f && max.x < 1f) finish = true;
+        }
+        maxCamSzie = Camera.main.orthographicSize;
     }
 
     public void test()
@@ -181,67 +199,46 @@ public class LakiaroManager : MonoBehaviour
             {
                 if (Input.touchCount == 1)
                 {
-                    if (touchs)
+                    if (Input.GetTouch(0).phase == TouchPhase.Began)
                     {
-                        vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
-                        vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
-                        cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
-                        xSize = vtowMax.x - vtowMin.x;
-                        ySize = vtowMax.y - vtowMin.y;
-
-                        touchs = false;
-
+                        SetCamMoveBox();
                         oldTouchPos = Input.GetTouch(0).position;
                     }
-                    else
+                    else if (Input.GetTouch(0).phase == TouchPhase.Moved)
                     {
-                        if (Input.GetTouch(0).phase == TouchPhase.Began)
+                        Vector3 cPos = oldTouchPos - Input.GetTouch(0).position;
+                        if (cPos.sqrMagnitude > 100)
                         {
+                            moved = true;
+
+                            MoveCam(cPos, Input.GetTouch(0).position);
+
                             oldTouchPos = Input.GetTouch(0).position;
                         }
-                        else if (Input.GetTouch(0).phase == TouchPhase.Moved)
+                    }
+                    else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                    {
+                        if (touchs)
                         {
-                            Vector3 cPos = oldTouchPos - Input.GetTouch(0).position;
-                            if (cPos.sqrMagnitude > 100)
-                            {
-                                moved = true;
+                            touchs = false;
 
-                                if (Camera.main.orthographicSize >= 11) return;
-                                Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
-
-                                cMin.x = xSize / 2;
-                                cMin.y = ySize / 2 + 0.5f;
-                                cMax.x = 12 - xSize / 2;
-                                cMax.y = 12.5f - ySize / 2;
-
-                                Vector3 pos = Camera.main.transform.position;
-                                pos += cPos * 0.01f;
-                                pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
-                                pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
-
-                                Camera.main.transform.position = pos;
-
-                                oldTouchPos = Input.GetTouch(0).position;
-                            }
+                            oldTouchPos = Input.GetTouch(0).position;
                         }
-                        else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                        else if (moved) moved = false;
+                        else
                         {
-                            if (moved) moved = false;
-                            else
+                            if (inGame_UI.currDig == 0)
                             {
-                                if (inGame_UI.currDig == 0)
-                                {
-                                    if (currRemainTryTime != 0)
-                                    {
-                                        mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                                        SwallowlyDig(mousePosition);
-                                    }
-                                }
-                                else
+                                if (currRemainTryTime != 0)
                                 {
                                     mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                                    DeeplyDig(mousePosition);
+                                    SwallowlyDig(mousePosition);
                                 }
+                            }
+                            else
+                            {
+                                mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                                DeeplyDig(mousePosition);
                             }
                         }
                     }
@@ -254,34 +251,22 @@ public class LakiaroManager : MonoBehaviour
                         float touchDis = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
                         float fDis = (touchDis - oldTouchDis) * 0.00001f;
                         cameraSize -= fDis;
-                        cameraSize = Mathf.Clamp(cameraSize, 4f, 11f);
+                        cameraSize = Mathf.Clamp(cameraSize, 4f, maxCamSzie);
                         Camera.main.orthographicSize = cameraSize;//Mathf.Lerp(Camera.main.orthographicSize, cameraSize, Time.deltaTime);
                         oldTouchDis = touchDis;
+                        
+                        SetCamMoveBox();
 
-
-                        if (Camera.main.orthographicSize == 11)
+                        if (Camera.main.orthographicSize == maxCamSzie)
                         {
                             Camera.main.transform.position = initPos;
                         }
                         else
                         {
-                            vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
-                            vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
-
-                            xSize = vtowMax.x - vtowMin.x;
-                            ySize = vtowMax.y - vtowMin.y;
-
-                            Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
-
-                            cMin.x = xSize / 2;
-                            cMin.y = ySize / 2 + 0.5f;
-                            cMax.x = 12 - xSize / 2;
-                            cMax.y = 12.5f - ySize / 2;
-
                             Vector3 pos = Camera.main.transform.position;
 
-                            pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
-                            pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
+                            pos.x = Mathf.Clamp(pos.x, minCamBox.x, maxCamBox.x);
+                            pos.y = Mathf.Clamp(pos.y, minCamBox.y, maxCamBox.y);
 
                             Camera.main.transform.position = pos;
                         }
@@ -308,6 +293,7 @@ public class LakiaroManager : MonoBehaviour
                 }
                 if (Input.GetMouseButtonDown(1))
                 {
+                    SetCamMoveBox();
                     oldTouchPos = Input.mousePosition;
                 }
                 if (Input.GetMouseButton(1))
@@ -316,32 +302,40 @@ public class LakiaroManager : MonoBehaviour
 
                     if (cPos.sqrMagnitude > 100)
                     {
-                        Vector3 vtowMin = Camera.main.ViewportToWorldPoint(inGame_UI.viewMin);
-                        Vector3 vtowMax = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax);
-                        Vector3 cen = Camera.main.ViewportToWorldPoint(Vector3.one * 0.5f);
-                        float xSize = vtowMax.x - vtowMin.x;
-                        float ySize = vtowMax.y - vtowMin.y;
-
-                        Vector3 cMin = Vector3.zero, cMax = Vector3.zero;
-
-                        cMin.x = xSize / 2;
-                        cMin.y = ySize / 2 + 0.5f;
-                        cMax.x = 12 - xSize / 2;
-                        cMax.y = 12.5f - ySize / 2;
-
-                        Vector3 pos = Camera.main.transform.position;
-                        pos += cPos * 0.01f;
-                        pos.x = Mathf.Clamp(pos.x, cMin.x, cMax.x);
-                        pos.y = Mathf.Clamp(pos.y, cMin.y, cMax.y);
-
-                        Camera.main.transform.position = pos;
-
-                        oldTouchPos = Input.mousePosition;
+                        MoveCam(cPos, Input.mousePosition);
                     }
                 }
             }
         }
 
+    }
+
+    Vector2 minCamBox = Vector2.zero, maxCamBox = Vector2.one, centerBox = Vector2.zero;
+    void SetCamMoveBox()
+    {
+        centerBox = Camera.main.ViewportToWorldPoint((inGame_UI.viewMax + inGame_UI.viewMin) / 2f);
+        float width, height, offset;
+        width = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax).x - Camera.main.ViewportToWorldPoint(inGame_UI.viewMin).x;
+        height = Camera.main.ViewportToWorldPoint(inGame_UI.viewMax).y - Camera.main.ViewportToWorldPoint(inGame_UI.viewMin).y;
+
+        offset = Camera.main.orthographicSize / maxCamSzie;
+
+        minCamBox.x = width / 2f; minCamBox.y = height / 2f + offset;
+        maxCamBox.x = 12f - width / 2f; maxCamBox.y = 12f - height / 2f + offset;
+
+        Debug.LogWarning("MinCamBox : " + minCamBox + " MaxCamBox : " + offset);
+    }
+
+    void MoveCam(Vector3 cPos, Vector2 mousePos)
+    {
+        Vector3 pos = Camera.main.transform.position;
+        pos += cPos * 0.01f;
+        pos.x = Mathf.Clamp(pos.x, minCamBox.x, maxCamBox.x);
+        pos.y = Mathf.Clamp(pos.y, minCamBox.y, maxCamBox.y);
+        
+        Camera.main.transform.position = pos;
+
+        oldTouchPos = mousePos;
     }
 
     Vector3Int vector3Int = new Vector3Int();

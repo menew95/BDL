@@ -24,18 +24,47 @@ public class InGame_UI : MonoBehaviour
     Vector3 min, max;
     public Vector3 viewMin, viewMax;
     float yMin, yMax;
+
+
+    public RectTransform top, bottom;
+
+    void SetUISize()
+    {
+        float topH = Camera.main.WorldToScreenPoint(Vector3.up * 12f).y;
+        float botH = Camera.main.WorldToScreenPoint(Vector3.zero).y;
+
+        Debug.LogWarning(Screen.height - topH);
+        topH = ((Screen.height - topH) / Screen.height) * 1920f;
+        botH = (botH / Screen.height) * 1920f;
+        two[0].GetComponent<RectTransform>().sizeDelta = new Vector2(two[0].GetComponent<RectTransform>().sizeDelta.x, topH);
+        two[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -topH / 2);
+        two[1].GetComponent<RectTransform>().sizeDelta = new Vector2(two[1].GetComponent<RectTransform>().sizeDelta.x, botH);
+        two[1].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, botH / 2);
+        //two[0].GetComponent<RectTransform>().rect.Set(0, -(topH / 2f), two[0].GetComponent<RectTransform>().rect.width,topH);
+        //two[1].GetComponent<RectTransform>().rect.Set(0, -(botH / 2f), two[1].GetComponent<RectTransform>().rect.width, botH);
+
+        Debug.LogWarning(topH + " " + botH);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        SetUISize();
+
         yMin = two[1].GetComponent<RectTransform>().rect.y * 2;
         yMax = two[0].GetComponent<RectTransform>().rect.y * 2;
         min = Vector3.zero;
         min.y = -yMin;
         max.x = two[1].GetComponent<RectTransform>().rect.xMax * 2;
         max.y = 1920f + yMax;
+
         viewMin = Camera.main.ScreenToViewportPoint(min);
         viewMax = Camera.main.ScreenToViewportPoint(max);
-        
+        viewMin = new Vector3(0f, (two[0].GetComponent<RectTransform>().sizeDelta.y / 1920f), 0f);
+        viewMax = new Vector3(1f, (1920f - two[1].GetComponent<RectTransform>().sizeDelta.y) / 1920f, 0f);
+
+        Debug.LogWarning(viewMax + " " + viewMin + " " + (two[0].GetComponent<RectTransform>().sizeDelta.y / 1920f) + " " + (1920f - two[1].GetComponent<RectTransform>().sizeDelta.y) / 1920f);
+
     }
 
     // Update is called once per frame
