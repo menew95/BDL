@@ -76,9 +76,9 @@ public class InGame_UI : MonoBehaviour
 
     public void UpdateRemainTexts(int remainDirt, int remainRoot, int remainPebble, int _remainTryTime, int _currlevel, int _lakiaroLevel)
     {
-        remain[0].text = remainDirt.ToString();
-        remain[1].text = remainRoot.ToString();
-        remain[2].text = remainPebble.ToString();
+        remain[0].text = remainDirt.ToString() + "개";
+        remain[1].text = remainRoot.ToString() + "개";
+        remain[2].text = remainPebble.ToString() + "개";
 
         remainTryTime.text = _remainTryTime.ToString();
         level.text = (_currlevel + 1).ToString() + " / " + (_lakiaroLevel + 1);
@@ -87,7 +87,7 @@ public class InGame_UI : MonoBehaviour
 
     public void UpdateRemainLakiaroText(int index, int remainNum)
     {
-        remain[index].text = remainNum.ToString();
+        remain[index].text = remainNum.ToString() + "개";
         StartCoroutine(TextGlowEffect(remain[index].GetComponentInChildren<Image>()));
     }
 

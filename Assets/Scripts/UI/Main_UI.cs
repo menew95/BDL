@@ -30,7 +30,7 @@ public class Main_UI : MonoBehaviour
 
     public void OnClickStartBtn()
     {
-        UIManager.Instance.CallPracticeMenu();
+        UIManager.Instance.CallLobbyUI();
 
         GameManager.Instance.audioManager.CallAudioClip(1);
     }

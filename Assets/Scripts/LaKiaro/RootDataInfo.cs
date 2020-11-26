@@ -20,7 +20,7 @@ public class HardRootData
     /*public List<Root.Direction> rootDirList = new List<Root.Direction>();
     public List<Root.Direction> lastRootDirList = new List<Root.Direction>();*/
 }
-[CreateAssetMenu(fileName = "RootDataInfoSO", menuName = "Create RootDataInfo", order = 2)]
+[CreateAssetMenu(fileName = "RootDataInfoSO", menuName = "CreateSO/RootDataInfo", order = 0)]
 [System.Serializable]
 public class RootDataInfo : ScriptableObject
 {

@@ -1,0 +1,57 @@
+{
+  
+  "isSaveGameData": false,
+  "saveGameData": { "rootLists": [] },
+  "playerData": {
+    "stack": 0,
+    "gold": 0,
+    "manosHoes": []
+  },
+  "LakiaroInfoDataList": [
+    {
+      "pos": {
+        "x": 540.0,
+        "y": 960.0,
+        "z": 0.0
+      },
+      "lakiaroLevel": 4,
+      "coolTime": 0
+    },
+    {
+      "pos": {
+        "x": 956.4000244140625,
+        "y": 1299.800048828125,
+        "z": 0.0
+      },
+      "lakiaroLevel": 0,
+      "coolTime": 0
+    },
+    {
+      "pos": {
+        "x": 113.20001220703125,
+        "y": 1289.199951171875,
+        "z": 0.0
+      },
+      "lakiaroLevel": 1,
+      "coolTime": 0
+    },
+    {
+      "pos": {
+        "x": 55.4000244140625,
+        "y": 794.800048828125,
+        "z": 0.0
+      },
+      "lakiaroLevel": 2,
+      "coolTime": 0
+    },
+    {
+      "pos": {
+        "x": 986.4000244140625,
+        "y": 614.800048828125,
+        "z": 0.0
+      },
+      "lakiaroLevel": 3,
+      "coolTime": 0
+    }
+  ]
+}

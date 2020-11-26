@@ -38,10 +38,12 @@ public class UIManager : MonoBehaviour
     public CanvasGroup main_UI_CG;
     public CanvasGroup practice_UI_CG;
     public CanvasGroup inGame_UI_CG;
+    public CanvasGroup lobby_UI;
 
     public enum UIState
     {
         Main,
+        Lobby,
         Practice,
         InGame
     }
@@ -67,6 +69,7 @@ public class UIManager : MonoBehaviour
 
         main_UI_CG.gameObject.SetActive(false);
         inGame_UI_CG.gameObject.SetActive(true);
+        lobby_UI.gameObject.SetActive(false);
     }
 
     public void CallMainUI()
@@ -75,5 +78,16 @@ public class UIManager : MonoBehaviour
 
         main_UI_CG.gameObject.SetActive(true);
         inGame_UI_CG.gameObject.SetActive(false);
+        lobby_UI.gameObject.SetActive(false);
+    }
+
+    public void CallLobbyUI()
+    {
+        currUIState = UIState.Lobby;
+
+        main_UI_CG.gameObject.SetActive(false);
+        inGame_UI_CG.gameObject.SetActive(false);
+        lobby_UI.gameObject.SetActive(true);
+
     }
 }

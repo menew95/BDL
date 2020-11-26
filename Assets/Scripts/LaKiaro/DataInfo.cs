@@ -5,6 +5,34 @@ using UnityEngine;
 namespace DataInfo
 {
     [System.Serializable]
+    public class LakiaroInfoData
+    {
+        [SerializeField]
+        Vector3 pos;
+        [SerializeField]
+        int lakiaroLevel;
+        [SerializeField]
+        int coolTime;
+
+        public LakiaroInfoData()
+        {
+            coolTime = 0;
+        }
+
+        public LakiaroInfoData(Vector3 _pos, int _lakiaroLevel)
+        {
+            pos = _pos;
+            lakiaroLevel = _lakiaroLevel;
+            coolTime = 0;
+        }
+
+        public Vector3 Pos { get => pos; set => pos = value; }
+        public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
+        public int CoolTime { get => coolTime; set => coolTime = value; }
+    }
+
+
+    [System.Serializable]
     public class Lakiaro
     {
         public enum Type

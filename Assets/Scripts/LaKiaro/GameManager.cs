@@ -41,12 +41,14 @@ public class GameManager : MonoBehaviour
 
     public LakiaroManager lakiaroManager;
 
+    public DataManager dataManager;
     void Update()
     {
         if (UIManager.Instance.currUIState == UIManager.UIState.Main)
         {
             if (Input.GetKeyUp(KeyCode.Escape))
             {
+                dataManager.SaveGameData();
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
 #else
