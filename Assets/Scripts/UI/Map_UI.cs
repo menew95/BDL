@@ -37,8 +37,6 @@ public class Map_UI : MonoBehaviour
         cPos.x = Mathf.Clamp(rectTransform.anchoredPosition.x + cPos.x * 0.5f, -764, 764);
         rectTransform.anchoredPosition = cPos;
         oldPos = newPos;
-
-        lakiaroInfo.UpdateUIPos();
     }
     
 }

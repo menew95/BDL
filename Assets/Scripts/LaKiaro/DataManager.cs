@@ -38,6 +38,8 @@ public class DataManager : MonoBehaviour
 
     public void SaveGameData()
     {
+        gameData.userIndate = System.DateTime.Now.ToString();
+
         string toJsonData = JsonUtility.ToJson(gameData);
         string dataPath;
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN

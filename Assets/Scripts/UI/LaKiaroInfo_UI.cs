@@ -48,13 +48,10 @@ public class LaKiaroInfo_UI : MonoBehaviour
 
     public void SetPos(Vector3 pos)
     {
-        infoUIPos = pos;
-
         GetComponent<RectTransform>().anchoredPosition = pos;
-    }
-    
-    public void UpdateUIPos()
-    {
+
+        infoUIPos = transform.position;
+
 
     }
 }

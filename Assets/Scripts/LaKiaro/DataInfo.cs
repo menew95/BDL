@@ -12,11 +12,19 @@ namespace DataInfo
         [SerializeField]
         int lakiaroLevel;
         [SerializeField]
-        int coolTime;
+        string generateTime;
+        [SerializeField]
+        int coolTime = 0;
+        [SerializeField]
+        bool isDig = false;
+        [SerializeField]
+        bool currDigging = false;
 
         public LakiaroInfoData()
         {
             coolTime = 0;
+            IsDig = true;
+            CurrDigging = false;
         }
 
         public LakiaroInfoData(Vector3 _pos, int _lakiaroLevel)
@@ -24,11 +32,15 @@ namespace DataInfo
             pos = _pos;
             lakiaroLevel = _lakiaroLevel;
             coolTime = 0;
+            IsDig = false;
         }
 
         public Vector3 Pos { get => pos; set => pos = value; }
         public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
         public int CoolTime { get => coolTime; set => coolTime = value; }
+        public string GenerateTime { get => generateTime; set => generateTime = value; }
+        public bool IsDig { get => isDig; set => isDig = value; }
+        public bool CurrDigging { get => currDigging; set => currDigging = value; }
     }
 
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DataInfo;
+using System;
+
 [CreateAssetMenu(fileName = "GameDataSO", menuName = "CreateSO/GameDataScriptableObject", order = 2)]
 [System.Serializable]
 public class GameDataScriptableObject : ScriptableObject
@@ -12,6 +14,8 @@ public class GameDataScriptableObject : ScriptableObject
 [System.Serializable]
 public class GameData
 {
+    public string userIndate;
+
     public bool isSaveGameData = false;
 
     public SaveGameData saveGameData;
