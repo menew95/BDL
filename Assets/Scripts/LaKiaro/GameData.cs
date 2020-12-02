@@ -18,7 +18,7 @@ public class GameData
 
     public bool isSaveGameData = false;
 
-    public SaveGameData saveGameData;
+    public LakiaroGameData lakiaroGameData;
 
     public PlayerData playerData;
 
@@ -26,11 +26,25 @@ public class GameData
 }
 
 [System.Serializable]
-public class SaveGameData
+public class LakiaroGameData
 {
-    public Lakiaro[,] lakiaroRoot = new Lakiaro[12, 12];
+    private Lakiaro[,] lakiaroRoot = new Lakiaro[12, 12];
     [SerializeField]
     private List<RootList> rootLists = new List<RootList>();
+
+    private int lakiaroLevel;
+    private int currLevel;
+    private int manosHoeLevel;
+    private int currRemainTryTime;
+    private float progress;
+
+    public Lakiaro[,] LakiaroRoot { get => lakiaroRoot; set => lakiaroRoot = value; }
+    public List<RootList> RootLists { get => rootLists; set => rootLists = value; }
+    public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
+    public int CurrLevel { get => currLevel; set => currLevel = value; }
+    public int ManosHoeLevel { get => manosHoeLevel; set => manosHoeLevel = value; }
+    public int CurrRemainTryTime { get => currRemainTryTime; set => currRemainTryTime = value; }
+    public float Progress { get => progress; set => progress = value; }
 }
 
 [System.Serializable]

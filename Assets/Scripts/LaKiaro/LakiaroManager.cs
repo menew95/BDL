@@ -20,7 +20,11 @@ public class LakiaroManager : MonoBehaviour
     public Tilemap lakiaroDirtTileMap_Lower;
     public Tilemap lakiaroDirtTilemap_Upper;
 
+    [SerializeField]
+    private List<RootList> rootLists = new List<RootList>();
     public Lakiaro[,] lakiaroRoot = new Lakiaro[12, 12];
+    private int lakiaroLevel, currLakiaroLevel = 0, manosHoeLevel, currRemainTryTime;
+    public float progress;
 
     public Queue<Dirt> dirtPool = new Queue<Dirt>();
     public Queue<Root> rootPool = new Queue<Root>();
@@ -28,7 +32,6 @@ public class LakiaroManager : MonoBehaviour
 
     [SerializeField]
     private int currRemainDirt = 128, currRemainRoot = 0, currRemainPebble = 0;
-    private int lakiaroLevel, currLakiaroLevel = 0, manosHoeLevel, currRemainTryTime;
     public TileBase temp;
 
     public bool gamePause = true;
@@ -62,6 +65,8 @@ public class LakiaroManager : MonoBehaviour
     public TileBase[] lower_Left;//아래쪽_위쪽,
     public TileBase[] lower_Upper;//아래쪽_왼쪽
     public TileBase[] end;//아래쪽_왼쪽
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -572,7 +577,8 @@ public class LakiaroManager : MonoBehaviour
 
         if (lastRound)
         {
-            UIManager.Instance.CallMainUI();
+            UIManager.Instance.CallLobbyUI();
+            UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
             gamePause = true;
         }
         else
@@ -581,7 +587,6 @@ public class LakiaroManager : MonoBehaviour
 
             inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
         }
-
 
     }
 
@@ -734,8 +739,6 @@ public class LakiaroManager : MonoBehaviour
     }
 
     List<int> tempIndexList = new List<int>();
-    [SerializeField]
-    private List<RootList> rootLists = new List<RootList>();
     bool CheckCanMakeThickRoot(Vector3Int checkPoint, int dir) // 해당 포인트에 들어 갈 수 있는 뿌리 확인
     {
         // 1~24형태의 뿌리중 가능한 뿌리 인덱스를 출력
@@ -1519,6 +1522,32 @@ public class LakiaroManager : MonoBehaviour
         Debug.Log(dirtPool.Count);
         Debug.Log(rootPool.Count);
         Debug.Log(pebblePool.Count);
+    }
+
+    public void LoadGameData()
+    {
+        lakiaroRoot = GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot;
+        /*for(int i = 0; i < GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists.Count; i++)
+        {
+            rootLists.Add(new RootList());
+            for (int j = 0; j < GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList.Count; j++)
+            {
+                rootLists[i].rootList.Add(GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList[j]);
+            }
+        }*/
+        rootLists = GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists;
+
+        lakiaroLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroLevel;
+        currLakiaroLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrLevel;
+        manosHoeLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeLevel;
+        currRemainTryTime = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime;
+        progress = GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress;
+
+}
+
+    public void SaveGameData()
+    {
+
     }
 }
 

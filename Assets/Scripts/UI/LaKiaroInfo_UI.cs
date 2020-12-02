@@ -51,7 +51,6 @@ public class LaKiaroInfo_UI : MonoBehaviour
         GetComponent<RectTransform>().anchoredPosition = pos;
 
         infoUIPos = transform.position;
-
-
+        
     }
 }
