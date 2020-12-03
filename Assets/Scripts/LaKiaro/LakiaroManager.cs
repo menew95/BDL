@@ -310,6 +310,18 @@ public class LakiaroManager : MonoBehaviour
                         MoveCam(cPos, Input.mousePosition);
                     }
                 }
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    SaveGameData();
+                }
+                if (Input.GetKeyDown(KeyCode.L))
+                {
+                    LoadGameData();
+                }
+                if (Input.GetKeyDown(KeyCode.I))
+                {
+                    InitGame();
+                }
             }
         }
 
@@ -1288,6 +1300,10 @@ public class LakiaroManager : MonoBehaviour
             if (root.rootState == 0) lakiaroRootTileMap.SetTile(root.GetCurrRoot(), tileBaseList[0]);
             else if (root.rootState == 1) lakiaroRootTileMap.SetTile(root.GetCurrRoot(), tileBaseList[1]);
             else if (root.rootState == 2) lakiaroRootTileMap.SetTile(root.GetCurrRoot(), tileBaseList[2]);
+            else
+            {
+                Debug.Log("??" + root.rootState + root.ToString());
+            }
         }
 
         root = rootList.rootList[rootList.rootList.Count - 1];
@@ -1526,16 +1542,23 @@ public class LakiaroManager : MonoBehaviour
 
     public void LoadGameData()
     {
-        lakiaroRoot = GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot;
-        /*for(int i = 0; i < GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists.Count; i++)
+        for(int i = 0; i < GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot.Count; i++)
+        {
+            for (int j = 0; j < GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot[i].LakiaroList.Count; j++)
+            {
+                lakiaroRoot[i, j] = GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot[i].LakiaroList[j];
+            }
+        }
+
+        for (int i = 0; i < GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists.Count; i++)
         {
             rootLists.Add(new RootList());
             for (int j = 0; j < GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList.Count; j++)
             {
                 rootLists[i].rootList.Add(GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList[j]);
             }
-        }*/
-        rootLists = GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists;
+        }
+        //rootLists = GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists;
 
         lakiaroLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroLevel;
         currLakiaroLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrLevel;
@@ -1543,10 +1566,107 @@ public class LakiaroManager : MonoBehaviour
         currRemainTryTime = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime;
         progress = GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress;
 
-}
+        LoadLakiaro();
+    }
+
+    void LoadLakiaro()
+    {
+
+        SetFlowerTile(currLakiaroLevel);
+        LoadDirt();
+
+        currRemainDirt = 0;
+        currRemainPebble = 0;
+        currRemainRoot = 0;
+        for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
+        {
+            for(int j = 0; j < lakiaroRoot.GetLength(1); j++)
+            {
+                switch (lakiaroRoot[i, j].type)
+                {
+                    case Lakiaro.Type.Pebble:
+                        vector3Int.x = i;
+                        vector3Int.y = j;
+                        lakiaroRootTileMap.SetTile(vector3Int,pebbleTile[Random.Range(0, pebbleTile.Count)]);
+                        if (!lakiaroRoot[i, j].isChecked)
+                        {
+                            currRemainPebble++;
+                        }
+                        break;
+                    case Lakiaro.Type.Root:
+                        if (!lakiaroRoot[i, j].isChecked)
+                        {
+                            currRemainRoot++;
+                        }
+                        break;
+                    case Lakiaro.Type.Dirt:
+                        if (!lakiaroRoot[i, j].isChecked)
+                        {
+                            currRemainDirt++;
+                        }
+                        break;
+                }
+            }
+        }
+
+        for(int i = 0; i < rootLists.Count; i++)
+        {
+            if(!SettingRootTileBase(rootLists[i])) Debug.Log("불러온 뿌리 데이터 타일맵 설정중 에러 " + i);
+        }
+
+        inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
+    }
+
+    void LoadDirt()
+    {
+        lakiaroDirtTilemap_Upper.ClearAllTiles();
+        for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
+        {
+            for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
+            {
+                if (i < 8 && i > 3 && j > 3 && j < 8) continue;
+
+                vector3Int.x = i;
+                vector3Int.y = j;
+                
+                if (!lakiaroRoot[i, j].isChecked)
+                {
+                    lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[currLakiaroLevel][Random.Range(0, basicTile[currLakiaroLevel].Count)]);
+                }
+                lakiaroDirtTileMap_Lower.SetTile(vector3Int, basicTile[currLakiaroLevel + 1][Random.Range(0, basicTile[currLakiaroLevel + 1].Count)]);
+
+            }
+        }
+    }
 
     public void SaveGameData()
     {
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot.Clear();
+        //GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot = lakiaroRoot;
+        for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
+        {
+            GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot.Add(new LakiaroListData());
+            for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
+            {
+                GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot[i].LakiaroList.Add(lakiaroRoot[i, j]);
+            }
+        }
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists.Clear();
+        for (int i = 0; i < rootLists.Count; i++)
+        {
+            GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists.Add(new RootList());
+            for (int j = 0; j < rootLists[i].rootList.Count; j++)
+            {
+                GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList.Add(rootLists[i].rootList[j]);
+            }
+        }
+        //GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists = rootLists;
+
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroLevel = lakiaroLevel;
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrLevel = currLakiaroLevel;
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeLevel = manosHoeLevel;
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime = currRemainTryTime;
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress = progress;
 
     }
 }

@@ -26,19 +26,34 @@ public class GameData
 }
 
 [System.Serializable]
+public class LakiaroListData
+{
+    [SerializeField]
+    private List<Lakiaro> lakiaroList = new List<Lakiaro>();
+
+    public List<Lakiaro> LakiaroList { get => lakiaroList; set => lakiaroList = value; }
+}
+
+[System.Serializable]
 public class LakiaroGameData
 {
-    private Lakiaro[,] lakiaroRoot = new Lakiaro[12, 12];
+    [SerializeField]
+    private List<LakiaroListData> lakiaroRoot = new List<LakiaroListData>();
     [SerializeField]
     private List<RootList> rootLists = new List<RootList>();
 
+    [SerializeField]
     private int lakiaroLevel;
+    [SerializeField]
     private int currLevel;
+    [SerializeField]
     private int manosHoeLevel;
+    [SerializeField]
     private int currRemainTryTime;
+    [SerializeField]
     private float progress;
 
-    public Lakiaro[,] LakiaroRoot { get => lakiaroRoot; set => lakiaroRoot = value; }
+    public List<LakiaroListData> LakiaroRoot { get => lakiaroRoot; set => lakiaroRoot = value; }
     public List<RootList> RootLists { get => rootLists; set => rootLists = value; }
     public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
     public int CurrLevel { get => currLevel; set => currLevel = value; }

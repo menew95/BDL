@@ -136,6 +136,7 @@ namespace DataInfo
             아래쪽_위쪽,
             아래쪽_왼쪽
         }
+        [SerializeField]
         private Direction direction;
         public Direction GetDirection { get => direction; set => direction = value; }
 
@@ -170,8 +171,11 @@ namespace DataInfo
             nextRooty = pos.y;
         }
 
+        [SerializeField]
         private int preRootx, preRooty;
+        [SerializeField]
         private int currRootx, currRooty;
+        [SerializeField]
         private int nextRootx, nextRooty;
     }
 }
