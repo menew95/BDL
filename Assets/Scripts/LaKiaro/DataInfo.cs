@@ -8,17 +8,17 @@ namespace DataInfo
     public class LakiaroInfoData
     {
         [SerializeField]
-        Vector3 pos;
+        Vector3 pos; // 라키아로 버튼 UI 위치(앵커포지션 기준)
         [SerializeField]
-        int lakiaroLevel;
+        int lakiaroLevel; // 라키아로 레벨
         [SerializeField]
-        string generateTime;
+        string generateTime; // 라키아로 생성 시간
         [SerializeField]
-        int coolTime = 0;
+        int coolTime = 0; // 라키아로 캔후 재생성까지 걸릴 시간
         [SerializeField]
-        bool isDig = false;
+        bool isDig = false; // 수확이 끝난 라키아로 확인
         [SerializeField]
-        bool currDigging = false;
+        bool currDigging = false; // 진행중이던 게임 확인
 
         public LakiaroInfoData()
         {
@@ -61,6 +61,17 @@ namespace DataInfo
         public void Init()
         {
             isChecked = false;
+        }
+
+        public Lakiaro()
+        {
+
+        }
+
+        public Lakiaro(Lakiaro _lakiaro)
+        {
+            this.type = _lakiaro.type;
+            this.isChecked = _lakiaro.isChecked;
         }
     }
 
@@ -177,5 +188,20 @@ namespace DataInfo
         private int currRootx, currRooty;
         [SerializeField]
         private int nextRootx, nextRooty;
+
+        public Root(Root _root)
+        {
+            this.rootState = _root.rootState;
+            this.direction = _root.direction;
+            GetDirection = _root.GetDirection;
+            this.startPoint = _root.startPoint;
+            this.finishPoint = _root.finishPoint;
+            this.preRootx = _root.preRootx;
+            this.preRooty = _root.preRooty;
+            this.currRootx = _root.currRootx;
+            this.currRooty = _root.currRooty;
+            this.nextRootx = _root.nextRootx;
+            this.nextRooty = _root.nextRooty;
+        }
     }
 }

@@ -159,7 +159,7 @@ public class Practice_UI : MonoBehaviour
         {
             UIManager.Instance.CallInGameUI();
             gameObject.SetActive(false);
-            lm.StartGame(currLakiaro, currManos);
+            lm.StartGame(currLakiaro, currManos, false);
             Init();
         }
 

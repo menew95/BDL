@@ -8,23 +8,25 @@ public class LaKiaroInfo_UI : MonoBehaviour
     public Image lakiaroImage;
     public Text lakiaroNmaeText;
     public Text difficultText;
-
+    public Text btnText;
     public Sprite[] lakiaroImages;
     public string[] lakiaroNmae = { "고급 라키아로", "굵은 라키아로", "희귀 라키아로", "숙성 라키아로", "원시 라키아로" };
     public string[] difficults = { "매우 어려움", "어려움", "보통", "쉬움", "매우 쉬움" };
 
     Vector3 infoUIPos;
-
-    public void OnInfo(int lakiaroLevel, int hoeLevel, Vector3 pos)
+    const string startText = "시작하기";
+    const string continueText = "계속하기";
+    public void OnInfo(int lakiaroLevel, int hoeLevel, Vector3 pos, bool currDigging)
     {
         gameObject.SetActive(true);
         SetInfo(lakiaroLevel, hoeLevel);
         SetPos(pos);
+        btnText.text = (currDigging) ? continueText : startText;
     }
 
     public void OffInfo()
     {
-        gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     Color[] colors = { new Color(50f/255f, 150f/255f, 1), new Color(1, 220f/250f, 0), new Color(1, 100f/255f, 0) };

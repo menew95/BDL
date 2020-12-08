@@ -26,6 +26,17 @@ public class InGame_UI : MonoBehaviour
     float yMin, yMax;
 
 
+    void OnDisable()
+    {
+        Init();
+    }
+
+    void Init()
+    {
+        round.SetActive(false);
+        resumeBtn.SetActive(false);
+    }
+
     public RectTransform top, bottom;
 
     void SetUISize()

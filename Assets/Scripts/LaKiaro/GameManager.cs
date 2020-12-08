@@ -5,9 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
-
-
-
+    
     public static GameManager Instance
     {
         get
@@ -56,6 +54,28 @@ public class GameManager : MonoBehaviour
 #endif
             }
         }
+        else if (UIManager.Instance.currUIState == UIManager.UIState.Lobby)
+        {
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.None)
+                {
+                    UIManager.Instance.CallMainUI();
+                }
+                else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.InfoUI)
+                {
+                    UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffLakiaroInfo();
+                }
+                else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.loadingUI)
+                {
+                    UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffLoading();
+                }
+                else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.CurrDinggingUI)
+                {
+                    UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffCurrDigging();
+                }
+            }
+        }
         else if (UIManager.Instance.currUIState == UIManager.UIState.Practice)
         {
             if (Input.GetKeyUp(KeyCode.Escape))
@@ -93,6 +113,7 @@ public class GameManager : MonoBehaviour
 
     void SaveGame()
     {
-        UIManager.Instance.CallMainUI();
+        UIManager.Instance.CallLobbyUI();
+        lakiaroManager.SaveGameData();
     }
 }

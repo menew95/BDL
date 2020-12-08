@@ -18,9 +18,9 @@ public class GameData
 
     public bool isSaveGameData = false;
 
-    public LakiaroGameData lakiaroGameData;
+    public LakiaroGameData lakiaroGameData = new LakiaroGameData();
 
-    public PlayerData playerData;
+    public PlayerData playerData = new PlayerData();
 
     public List<LakiaroInfoData> LakiaroInfoDataList = new List<LakiaroInfoData> { new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData() };
 }
@@ -52,7 +52,7 @@ public class LakiaroGameData
     private int currRemainTryTime;
     [SerializeField]
     private float progress;
-
+    
     public List<LakiaroListData> LakiaroRoot { get => lakiaroRoot; set => lakiaroRoot = value; }
     public List<RootList> RootLists { get => rootLists; set => rootLists = value; }
     public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
