@@ -65,6 +65,9 @@ TextureImporter:
   - first:
       213: 3721520093476865006
     second: Icon_20
+  - first:
+      213: -777019344162930043
+    second: Coin_Icon
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -597,6 +600,27 @@ TextureImporter:
       bones: []
       spriteID: 61466fd62a490aa4aab2ac8459c6979a
       internalID: 3721520093476865006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Coin_Icon
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80bd0bbc356537c4fbc50cca7993e6c3
+      internalID: -777019344162930043
       vertices: []
       indices: 
       edges: []

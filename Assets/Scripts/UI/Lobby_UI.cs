@@ -9,6 +9,7 @@ public class Lobby_UI : MonoBehaviour
     public LakiaroBtn[] lakiaroBtn;
     public Sprite[] lakiaroSprite;
     public LaKiaroInfo_UI laKiaroInfo_UI;
+    public Gold_UI gold_UI;
     public GameObject currDigging;
     public RectTransform currDigAnim;
 
@@ -271,5 +272,54 @@ public class Lobby_UI : MonoBehaviour
         currDigAnim.gameObject.SetActive(true);
         currDigAnim.SetParent(lakiaroBtn[index].transform);
         currDigAnim.anchoredPosition = Vector3.zero;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold += 100;
+            gold_UI.UpdateCoin();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold += 1000;
+            gold_UI.UpdateCoin();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold += 10000;
+            gold_UI.UpdateCoin();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold += 100000;
+            gold_UI.UpdateCoin();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold += 1000000;
+            gold_UI.UpdateCoin();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold -= 100;
+            gold_UI.UpdateCoin();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold -= 1000;
+            gold_UI.UpdateCoin();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold -= 1000;
+            gold_UI.UpdateCoin();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            GameManager.Instance.dataManager.gameData.playerData.Gold -= 100000;
+            gold_UI.UpdateCoin();
+        }
     }
 }
