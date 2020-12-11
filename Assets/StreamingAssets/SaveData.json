@@ -1,1 +1,1451 @@
-{"userIndate":"2020-12-08 PM 7:59:01","isSaveGameData":false,"lakiaroGameData":{"lakiaroRoot":[{"lakiaroList":[{"type":0,"isChecked":false},{"type":2,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":2,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":2,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":2,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":3,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":2,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":2,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":1,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]},{"lakiaroList":[{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":2,"isChecked":false},{"type":2,"isChecked":false},{"type":0,"isChecked":false},{"type":2,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false},{"type":0,"isChecked":false}]}],"rootLists":[{"rootList":[{"type":0,"isChecked":false,"rootState":0,"direction":1,"startPoint":0,"finishPoint":0,"preRootx":0,"preRooty":0,"currRootx":3,"currRooty":7,"nextRootx":2,"nextRooty":7},{"type":0,"isChecked":false,"rootState":0,"direction":1,"startPoint":0,"finishPoint":0,"preRootx":3,"preRooty":7,"currRootx":2,"currRooty":7,"nextRootx":1,"nextRooty":7},{"type":0,"isChecked":false,"rootState":0,"direction":0,"startPoint":0,"finishPoint":0,"preRootx":2,"preRooty":7,"currRootx":1,"currRooty":7,"nextRootx":1,"nextRooty":8},{"type":0,"isChecked":false,"rootState":0,"direction":9,"startPoint":0,"finishPoint":0,"preRootx":1,"preRooty":7,"currRootx":1,"currRooty":8,"nextRootx":2,"nextRooty":8},{"type":0,"isChecked":false,"rootState":1,"direction":7,"startPoint":0,"finishPoint":0,"preRootx":1,"preRooty":8,"currRootx":2,"currRooty":8,"nextRootx":3,"nextRooty":8},{"type":0,"isChecked":false,"rootState":2,"direction":8,"startPoint":0,"finishPoint":0,"preRootx":2,"preRooty":8,"currRootx":3,"currRooty":8,"nextRootx":3,"nextRooty":9},{"type":0,"isChecked":false,"rootState":3,"direction":10,"startPoint":0,"finishPoint":0,"preRootx":3,"preRooty":8,"currRootx":3,"currRooty":9,"nextRootx":0,"nextRooty":0}]},{"rootList":[{"type":0,"isChecked":false,"rootState":0,"direction":10,"startPoint":0,"finishPoint":0,"preRootx":0,"preRooty":0,"currRootx":5,"currRooty":8,"nextRootx":5,"nextRooty":9},{"type":0,"isChecked":false,"rootState":0,"direction":10,"startPoint":0,"finishPoint":0,"preRootx":5,"preRooty":8,"currRootx":5,"currRooty":9,"nextRootx":5,"nextRooty":10},{"type":0,"isChecked":false,"rootState":0,"direction":10,"startPoint":0,"finishPoint":0,"preRootx":5,"preRooty":9,"currRootx":5,"currRooty":10,"nextRootx":5,"nextRooty":11},{"type":0,"isChecked":false,"rootState":0,"direction":9,"startPoint":0,"finishPoint":0,"preRootx":5,"preRooty":10,"currRootx":5,"currRooty":11,"nextRootx":6,"nextRooty":11},{"type":0,"isChecked":false,"rootState":1,"direction":7,"startPoint":0,"finishPoint":0,"preRootx":5,"preRooty":11,"currRootx":6,"currRooty":11,"nextRootx":7,"nextRooty":11},{"type":0,"isChecked":false,"rootState":2,"direction":6,"startPoint":0,"finishPoint":0,"preRootx":6,"preRooty":11,"currRootx":7,"currRooty":11,"nextRootx":7,"nextRooty":10},{"type":0,"isChecked":false,"rootState":2,"direction":3,"startPoint":0,"finishPoint":0,"preRootx":7,"preRooty":11,"currRootx":7,"currRooty":10,"nextRootx":6,"nextRooty":10},{"type":0,"isChecked":false,"rootState":2,"direction":2,"startPoint":0,"finishPoint":0,"preRootx":7,"preRooty":10,"currRootx":6,"currRooty":10,"nextRootx":6,"nextRooty":9},{"type":0,"isChecked":false,"rootState":3,"direction":4,"startPoint":0,"finishPoint":0,"preRootx":6,"preRooty":10,"currRootx":6,"currRooty":9,"nextRootx":0,"nextRooty":0}]},{"rootList":[{"type":0,"isChecked":false,"rootState":0,"direction":7,"startPoint":0,"finishPoint":0,"preRootx":0,"preRooty":0,"currRootx":8,"currRooty":5,"nextRootx":9,"nextRooty":5},{"type":0,"isChecked":false,"rootState":0,"direction":8,"startPoint":0,"finishPoint":0,"preRootx":8,"preRooty":5,"currRootx":9,"currRooty":5,"nextRootx":9,"nextRooty":6},{"type":0,"isChecked":false,"rootState":0,"direction":11,"startPoint":0,"finishPoint":0,"preRootx":9,"preRooty":5,"currRootx":9,"currRooty":6,"nextRootx":8,"nextRooty":6},{"type":0,"isChecked":false,"rootState":0,"direction":0,"startPoint":0,"finishPoint":0,"preRootx":9,"preRooty":6,"currRootx":8,"currRooty":6,"nextRootx":8,"nextRooty":7},{"type":0,"isChecked":false,"rootState":1,"direction":9,"startPoint":0,"finishPoint":0,"preRootx":8,"preRooty":6,"currRootx":8,"currRooty":7,"nextRootx":9,"nextRooty":7},{"type":0,"isChecked":false,"rootState":2,"direction":7,"startPoint":0,"finishPoint":0,"preRootx":8,"preRooty":7,"currRootx":9,"currRooty":7,"nextRootx":10,"nextRooty":7},{"type":0,"isChecked":false,"rootState":2,"direction":6,"startPoint":0,"finishPoint":0,"preRootx":9,"preRooty":7,"currRootx":10,"currRooty":7,"nextRootx":10,"nextRooty":6},{"type":0,"isChecked":false,"rootState":2,"direction":4,"startPoint":0,"finishPoint":0,"preRootx":10,"preRooty":7,"currRootx":10,"currRooty":6,"nextRootx":10,"nextRooty":5},{"type":0,"isChecked":false,"rootState":3,"direction":4,"startPoint":0,"finishPoint":0,"preRootx":10,"preRooty":6,"currRootx":10,"currRooty":5,"nextRootx":0,"nextRooty":0}]},{"rootList":[{"type":0,"isChecked":false,"rootState":0,"direction":4,"startPoint":0,"finishPoint":0,"preRootx":0,"preRooty":0,"currRootx":4,"currRooty":3,"nextRootx":4,"nextRooty":2},{"type":0,"isChecked":false,"rootState":0,"direction":5,"startPoint":0,"finishPoint":0,"preRootx":4,"preRooty":3,"currRootx":4,"currRooty":2,"nextRootx":5,"nextRooty":2},{"type":0,"isChecked":false,"rootState":0,"direction":6,"startPoint":0,"finishPoint":0,"preRootx":4,"preRooty":2,"currRootx":5,"currRooty":2,"nextRootx":5,"nextRooty":1},{"type":0,"isChecked":false,"rootState":0,"direction":5,"startPoint":0,"finishPoint":0,"preRootx":5,"preRooty":2,"currRootx":5,"currRooty":1,"nextRootx":6,"nextRooty":1},{"type":0,"isChecked":false,"rootState":1,"direction":7,"startPoint":0,"finishPoint":0,"preRootx":5,"preRooty":1,"currRootx":6,"currRooty":1,"nextRootx":7,"nextRooty":1},{"type":0,"isChecked":false,"rootState":2,"direction":8,"startPoint":0,"finishPoint":0,"preRootx":6,"preRooty":1,"currRootx":7,"currRooty":1,"nextRootx":7,"nextRooty":2},{"type":0,"isChecked":false,"rootState":2,"direction":10,"startPoint":0,"finishPoint":0,"preRootx":7,"preRooty":1,"currRootx":7,"currRooty":2,"nextRootx":7,"nextRooty":3},{"type":0,"isChecked":false,"rootState":2,"direction":11,"startPoint":0,"finishPoint":0,"preRootx":7,"preRooty":2,"currRootx":7,"currRooty":3,"nextRootx":6,"nextRooty":3},{"type":0,"isChecked":false,"rootState":3,"direction":1,"startPoint":0,"finishPoint":0,"preRootx":7,"preRooty":3,"currRootx":6,"currRooty":3,"nextRootx":0,"nextRooty":0}]},{"rootList":[{"type":0,"isChecked":false,"rootState":0,"direction":1,"startPoint":0,"finishPoint":0,"preRootx":0,"preRooty":0,"currRootx":3,"currRooty":6,"nextRootx":2,"nextRooty":6},{"type":0,"isChecked":false,"rootState":0,"direction":2,"startPoint":0,"finishPoint":0,"preRootx":3,"preRooty":6,"currRootx":2,"currRooty":6,"nextRootx":2,"nextRooty":5},{"type":0,"isChecked":false,"rootState":0,"direction":3,"startPoint":0,"finishPoint":0,"preRootx":2,"preRooty":6,"currRootx":2,"currRooty":5,"nextRootx":1,"nextRooty":5},{"type":0,"isChecked":false,"rootState":0,"direction":2,"startPoint":0,"finishPoint":0,"preRootx":2,"preRooty":5,"currRootx":1,"currRooty":5,"nextRootx":1,"nextRooty":4},{"type":0,"isChecked":false,"rootState":1,"direction":3,"startPoint":0,"finishPoint":0,"preRootx":1,"preRooty":5,"currRootx":1,"currRooty":4,"nextRootx":0,"nextRooty":4},{"type":0,"isChecked":false,"rootState":2,"direction":0,"startPoint":0,"finishPoint":0,"preRootx":1,"preRooty":4,"currRootx":0,"currRooty":4,"nextRootx":0,"nextRooty":5},{"type":0,"isChecked":false,"rootState":2,"direction":10,"startPoint":0,"finishPoint":0,"preRootx":0,"preRooty":4,"currRootx":0,"currRooty":5,"nextRootx":0,"nextRooty":6},{"type":0,"isChecked":false,"rootState":2,"direction":10,"startPoint":0,"finishPoint":0,"preRootx":0,"preRooty":5,"currRootx":0,"currRooty":6,"nextRootx":0,"nextRooty":7},{"type":0,"isChecked":false,"rootState":3,"direction":10,"startPoint":0,"finishPoint":0,"preRootx":0,"preRooty":6,"currRootx":0,"currRooty":7,"nextRootx":0,"nextRooty":0}]}],"lakiaroLevel":1,"currLevel":0,"manosHoeLevel":3,"currRemainTryTime":25,"progress":0.0},"playerData":{"stack":0,"gold":0,"manosHoes":[]},"LakiaroInfoDataList":[{"pos":{"x":250.0,"y":185.0,"z":0.0},"lakiaroLevel":1,"generateTime":"2020-12-08 PM 4:51:27","coolTime":0,"isDig":false,"currDigging":true},{"pos":{"x":668.9000244140625,"y":438.9000244140625,"z":0.0},"lakiaroLevel":1,"generateTime":"2020-12-08 PM 7:58:44","coolTime":0,"isDig":false,"currDigging":false},{"pos":{"x":-921.0999755859375,"y":256.9000244140625,"z":0.0},"lakiaroLevel":2,"generateTime":"2020-12-08 PM 7:58:44","coolTime":0,"isDig":false,"currDigging":false},{"pos":{"x":-553.5,"y":-555.0999755859375,"z":0.0},"lakiaroLevel":3,"generateTime":"2020-12-08 PM 7:58:44","coolTime":0,"isDig":false,"currDigging":false},{"pos":{"x":294.5,"y":-500.0999755859375,"z":0.0},"lakiaroLevel":1,"generateTime":"2020-12-08 PM 7:58:44","coolTime":0,"isDig":false,"currDigging":false}]}
+{
+  
+  "userIndate": "2020-12-11 PM 4:58:25",
+  "isSaveGameData": false,
+  "lakiaroGameData": {
+    "lakiaroRoot": [
+      {
+        "lakiaroList": [
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": true
+          },
+          {
+            "type": 1,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 3,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": true
+          },
+          {
+            "type": 1,
+            "isChecked": true
+          },
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 1,
+            "isChecked": true
+          },
+          {
+            "type": 1,
+            "isChecked": true
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": true
+          },
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 2,
+            "isChecked": false
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          }
+        ]
+      },
+      {
+        "lakiaroList": [
+          {
+            "type": 2,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 1,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          },
+          {
+            "type": 0,
+            "isChecked": false
+          }
+        ]
+      }
+    ],
+    "rootLists": [
+      {
+        "rootList": [
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 7,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 0,
+            "preRooty": 0,
+            "currRootx": 8,
+            "currRooty": 6,
+            "nextRootx": 9,
+            "nextRooty": 6
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 8,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 8,
+            "preRooty": 6,
+            "currRootx": 9,
+            "currRooty": 6,
+            "nextRootx": 9,
+            "nextRooty": 7
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 9,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 9,
+            "preRooty": 6,
+            "currRootx": 9,
+            "currRooty": 7,
+            "nextRootx": 10,
+            "nextRooty": 7
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 7,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 9,
+            "preRooty": 7,
+            "currRootx": 10,
+            "currRooty": 7,
+            "nextRootx": 11,
+            "nextRooty": 7
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 1,
+            "direction": 8,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 10,
+            "preRooty": 7,
+            "currRootx": 11,
+            "currRooty": 7,
+            "nextRootx": 11,
+            "nextRooty": 8
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 10,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 11,
+            "preRooty": 7,
+            "currRootx": 11,
+            "currRooty": 8,
+            "nextRootx": 11,
+            "nextRooty": 9
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 11,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 11,
+            "preRooty": 8,
+            "currRootx": 11,
+            "currRooty": 9,
+            "nextRootx": 10,
+            "nextRooty": 9
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 0,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 11,
+            "preRooty": 9,
+            "currRootx": 10,
+            "currRooty": 9,
+            "nextRootx": 10,
+            "nextRooty": 10
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 3,
+            "direction": 10,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 10,
+            "preRooty": 9,
+            "currRootx": 10,
+            "currRooty": 10,
+            "nextRootx": 0,
+            "nextRooty": 0
+          }
+        ]
+      },
+      {
+        "rootList": [
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 4,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 0,
+            "preRooty": 0,
+            "currRootx": 5,
+            "currRooty": 3,
+            "nextRootx": 5,
+            "nextRooty": 2
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 3,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 5,
+            "preRooty": 3,
+            "currRootx": 5,
+            "currRooty": 2,
+            "nextRootx": 4,
+            "nextRooty": 2
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 1,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 5,
+            "preRooty": 2,
+            "currRootx": 4,
+            "currRooty": 2,
+            "nextRootx": 3,
+            "nextRooty": 2
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 2,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 4,
+            "preRooty": 2,
+            "currRootx": 3,
+            "currRooty": 2,
+            "nextRootx": 3,
+            "nextRooty": 1
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 1,
+            "direction": 4,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 3,
+            "preRooty": 2,
+            "currRootx": 3,
+            "currRooty": 1,
+            "nextRootx": 3,
+            "nextRooty": 0
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 5,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 3,
+            "preRooty": 1,
+            "currRootx": 3,
+            "currRooty": 0,
+            "nextRootx": 4,
+            "nextRooty": 0
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 7,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 3,
+            "preRooty": 0,
+            "currRootx": 4,
+            "currRooty": 0,
+            "nextRootx": 5,
+            "nextRooty": 0
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 8,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 4,
+            "preRooty": 0,
+            "currRootx": 5,
+            "currRooty": 0,
+            "nextRootx": 5,
+            "nextRooty": 1
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 3,
+            "direction": 10,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 5,
+            "preRooty": 0,
+            "currRootx": 5,
+            "currRooty": 1,
+            "nextRootx": 0,
+            "nextRooty": 0
+          }
+        ]
+      },
+      {
+        "rootList": [
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 10,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 0,
+            "preRooty": 0,
+            "currRootx": 6,
+            "currRooty": 8,
+            "nextRootx": 6,
+            "nextRooty": 9
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 9,
+            "isDameaed": true,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 6,
+            "preRooty": 8,
+            "currRootx": 6,
+            "currRooty": 9,
+            "nextRootx": 7,
+            "nextRooty": 9
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 7,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 6,
+            "preRooty": 9,
+            "currRootx": 7,
+            "currRooty": 9,
+            "nextRootx": 8,
+            "nextRooty": 9
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 6,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 7,
+            "preRooty": 9,
+            "currRootx": 8,
+            "currRooty": 9,
+            "nextRootx": 8,
+            "nextRooty": 8
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 1,
+            "direction": 3,
+            "isDameaed": true,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 8,
+            "preRooty": 9,
+            "currRootx": 8,
+            "currRooty": 8,
+            "nextRootx": 7,
+            "nextRooty": 8
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 3,
+            "direction": 1,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 8,
+            "preRooty": 8,
+            "currRootx": 7,
+            "currRooty": 8,
+            "nextRootx": 0,
+            "nextRooty": 0
+          }
+        ]
+      },
+      {
+        "rootList": [
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 4,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 0,
+            "preRooty": 0,
+            "currRootx": 6,
+            "currRooty": 3,
+            "nextRootx": 6,
+            "nextRooty": 2
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 5,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 6,
+            "preRooty": 3,
+            "currRootx": 6,
+            "currRooty": 2,
+            "nextRootx": 7,
+            "nextRooty": 2
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 7,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 6,
+            "preRooty": 2,
+            "currRootx": 7,
+            "currRooty": 2,
+            "nextRootx": 8,
+            "nextRooty": 2
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 6,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 7,
+            "preRooty": 2,
+            "currRootx": 8,
+            "currRooty": 2,
+            "nextRootx": 8,
+            "nextRooty": 1
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 1,
+            "direction": 5,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 8,
+            "preRooty": 2,
+            "currRootx": 8,
+            "currRooty": 1,
+            "nextRootx": 9,
+            "nextRooty": 1
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 8,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 8,
+            "preRooty": 1,
+            "currRootx": 9,
+            "currRooty": 1,
+            "nextRootx": 9,
+            "nextRooty": 2
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 9,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 9,
+            "preRooty": 1,
+            "currRootx": 9,
+            "currRooty": 2,
+            "nextRootx": 10,
+            "nextRooty": 2
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 6,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 9,
+            "preRooty": 2,
+            "currRootx": 10,
+            "currRooty": 2,
+            "nextRootx": 10,
+            "nextRooty": 1
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 3,
+            "direction": 4,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 10,
+            "preRooty": 2,
+            "currRootx": 10,
+            "currRooty": 1,
+            "nextRootx": 0,
+            "nextRooty": 0
+          }
+        ]
+      },
+      {
+        "rootList": [
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 1,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 0,
+            "preRooty": 0,
+            "currRootx": 3,
+            "currRooty": 5,
+            "nextRootx": 2,
+            "nextRooty": 5
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 0,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 3,
+            "preRooty": 5,
+            "currRootx": 2,
+            "currRooty": 5,
+            "nextRootx": 2,
+            "nextRooty": 6
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 11,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 2,
+            "preRooty": 5,
+            "currRootx": 2,
+            "currRooty": 6,
+            "nextRootx": 1,
+            "nextRooty": 6
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 2,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 2,
+            "preRooty": 6,
+            "currRootx": 1,
+            "currRooty": 6,
+            "nextRootx": 1,
+            "nextRooty": 5
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 1,
+            "direction": 4,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 1,
+            "preRooty": 6,
+            "currRootx": 1,
+            "currRooty": 5,
+            "nextRootx": 1,
+            "nextRooty": 4
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 5,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 1,
+            "preRooty": 5,
+            "currRootx": 1,
+            "currRooty": 4,
+            "nextRootx": 2,
+            "nextRooty": 4
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 6,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 1,
+            "preRooty": 4,
+            "currRootx": 2,
+            "currRooty": 4,
+            "nextRootx": 2,
+            "nextRooty": 3
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 2,
+            "direction": 3,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 2,
+            "preRooty": 4,
+            "currRootx": 2,
+            "currRooty": 3,
+            "nextRootx": 1,
+            "nextRooty": 3
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 3,
+            "direction": 1,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 2,
+            "preRooty": 3,
+            "currRootx": 1,
+            "currRooty": 3,
+            "nextRootx": 0,
+            "nextRooty": 0
+          }
+        ]
+      },
+      {
+        "rootList": [
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 7,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 0,
+            "preRooty": 0,
+            "currRootx": 8,
+            "currRooty": 5,
+            "nextRootx": 9,
+            "nextRooty": 5
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 6,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 8,
+            "preRooty": 5,
+            "currRootx": 9,
+            "currRooty": 5,
+            "nextRootx": 9,
+            "nextRooty": 4
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 5,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 9,
+            "preRooty": 5,
+            "currRootx": 9,
+            "currRooty": 4,
+            "nextRootx": 10,
+            "nextRooty": 4
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 0,
+            "direction": 6,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 9,
+            "preRooty": 4,
+            "currRootx": 10,
+            "currRooty": 4,
+            "nextRootx": 10,
+            "nextRooty": 3
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 1,
+            "direction": 3,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 10,
+            "preRooty": 4,
+            "currRootx": 10,
+            "currRooty": 3,
+            "nextRootx": 9,
+            "nextRooty": 3
+          },
+          {
+            "type": 0,
+            "isChecked": false,
+            "rootState": 3,
+            "direction": 1,
+            "isDameaed": false,
+            "startPoint": 0,
+            "finishPoint": 0,
+            "preRootx": 10,
+            "preRooty": 3,
+            "currRootx": 9,
+            "currRooty": 3,
+            "nextRootx": 0,
+            "nextRooty": 0
+          }
+        ]
+      }
+    ],
+    "lakiaroLevel": 1,
+    "currLevel": 0,
+    "manosHoeLevel": 3,
+    "currRemainTryTime": 19,
+    "progress": 97.72000122070313
+  },
+  "playerData": {
+    "stack": 0,
+    "gold": 0,
+    "manosHoes": []
+  },
+  "LakiaroInfoDataList": [
+    {
+      "pos": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "lakiaroLevel": 3,
+      "generateTime": "2020-12-11 PM 4:57:51",
+      "coolTime": 0,
+      "isDig": false,
+      "currDigging": false
+    },
+    {
+      "pos": {
+        "x": 668.9000244140625,
+        "y": 438.9000244140625,
+        "z": 0.0
+      },
+      "lakiaroLevel": 1,
+      "generateTime": "2020-12-11 PM 4:33:42",
+      "coolTime": 0,
+      "isDig": false,
+      "currDigging": false
+    },
+    {
+      "pos": {
+        "x": -921.0999755859375,
+        "y": 256.9000244140625,
+        "z": 0.0
+      },
+      "lakiaroLevel": 1,
+      "generateTime": "2020-12-11 PM 4:33:42",
+      "coolTime": 0,
+      "isDig": false,
+      "currDigging": true
+    },
+    {
+      "pos": {
+        "x": -553.5,
+        "y": -555.0999755859375,
+        "z": 0.0
+      },
+      "lakiaroLevel": 1,
+      "generateTime": "2020-12-11 PM 4:33:42",
+      "coolTime": 0,
+      "isDig": false,
+      "currDigging": false
+    },
+    {
+      "pos": {
+        "x": 613.5,
+        "y": -266.0999755859375,
+        "z": 0.0
+      },
+      "lakiaroLevel": 3,
+      "generateTime": "2020-12-11 PM 4:33:42",
+      "coolTime": 0,
+      "isDig": false,
+      "currDigging": false
+    }
+  ]
+}

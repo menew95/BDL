@@ -25,6 +25,14 @@ public class InGame_UI : MonoBehaviour
     public Vector3 viewMin, viewMax;
     float yMin, yMax;
 
+    [Header("Lakiaro Progress")]
+    public Sprite[] lakiaroSprite;
+    public Image[] lakiaroImage;
+    public Image[] lakiaroBG;
+    public Image progressImage;
+    public Text progressText;
+    public Image progressGlow;
+
 
     void OnDisable()
     {
@@ -85,7 +93,7 @@ public class InGame_UI : MonoBehaviour
         //Debug.Log(Camera.main.ViewportToScreenPoint(Vector3.one) + " " +yMax + " " + min + " " + max + " " + viewMin + " " + viewMax + " " + Camera.main.ViewportToWorldPoint(viewMin) + " " + Camera.main.ViewportToWorldPoint(viewMax));
     }
 
-    public void UpdateRemainTexts(int remainDirt, int remainRoot, int remainPebble, int _remainTryTime, int _currlevel, int _lakiaroLevel)
+    public void UpdateRemainTexts(int remainDirt, int remainRoot, int remainPebble, int _remainTryTime, int _currlevel, int _lakiaroLevel, float progress)
     {
         remain[0].text = remainDirt.ToString() + "개";
         remain[1].text = remainRoot.ToString() + "개";
@@ -94,6 +102,7 @@ public class InGame_UI : MonoBehaviour
         remainTryTime.text = _remainTryTime.ToString();
         level.text = (_currlevel + 1).ToString() + " / " + (_lakiaroLevel + 1);
         level_UI.SetLevel(_currlevel);
+        UpdateProgress(progress, _lakiaroLevel);
     }
 
     public void UpdateRemainLakiaroText(int index, int remainNum)
@@ -112,6 +121,34 @@ public class InGame_UI : MonoBehaviour
     {
         level.text = (_currlevel + 1).ToString() + " / " + (_lakiaroLevel + 1);
         level_UI.SetLevel(_currlevel);
+    }
+
+    public void UpdateProgress(float progress, int lakiaroLevel)
+    {
+        float tempProgress = Mathf.Floor(progress * 10) * 0.1f;
+        progressText.text = string.Format("{0:0.0}%", tempProgress);
+        StartCoroutine(TextGlowEffect(progressGlow));
+        progressImage.fillAmount = progress;
+
+        int curr = 5;
+        if (80 <= progress && progress < 100) curr = 4;
+        else if (60 <= progress && progress < 80) curr = 3;
+        else if (40 <= progress && progress < 60) curr = 2;
+        else if (20 <= progress && progress < 40) curr = 1;
+        else if (0 < progress && progress < 20) curr = 0;
+        for (int i = 0; i < lakiaroImage.Length; i++)
+        {
+            if (curr == i)
+            {
+                lakiaroImage[i].sprite = lakiaroSprite[i + lakiaroLevel];
+                lakiaroBG[i].enabled = true;
+            }
+            else
+            {
+                lakiaroImage[i].sprite = lakiaroSprite[i + lakiaroLevel + 10];
+                lakiaroBG[i].enabled = false;
+            }
+        }
     }
 
     public void ChangeDigType()
@@ -137,6 +174,7 @@ public class InGame_UI : MonoBehaviour
 
     IEnumerator TextGlowEffect(Image glowEffect)
     {
+        Debug.Log(glowEffect.name);
         Color color = Color.white;
         glowEffect.color = color;
 

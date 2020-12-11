@@ -76,6 +76,8 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        
         else if (UIManager.Instance.currUIState == UIManager.UIState.Practice)
         {
             if (Input.GetKeyUp(KeyCode.Escape))
@@ -115,5 +117,11 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance.CallLobbyUI();
         lakiaroManager.SaveGameData();
+    }
+
+    public void FinishDigLakiaro()
+    {
+        /*라키아로 가치에 따른 자원 추가
+         */
     }
 }

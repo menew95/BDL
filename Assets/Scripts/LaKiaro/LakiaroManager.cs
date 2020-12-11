@@ -24,7 +24,7 @@ public class LakiaroManager : MonoBehaviour
     private List<RootList> rootLists = new List<RootList>();
     public Lakiaro[,] lakiaroRoot = new Lakiaro[12, 12];
     private int lakiaroLevel, currLakiaroLevel = 0, manosHoeLevel, currRemainTryTime;
-    public float progress;
+    public float progress = 100f;
 
     public Queue<Dirt> dirtPool = new Queue<Dirt>();
     public Queue<Root> rootPool = new Queue<Root>();
@@ -448,6 +448,8 @@ public class LakiaroManager : MonoBehaviour
                         }
                         else if (lakiaroRoot[vector3Int.x, vector3Int.y].type == Lakiaro.Type.Root)
                         {
+                            DigRoot(vector3Int);
+                            (lakiaroRoot[vector3Int.x, vector3Int.y] as Root).IsDameaed = true;
                             currRemainRoot--;
                             root = true;
                         }
@@ -513,7 +515,7 @@ public class LakiaroManager : MonoBehaviour
             GenerateLakiaro(0);
         }
 
-        inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
+        inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
 
         gamePause = false;
     }
@@ -541,7 +543,7 @@ public class LakiaroManager : MonoBehaviour
 
         GenerateLakiaro(nextLevel);
 
-        inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
+        inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
     }
 
     IEnumerator FinishDig(int nextLevel, int _manosHoeLevel, bool lastRound)
@@ -583,6 +585,7 @@ public class LakiaroManager : MonoBehaviour
 
         if (lastRound)
         {
+            GameManager.Instance.FinishDigLakiaro();
             UIManager.Instance.CallLobbyUI();
             UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
             gamePause = true;
@@ -591,9 +594,97 @@ public class LakiaroManager : MonoBehaviour
         {
             GenerateLakiaro(nextLevel);
 
-            inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel);
+            inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
         }
 
+    }
+    
+    void SetDamagedRootTileBase(Vector3Int pos)
+    {
+        if (lakiaroRoot[pos.x, pos.y].type != Lakiaro.Type.Root) return;
+        TileBase[] tileBaseList;
+
+        if ((lakiaroRoot[pos.x, pos.y] as Root).rootState == 3)
+        {
+            switch ((lakiaroRoot[pos.x, pos.y] as Root).GetDirection)
+            {
+                case Root.Direction.아래쪽_위쪽:
+                    lakiaroRootTileMap.SetTile(pos, end[6]);
+                    break;
+                case Root.Direction.왼쪽_오른쪽:
+                    lakiaroRootTileMap.SetTile(pos, end[4]);
+                    break;
+                case Root.Direction.위쪽_아래쪽:
+                    lakiaroRootTileMap.SetTile(pos, end[7]);
+                    break;
+                case Root.Direction.오른쪽_왼쪽:
+                    lakiaroRootTileMap.SetTile(pos, end[5]);
+                    break;
+            }
+        }
+        else
+        {
+            switch ((lakiaroRoot[pos.x, pos.y] as Root).GetDirection)
+            {
+                case Root.Direction.아래쪽_오른쪽:
+                    tileBaseList = lower_Right;
+                    break;
+                case Root.Direction.아래쪽_위쪽:
+                    tileBaseList = lower_Upper;
+                    break;
+                case Root.Direction.아래쪽_왼쪽:
+                    tileBaseList = lower_Left;
+                    break;
+                case Root.Direction.왼쪽_위쪽:
+                    tileBaseList = left_Upper;
+                    break;
+                case Root.Direction.왼쪽_오른쪽:
+                    tileBaseList = left_Right;
+                    break;
+                case Root.Direction.왼쪽_아래쪽:
+                    tileBaseList = left_Lower;
+                    break;
+                case Root.Direction.위쪽_오른쪽:
+                    tileBaseList = upper_Right;
+                    break;
+                case Root.Direction.위쪽_아래쪽:
+                    tileBaseList = upper_Lower;
+                    break;
+                case Root.Direction.위쪽_왼쪽:
+                    tileBaseList = upper_Left;
+                    break;
+                case Root.Direction.오른쪽_아래쪽:
+                    tileBaseList = right_Lower;
+                    break;
+                case Root.Direction.오른쪽_왼쪽:
+                    tileBaseList = right_Left;
+                    break;
+                case Root.Direction.오른쪽_위쪽:
+                    tileBaseList = right_Upper;
+                    break;
+                default:
+                    tileBaseList = right_Left;
+                    break;
+            }
+            if ((lakiaroRoot[pos.x, pos.y] as Root).rootState == 0) lakiaroRootTileMap.SetTile(pos, tileBaseList[3]);
+            else if ((lakiaroRoot[pos.x, pos.y] as Root).rootState == 1) lakiaroRootTileMap.SetTile(pos, tileBaseList[4]);
+            else if ((lakiaroRoot[pos.x, pos.y] as Root).rootState == 2) lakiaroRootTileMap.SetTile(pos, tileBaseList[5]);
+        }
+    }
+
+    void DigRoot(Vector3Int pos)
+    {
+        if (lakiaroRoot[pos.x, pos.y].type != Lakiaro.Type.Root) return;
+        SetDamagedRootTileBase(pos);
+        float rootCount = 0;
+        for(int i = 0; i < rootLists.Count; i++)
+        {
+            rootCount += rootLists[i].rootList.Count;
+        }
+        
+        float damp = 0;
+        progress -= 1.14f;
+        inGame_UI.UpdateProgress(progress, lakiaroLevel);
     }
 
     public void GenerateLakiaro(int level = 0)
@@ -883,7 +974,7 @@ public class LakiaroManager : MonoBehaviour
             if(canMake) Debug.Log(randomIndex + "가능");
         }
 
-        Debug.Log(canMake);
+
         if (canMake)
         {
             Root root;
@@ -1224,9 +1315,6 @@ public class LakiaroManager : MonoBehaviour
         }
 
         currRoot = rootList.rootList[rootList.rootList.Count - 1];
-        Debug.Log(currRoot.type + (rootList.rootList.Count - 1));
-        Debug.Log(currRoot.GetCurrRoot());
-        Debug.Log(currRoot.GetPreRoot());
         tempX = currRoot.GetCurrRoot().x - currRoot.GetPreRoot().x;
         tempY = currRoot.GetCurrRoot().y - currRoot.GetPreRoot().y;
         if (tempX == 1) currRoot.GetDirection = Root.Direction.왼쪽_오른쪽;
@@ -1243,10 +1331,15 @@ public class LakiaroManager : MonoBehaviour
     {
         Root root;
         TileBase[] tileBaseList;
-        Debug.Log(rootList.rootList.Count);
         for(int i = 0; i < rootList.rootList.Count; i++)
         {
             root = rootList.rootList[i];
+
+            if (root.IsDameaed)
+            {
+                SetDamagedRootTileBase(root.GetCurrRoot());
+                continue;
+            }
 
             switch (root.GetDirection)
             {
@@ -1294,10 +1387,6 @@ public class LakiaroManager : MonoBehaviour
             if (root.rootState == 0) lakiaroRootTileMap.SetTile(root.GetCurrRoot(), tileBaseList[0]);
             else if (root.rootState == 1) lakiaroRootTileMap.SetTile(root.GetCurrRoot(), tileBaseList[1]);
             else if (root.rootState == 2) lakiaroRootTileMap.SetTile(root.GetCurrRoot(), tileBaseList[2]);
-            else
-            {
-                Debug.Log("??" + root.rootState + root.ToString());
-            }
         }
 
         root = rootList.rootList[rootList.rootList.Count - 1];
@@ -1496,6 +1585,7 @@ public class LakiaroManager : MonoBehaviour
         currRemainDirt = 128;
         currRemainRoot = 0;
         currRemainPebble = 0;
+        progress = 100f;
         for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
         {
             for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
@@ -1583,12 +1673,16 @@ public class LakiaroManager : MonoBehaviour
                 lakiaroRoot[i, j].isChecked = GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot[i].LakiaroList[j].isChecked;
             }
         }
+        
         for (int i = 0; i < GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists.Count; i++)
         {
             rootLists.Add(new RootList());
             for (int j = 0; j < GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList.Count; j++)
             {
-                rootLists[i].rootList.Add(new Root(GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList[j]));
+                vector3Int = GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList[j].GetCurrRoot();
+                Root root = lakiaroRoot[vector3Int.x, vector3Int.y] as Root;
+                root.CopyData(GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList[j]);
+                rootLists[i].rootList.Add(root);
             }
         }
         //rootLists = GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists;
@@ -1598,7 +1692,6 @@ public class LakiaroManager : MonoBehaviour
         manosHoeLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeLevel;
         currRemainTryTime = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime;
         progress = GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress;
-
         LoadLakiaro();
     }
 

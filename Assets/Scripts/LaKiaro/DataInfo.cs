@@ -150,6 +150,9 @@ namespace DataInfo
         [SerializeField]
         private Direction direction;
         public Direction GetDirection { get => direction; set => direction = value; }
+        [SerializeField]
+        private bool isDameaed = false;
+        public bool IsDameaed { get => isDameaed; set => isDameaed = value; }
 
         public int startPoint;
         public int finishPoint;
@@ -193,7 +196,6 @@ namespace DataInfo
         {
             this.rootState = _root.rootState;
             this.direction = _root.direction;
-            GetDirection = _root.GetDirection;
             this.startPoint = _root.startPoint;
             this.finishPoint = _root.finishPoint;
             this.preRootx = _root.preRootx;
@@ -202,6 +204,22 @@ namespace DataInfo
             this.currRooty = _root.currRooty;
             this.nextRootx = _root.nextRootx;
             this.nextRooty = _root.nextRooty;
+            this.IsDameaed = _root.IsDameaed;
+        }
+
+        public void CopyData(Root _root)
+        {
+            this.rootState = _root.rootState;
+            this.direction = _root.direction;
+            this.startPoint = _root.startPoint;
+            this.finishPoint = _root.finishPoint;
+            this.preRootx = _root.preRootx;
+            this.preRooty = _root.preRooty;
+            this.currRootx = _root.currRootx;
+            this.currRooty = _root.currRooty;
+            this.nextRootx = _root.nextRootx;
+            this.nextRooty = _root.nextRooty;
+            this.IsDameaed = _root.IsDameaed;
         }
     }
 }

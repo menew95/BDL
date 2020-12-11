@@ -16,7 +16,6 @@ public class Level_UI : MonoBehaviour
 
     public void SetLevel(int currLevel)
     {
-        Debug.Log((currLevel) + " " + ((float)currLevel + 1f) / 5f);
         currLevelImage.fillAmount = ((float)currLevel + 1f)/5f;
         overLevelImage.fillAmount = (float)currLevel/ 5f;
     }

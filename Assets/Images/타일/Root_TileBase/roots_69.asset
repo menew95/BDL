@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: roots_5
+  m_Name: roots_69
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 2689239834821976853, guid: 6c57b533e90c7474ebf1e8b65333aa55,
+  m_Sprite: {fileID: 6562647585286880362, guid: 6c57b533e90c7474ebf1e8b65333aa55,
     type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.78431374, b: 0.78431374, a: 1}
   m_Transform:
     e00: 1
     e01: 0

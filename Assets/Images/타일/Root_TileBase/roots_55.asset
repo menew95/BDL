@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: pebble_0
+  m_Name: roots_55
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 8361171416893098218, guid: 6c57b533e90c7474ebf1e8b65333aa55,
+  m_Sprite: {fileID: 3601166302337332541, guid: 6c57b533e90c7474ebf1e8b65333aa55,
     type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.78431374, b: 0.78431374, a: 1}
   m_Transform:
     e00: 1
     e01: 0
