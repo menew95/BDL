@@ -119,9 +119,52 @@ public class GameManager : MonoBehaviour
         lakiaroManager.SaveGameData();
     }
 
-    public void FinishDigLakiaro()
+    public void FinishDigLakiaro(int _lakiaroLevel, float _progress)
     {
         /*라키아로 가치에 따른 자원 추가
          */
+        int lakiaroLevel = _lakiaroLevel + 5;
+        int gold = 0;
+        if (80 <= _progress && _progress < 100) lakiaroLevel -= 1;
+        else if (60 <= _progress && _progress < 80)lakiaroLevel -= 2;
+        else if (40 <= _progress && _progress < 60)lakiaroLevel -= 3;
+        else if (20 <= _progress && _progress < 40)lakiaroLevel -= 4;
+        else if (0 < _progress && _progress < 20) lakiaroLevel -= 5;
+
+        switch (lakiaroLevel)
+        {
+            case 0:
+                gold = 100000;
+                break;
+            case 1:
+                gold = 300000;
+                break;
+            case 2:
+                gold = 700000;
+                break;
+            case 3:
+                gold = 1000000;
+                break;
+            case 4:
+                gold = 1500000;
+                break;
+            case 5:
+                gold = 3000000;
+                break;
+            case 6:
+                gold = 5000000;
+                break;
+            case 7:
+                gold = 10000000;
+                break;
+            case 8:
+                gold = 30000000;
+                break;
+            case 9:
+                gold = 100000000;
+                break;
+        }
+
+        dataManager.gameData.playerData.Gold += gold;
     }
 }

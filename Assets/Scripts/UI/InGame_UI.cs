@@ -105,16 +105,24 @@ public class InGame_UI : MonoBehaviour
         UpdateProgress(progress, _lakiaroLevel);
     }
 
+    Coroutine[] remainCoroutine = new Coroutine[3];
     public void UpdateRemainLakiaroText(int index, int remainNum)
     {
         remain[index].text = remainNum.ToString() + "개";
-        StartCoroutine(TextGlowEffect(remain[index].GetComponentInChildren<Image>()));
+        if (remainCoroutine[index] != null) StopCoroutine(remainCoroutine[index]);
+        else
+        {
+            Debug.Log(index + " 코루틴 없음");
+        }
+        remainCoroutine[index] = StartCoroutine(TextGlowEffect(remain[index].GetComponentInChildren<Image>()));
     }
 
+    Coroutine tryTimeCoroutine;
     public void UpdateRemainTryTime(int _remainTryTime)
     {
         remainTryTime.text = _remainTryTime.ToString();
-        StartCoroutine(TextGlowEffect(remainTryTime.GetComponentInChildren<Image>()));
+        if (tryTimeCoroutine != null) StopCoroutine(tryTimeCoroutine);
+        tryTimeCoroutine = StartCoroutine(TextGlowEffect(remainTryTime.GetComponentInChildren<Image>()));
     }
 
     public void UpdateLevel(int _currlevel, int _lakiaroLevel)
@@ -123,14 +131,16 @@ public class InGame_UI : MonoBehaviour
         level_UI.SetLevel(_currlevel);
     }
 
+    Coroutine progressCoroutine;
     public void UpdateProgress(float progress, int lakiaroLevel)
     {
         float tempProgress = Mathf.Floor(progress * 10) * 0.1f;
         progressText.text = string.Format("{0:0.0}%", tempProgress);
-        StartCoroutine(TextGlowEffect(progressGlow));
-        progressImage.fillAmount = progress;
+        if(progressCoroutine != null) StopCoroutine(progressCoroutine);
+        progressCoroutine = StartCoroutine(TextGlowEffect(progressGlow));
+        progressImage.fillAmount = progress * 0.01f;
 
-        int curr = 5;
+                int curr = 5;
         if (80 <= progress && progress < 100) curr = 4;
         else if (60 <= progress && progress < 80) curr = 3;
         else if (40 <= progress && progress < 60) curr = 2;
@@ -177,11 +187,12 @@ public class InGame_UI : MonoBehaviour
         Debug.Log(glowEffect.name);
         Color color = Color.white;
         glowEffect.color = color;
-
+        float time = 0;
         effect++;
         while (glowEffect.color.a > 0)
         {
-            color.a = Mathf.Lerp(color.a, 0f, Time.deltaTime);
+            time += Time.deltaTime;
+            color.a = Mathf.Lerp(color.a, 0f, time * 0.5f);
             if (color.a < 0.1f) color.a = 0;
             glowEffect.color = color;
             

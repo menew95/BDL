@@ -212,12 +212,24 @@ public class Lobby_UI : MonoBehaviour
         GameManager.Instance.audioManager.CallAudioClip(1);
     }
 
-    public void DigFinishLakiaro() // 메인 게임이 완전히 끝난후 로딩버튼으로 변경
+    public void DigFinishLakiaro() 
     {
+        /* 메인게임이 끝난후 적용할 효과
+         * infodata (isDig, cooltime) 설정
+         * 라키아로 버튼 로딩버튼으로 변경
+         * 게임 결과창 On
+         */
         lakiaroBtn[currindex].OnLoading();
 
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].IsDig = true;
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CoolTime = 600;
+
+        OnResultUI();
+    }
+
+     public void OnResultUI()
+    {
+
     }
 
     /* UI On Off 시 필요한 작업들

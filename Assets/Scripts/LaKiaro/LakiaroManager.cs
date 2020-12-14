@@ -487,7 +487,7 @@ public class LakiaroManager : MonoBehaviour
     {
         lakiaroLevel = _lakiaroLevel;
         manosHoeLevel = _manosHoeLevel;
-        currLakiaroLevel = 0;
+        currLakiaroLevel = 0; progress = 100f;
         if (isLoad)
         {
             LoadGameData();
@@ -580,12 +580,12 @@ public class LakiaroManager : MonoBehaviour
             timer += Time.deltaTime;
         }
         inGame_UI.DisableRound();
-
+        
         InitGame();
 
         if (lastRound)
         {
-            GameManager.Instance.FinishDigLakiaro();
+            GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress);
             UIManager.Instance.CallLobbyUI();
             UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
             gamePause = true;
@@ -596,7 +596,6 @@ public class LakiaroManager : MonoBehaviour
 
             inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
         }
-
     }
     
     void SetDamagedRootTileBase(Vector3Int pos)
@@ -1585,7 +1584,7 @@ public class LakiaroManager : MonoBehaviour
         currRemainDirt = 128;
         currRemainRoot = 0;
         currRemainPebble = 0;
-        progress = 100f;
+        
         for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
         {
             for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
