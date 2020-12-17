@@ -10,6 +10,7 @@ public class Lobby_UI : MonoBehaviour
     public Sprite[] lakiaroSprite;
     public LaKiaroInfo_UI laKiaroInfo_UI;
     public Gold_UI gold_UI;
+    public Result_UI result_UI;
     public GameObject currDigging;
     public RectTransform currDigAnim;
 
@@ -224,14 +225,18 @@ public class Lobby_UI : MonoBehaviour
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].IsDig = true;
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CoolTime = 600;
 
-        OnResultUI();
     }
 
-     public void OnResultUI()
+    public void OnResultUI(int lakiaroLevel, float _progress, float _gold, bool _gameResult)
     {
-
+        result_UI.gameObject.SetActive(true);
+        result_UI.OnResultUI(lakiaroLevel, _progress, _gold, _gameResult);
     }
 
+    public void OffResultUI()
+    {
+        result_UI.gameObject.SetActive(false);
+    }
     /* UI On Off 시 필요한 작업들
     * currState변경 및 UI 위치 변경 등
     */

@@ -585,7 +585,7 @@ public class LakiaroManager : MonoBehaviour
 
         if (lastRound)
         {
-            GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress);
+            GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, true);
             UIManager.Instance.CallLobbyUI();
             UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
             gamePause = true;

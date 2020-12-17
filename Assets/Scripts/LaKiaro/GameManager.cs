@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     public LakiaroManager lakiaroManager;
 
     public DataManager dataManager;
+
     void Update()
     {
         if (UIManager.Instance.currUIState == UIManager.UIState.Main)
@@ -100,6 +101,10 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            FinishDigLakiaro(tempLakiaroLevel, tempProgress, tempGameResult);
+        }
     }
 
     public void Resume()
@@ -119,7 +124,11 @@ public class GameManager : MonoBehaviour
         lakiaroManager.SaveGameData();
     }
 
-    public void FinishDigLakiaro(int _lakiaroLevel, float _progress)
+    public int tempLakiaroLevel = 4;
+    public float tempProgress = 100;
+    public bool tempGameResult = true;
+
+    public void FinishDigLakiaro(int _lakiaroLevel, float _progress, bool _gameResult)
     {
         /*라키아로 가치에 따른 자원 추가
          */
@@ -163,8 +172,12 @@ public class GameManager : MonoBehaviour
             case 9:
                 gold = 100000000;
                 break;
+            default:
+                gold = 0;
+                break;
         }
 
         dataManager.gameData.playerData.Gold += gold;
+        UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
     }
 }

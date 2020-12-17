@@ -9,7 +9,7 @@ public class InGame_UI : MonoBehaviour
     public Text[] remain;// remina Dirt, Root, Pebble;
     public Text level;
     public Text remainTryTime;
-
+    
     public Level_UI level_UI;
     public GameObject round;
     public Text roundText;
