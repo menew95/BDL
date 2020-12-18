@@ -236,6 +236,7 @@ public class Lobby_UI : MonoBehaviour
     public void OffResultUI()
     {
         result_UI.gameObject.SetActive(false);
+        gold_UI.UpdateCoin();
     }
     /* UI On Off 시 필요한 작업들
     * currState변경 및 UI 위치 변경 등

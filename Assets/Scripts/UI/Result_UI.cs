@@ -5,15 +5,18 @@ using UnityEngine.UI;
 
 public class Result_UI : MonoBehaviour
 {
-    public CanvasGroup result_UI;
-
+    public GameObject skipBtn;
+    
     [Header("CanvasGroup")]
+    public CanvasGroup result_UI;
     public CanvasGroup resultglow;
     public CanvasGroup successUI;
     public CanvasGroup failUI;
+    public CanvasGroup continueBtn;
 
     [Header("Result Element")]
     public Image lakiaroImage;
+    public CanvasGroup lakiaroGlow;
     public Text progressText;
     public Text goldText;
 
@@ -26,12 +29,18 @@ public class Result_UI : MonoBehaviour
 
     public void Init()
     {
+        continueBtn.alpha = 0;
+        continueBtn.blocksRaycasts = false;
+
         result_UI.alpha = 0;
         successUI.alpha = 0;
         failUI.alpha = 0;
 
         progressText.text = "100%";
         goldText.text = "";
+
+        skipBtn.SetActive(true);
+        
     }
 
     public void OnResultUI(int _lakiaroLevel, float _progress, float _gold, bool _gameResult)
@@ -61,26 +70,36 @@ public class Result_UI : MonoBehaviour
             yield return null;
         }
         result_UI.alpha = 1f;
-        StartCoroutine(SetProgress());
+        if(gameResult) StartCoroutine(SetSuccessProgress());
+        else StartCoroutine(SetFailProgress());
     }
 
-    IEnumerator SetProgress()
+    IEnumerator SetSuccessProgress()
     {
         float time = 0;
         float currProgressText = 100f;
+        float currProgress = 120f;
         int index = lakiaroLevel;
         Debug.Log(index);
-        while (time < 2f && currProgressText != progress)
+        float duration = (100f - progress) / 20f;
+        while (time < duration && currProgressText != progress)
         {
             time += Time.deltaTime;
-            currProgressText = Mathf.Lerp(100, progress, time / 2f);
+            currProgressText = Mathf.Lerp(100, progress, time / duration);
             currProgressText = Mathf.Floor(currProgressText * 10) * 0.1f;
-            if (80 <= currProgressText && currProgressText < 100) index = lakiaroLevel - 1;
+
+            if (currProgress - 20f > currProgressText)
+            {
+                index--;
+                currProgress -= 20f;
+                StartCoroutine(ProgressGlow());
+            }
+            /*if (80 <= currProgressText && currProgressText < 100) index = lakiaroLevel - 1;
             else if (60 <= currProgressText && currProgressText < 80) index = lakiaroLevel - 2;
             else if (40 <= currProgressText && currProgressText < 60) index = lakiaroLevel - 3;
             else if (20 <= currProgressText && currProgressText < 40) index = lakiaroLevel - 4;
             else if (0 < currProgressText && currProgressText < 20) index = lakiaroLevel - 5;
-            Debug.Log(index);
+            Debug.Log(index);*/
             lakiaroImage.sprite = lakiaroSprite[index];
             progressText.text = string.Format("{0:0.#}%", currProgressText);
             yield return null;
@@ -88,6 +107,49 @@ public class Result_UI : MonoBehaviour
 
         progressText.text = string.Format("{0:0.#}%", progress);
         StartCoroutine(GameResultCG());
+    }
+
+    IEnumerator SetFailProgress()
+    {
+        float time = 0;
+        float currProgressText = 100f;
+        float currProgress = 120f;
+        int index = lakiaroLevel;
+        Debug.Log(index);
+        while (time < 2f && currProgressText != progress)
+        {
+            time += Time.deltaTime;
+            currProgressText = Mathf.Lerp(100, progress, time / 2f);
+            currProgressText = Mathf.Floor(currProgressText * 10) * 0.1f;
+
+            if (currProgress - 20f > currProgressText)
+            {
+                index--;
+                currProgress -= 20f;
+                StartCoroutine(ProgressGlow());
+            }
+
+            lakiaroImage.sprite = lakiaroSprite[index];
+            progressText.text = string.Format("{0:0.#}%", currProgressText);
+            yield return null;
+        }
+
+        lakiaroImage.sprite = lakiaroSprite[index + 10];
+        progressText.text = string.Format("{0:0.#}%", progress);
+        StartCoroutine(GameResultCG());
+    }
+
+    IEnumerator ProgressGlow()
+    {
+        float time = 0f;
+        lakiaroGlow.alpha = 1f;
+        while (lakiaroGlow.alpha > 0.05f)
+        {
+            time += Time.deltaTime;
+            lakiaroGlow.alpha = Mathf.Lerp(lakiaroGlow.alpha, 0, time);
+            yield return null;
+        }
+        lakiaroGlow.alpha = 0f;
     }
 
     IEnumerator GameResultCG()
@@ -117,15 +179,41 @@ public class Result_UI : MonoBehaviour
         }
 
         goldText.text = ((int)gold).ToString();
+        StartCoroutine(ContinueBtnCG());
+    }
+
+    IEnumerator ContinueBtnCG()
+    {
+        while (continueBtn.alpha < 0.95f)
+        {
+            continueBtn.alpha = Mathf.Lerp(continueBtn.alpha, 1f, Time.deltaTime);
+            yield return null;
+        }
+
+        continueBtn.blocksRaycasts = true;
     }
 
     public void Skip()
     {
         StopAllCoroutines();
-
+        skipBtn.SetActive(false);
         result_UI.alpha = 1f;
+
+        lakiaroGlow.alpha = 0f;
         progressText.text = string.Format("{0:0.#}%", progress);
+        if (80 <= progress && progress < 100) lakiaroImage.sprite = lakiaroSprite[lakiaroLevel - 1];
+        else if (60 <= progress && progress < 80) lakiaroImage.sprite = lakiaroSprite[lakiaroLevel - 2];
+        else if (40 <= progress && progress < 60) lakiaroImage.sprite = lakiaroSprite[lakiaroLevel - 3];
+        else if (20 <= progress && progress < 40) lakiaroImage.sprite = lakiaroSprite[lakiaroLevel - 4];
+        else if (0 < progress && progress < 20) lakiaroImage.sprite = lakiaroSprite[lakiaroLevel - 5];
+        else if(progress == 0) lakiaroImage.sprite = lakiaroSprite[lakiaroLevel - 5 + 10];
+
         ((gameResult) ? successUI : failUI).alpha = 1f;
-        goldText.text = gold.ToString();
+        resultglow.alpha = 0f;
+
+        goldText.text = ((int)gold).ToString();
+
+        continueBtn.alpha = 1f;
+        continueBtn.blocksRaycasts = true;
     }
 }

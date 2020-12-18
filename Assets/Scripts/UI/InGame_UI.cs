@@ -25,6 +25,10 @@ public class InGame_UI : MonoBehaviour
     public Vector3 viewMin, viewMax;
     float yMin, yMax;
 
+    [Header("GameResult UI")]
+    public CanvasGroup gameResultCG;
+    public Text gameResultText;
+
     [Header("Lakiaro Progress")]
     public Sprite[] lakiaroSprite;
     public Image[] lakiaroImage;
@@ -41,6 +45,7 @@ public class InGame_UI : MonoBehaviour
 
     void Init()
     {
+        gameResultCG.gameObject.SetActive(false);
         round.SetActive(false);
         resumeBtn.SetActive(false);
     }
@@ -201,11 +206,23 @@ public class InGame_UI : MonoBehaviour
         effect--;
     }
 
-    public void EnableRound(bool lastRound)
+    public void EnableRound()
     {
         if (!round.activeSelf) round.SetActive(true);
 
-        roundText.text = (!lastRound) ? "흙을 모두 찾는데 성공했습니다." : "라키아로를 수확하였습니다.";
+        roundText.text = "흙을 모두 찾는데 성공했습니다.\n3";
+        StartCoroutine(RoundTimer());
+    }
+
+    IEnumerator RoundTimer()
+    {
+        float timer = 3f;
+        while(timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            roundText.text = "흙을 모두 찾는데 성공했습니다.\n" + ((int)timer).ToString(); ;
+            yield return null;
+        }
     }
 
     public void DisableRound()
@@ -213,6 +230,28 @@ public class InGame_UI : MonoBehaviour
         if (round.activeSelf) round.SetActive(false);
 
     }
+
+    public void OnResultUI(bool gameResult)
+    {
+        gameResultCG.alpha = 0;
+        gameResultText.text = (gameResult) ? "수확에\n성공하였습니다." : "수확에\n실패하였습니다.";
+        gameResultCG.gameObject.SetActive(true);
+        StartCoroutine(OnGameResult());
+    }
+    IEnumerator OnGameResult()
+    {
+        while (gameResultCG.alpha < 0.95f)
+        {
+            gameResultCG.alpha = Mathf.Lerp(gameResultCG.alpha, 1, Time.deltaTime);
+            yield return null;
+        }
+        gameResultCG.alpha = 1f;
+    }
+    public void OffResultUI()
+    {
+        gameResultCG.gameObject.SetActive(false);
+    }
+
     public void Resume()
     {
         resumeBtn.SetActive(false);

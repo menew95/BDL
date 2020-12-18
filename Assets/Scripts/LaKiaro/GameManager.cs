@@ -105,6 +105,10 @@ public class GameManager : MonoBehaviour
         {
             FinishDigLakiaro(tempLakiaroLevel, tempProgress, tempGameResult);
         }
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().result_UI.Skip();
+        }
     }
 
     public void Resume()

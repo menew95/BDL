@@ -26,6 +26,8 @@ public class LakiaroManager : MonoBehaviour
     private int lakiaroLevel, currLakiaroLevel = 0, manosHoeLevel, currRemainTryTime;
     public float progress = 100f;
 
+    private bool gameResult = true;
+
     public Queue<Dirt> dirtPool = new Queue<Dirt>();
     public Queue<Root> rootPool = new Queue<Root>();
     public Queue<Pebble> pebblePool = new Queue<Pebble>();
@@ -569,35 +571,58 @@ public class LakiaroManager : MonoBehaviour
         }
 
         float timer = 0f;
-        
-        inGame_UI.EnableRound((lastRound) ? true : false);
 
-        lakiaroDirtTilemap_Upper.ClearAllTiles();
-
-        while (timer < 5f)
+        /*if (!lastRound)
         {
-            yield return null;
-            timer += Time.deltaTime;
-        }
-        inGame_UI.DisableRound();
-        
-        InitGame();
+            inGame_UI.EnableRound();
+
+            lakiaroDirtTilemap_Upper.ClearAllTiles();
+
+            while (timer < 3f)
+            {
+                yield return null;
+                timer += Time.deltaTime;
+            }
+            inGame_UI.DisableRound();
+        }*/
 
         if (lastRound)
         {
-            GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, true);
+            gamePause = true;
+            inGame_UI.OnResultUI(gameResult);
+            /*GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, true);
             UIManager.Instance.CallLobbyUI();
             UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
-            gamePause = true;
+            gamePause = true;*/
         }
         else
         {
+            inGame_UI.EnableRound();
+
+            lakiaroDirtTilemap_Upper.ClearAllTiles();
+
+            while (timer < 3f)
+            {
+                yield return null;
+                timer += Time.deltaTime;
+            }
+            inGame_UI.DisableRound();
+            
+            InitGame();
+
             GenerateLakiaro(nextLevel);
 
             inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
         }
     }
-    
+
+    public void ReturnToLobby()
+    {
+        UIManager.Instance.CallLobbyUI();
+        UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
+        GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, gameResult);
+    }
+
     void SetDamagedRootTileBase(Vector3Int pos)
     {
         if (lakiaroRoot[pos.x, pos.y].type != Lakiaro.Type.Root) return;
@@ -683,7 +708,15 @@ public class LakiaroManager : MonoBehaviour
         
         float damp = 0;
         progress -= 1.14f;
+        progress = Mathf.Clamp(progress, 0, 100);
         inGame_UI.UpdateProgress(progress, lakiaroLevel);
+
+        if (progress == 0)
+        {
+            gameResult = false;
+            gamePause = true;
+            inGame_UI.OnResultUI(gameResult);
+        }
     }
 
     public void GenerateLakiaro(int level = 0)
