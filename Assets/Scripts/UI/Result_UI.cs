@@ -19,6 +19,7 @@ public class Result_UI : MonoBehaviour
     public CanvasGroup lakiaroGlow;
     public Text progressText;
     public Text goldText;
+    public GameObject dailyBonusUI;
 
     public Sprite[] lakiaroSprite;
 
@@ -40,16 +41,18 @@ public class Result_UI : MonoBehaviour
         goldText.text = "";
 
         skipBtn.SetActive(true);
-        
+        dailyBonusUI.SetActive(false);
     }
 
-    public void OnResultUI(int _lakiaroLevel, float _progress, float _gold, bool _gameResult)
+    public void OnResultUI(int _lakiaroLevel, float _progress, float _gold, bool _gameResult, bool _isDaily = false, double _dailyBonus = 0)
     {
         lakiaroLevel = _lakiaroLevel;
         lakiaroImage.sprite = lakiaroSprite[lakiaroLevel];
         progress = _progress;
         gold = _gold;
         gameResult = _gameResult;
+        isDaily = _isDaily;
+        dailyBonus = _dailyBonus;
         goldText.text = "";
         StartCoroutine(OnResultCG());
     }
@@ -59,6 +62,8 @@ public class Result_UI : MonoBehaviour
     [SerializeField]
     float gold;
     bool gameResult;
+    bool isDaily;
+    double dailyBonus;
 
     IEnumerator OnResultCG()
     {
@@ -179,7 +184,34 @@ public class Result_UI : MonoBehaviour
         }
 
         goldText.text = ((int)gold).ToString();
+        if(isDaily && gameResult)
+        {
+            StartCoroutine(SetDailyBonus());
+        }
+        else
+        {
+            StartCoroutine(ContinueBtnCG());
+        }
+    }
+
+    IEnumerator SetDailyBonus()
+    {
+        dailyBonusUI.SetActive(true);
+        float time = 0;
+        double bonuseGold = gold * dailyBonus;
+        Debug.Log(((int)bonuseGold)+ " " + ((int)gold).ToString() + " " + dailyBonus.ToString());
+        while (time < 1.5f)
+        {
+            time += Time.deltaTime;
+            goldText.text = ((int)Mathf.Lerp(gold, (float)bonuseGold, time)).ToString();
+            yield return null;
+        }
+
+
+        goldText.text = ((int)bonuseGold).ToString();
+
         StartCoroutine(ContinueBtnCG());
+
     }
 
     IEnumerator ContinueBtnCG()
@@ -211,7 +243,15 @@ public class Result_UI : MonoBehaviour
         ((gameResult) ? successUI : failUI).alpha = 1f;
         resultglow.alpha = 0f;
 
-        goldText.text = ((int)gold).ToString();
+        if (isDaily)
+        {
+            dailyBonusUI.SetActive(true);
+            goldText.text = ((int)(gold * dailyBonus)).ToString();
+        }
+        else
+        {
+            goldText.text = ((int)gold).ToString();
+        }
 
         continueBtn.alpha = 1f;
         continueBtn.blocksRaycasts = true;

@@ -101,6 +101,12 @@ TextureImporter:
   - first:
       213: 7471660084807347399
     second: Icon_30
+  - first:
+      213: 931534263114688543
+    second: botIcon
+  - first:
+      213: -3651660898082863605
+    second: stat_icon
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -885,6 +891,48 @@ TextureImporter:
       bones: []
       spriteID: ded75eab831e68241aea01531ca2ecca
       internalID: 7471660084807347399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: botIcon
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 470
+        width: 46
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e60615bf365503c4abff63c1f6a17d87
+      internalID: 931534263114688543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stat_icon
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 464
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d0f15227940a2c4c96982c2eb6038c2
+      internalID: -3651660898082863605
       vertices: []
       indices: 
       edges: []

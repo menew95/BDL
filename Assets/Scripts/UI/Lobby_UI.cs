@@ -9,10 +9,14 @@ public class Lobby_UI : MonoBehaviour
     public LakiaroBtn[] lakiaroBtn;
     public Sprite[] lakiaroSprite;
     public LaKiaroInfo_UI laKiaroInfo_UI;
+    public LaKiaroInfo_UI dailyInfo_UI;
     public Gold_UI gold_UI;
     public Result_UI result_UI;
     public GameObject currDigging;
     public RectTransform currDigAnim;
+
+    public GameObject dailyClear;
+    public GameObject dailyLoading;
 
     public RectTransform[] panel;
     public RectTransform[] lakiaroPos;
@@ -23,6 +27,7 @@ public class Lobby_UI : MonoBehaviour
         None,
         loadingUI,
         InfoUI,
+        DailyInfo,
         CurrDinggingUI,
     }
     public State currState;
@@ -47,6 +52,7 @@ public class Lobby_UI : MonoBehaviour
         currDigAnim.gameObject.SetActive(false);
         loading.gameObject.SetActive(false);
         laKiaroInfo_UI.gameObject.SetActive(false);
+        dailyInfo_UI.gameObject.SetActive(false);
         currDigging.SetActive(false);
     }
 
@@ -67,6 +73,8 @@ public class Lobby_UI : MonoBehaviour
 
             lakiaroBtn[i].SetData(lakiaroSprite[GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].LakiaroLevel], setColor, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].Pos);
         }
+
+        if (GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig) dailyLoading.SetActive(true);
 
         StartCoroutine(Timer());
     }
@@ -106,7 +114,14 @@ public class Lobby_UI : MonoBehaviour
                 }
             }
         }
-        
+
+        // 데일리 데이타 재설정
+        timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.userIndate);
+        if(timespan.Days > 0)
+        {
+            GameManager.Instance.dataManager.NewDailyData();
+        }
+
         GameManager.Instance.dataManager.gameData.userIndate = System.DateTime.Now.ToString();
     }
 
@@ -185,6 +200,18 @@ public class Lobby_UI : MonoBehaviour
         }
     }
 
+    public void StartDailyLakiaro()
+    {
+        UIManager.Instance.CallInGameUI();
+        gameObject.SetActive(false);
+
+        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel, GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
+
+        GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = true;
+
+        GameManager.Instance.audioManager.CallAudioClip(1);
+    }
+
     public void DeleteGameData() // 기존 게임 데이타를 지우고 새로운 게임 시작
     {
         for(int i = 0; i < 5; i++)
@@ -206,31 +233,43 @@ public class Lobby_UI : MonoBehaviour
     {
         UIManager.Instance.CallInGameUI();
         gameObject.SetActive(false);
-        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging);
+        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging, false);
 
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging = true;
 
         GameManager.Instance.audioManager.CallAudioClip(1);
     }
 
-    public void DigFinishLakiaro() 
+    public void DigFinishLakiaro(bool isDailyGame) 
     {
         /* 메인게임이 끝난후 적용할 효과
          * infodata (isDig, cooltime) 설정
          * 라키아로 버튼 로딩버튼으로 변경
          * 게임 결과창 On
          */
-        lakiaroBtn[currindex].OnLoading();
 
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].IsDig = true;
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CoolTime = 600;
+        if (isDailyGame)
+        {
+            dailyLoading.SetActive(false);
+
+            GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeClear = true;
+            GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = false;
+        }
+        else
+        {
+            lakiaroBtn[currindex].OnLoading();
+
+            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].IsDig = true;
+            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging = false;
+            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CoolTime = 600;
+        }
 
     }
 
-    public void OnResultUI(int lakiaroLevel, float _progress, float _gold, bool _gameResult)
+    public void OnResultUI(int lakiaroLevel, float _progress, float _gold, bool _gameResult, bool isDaily = false, double dailyBonus = 0)
     {
         result_UI.gameObject.SetActive(true);
-        result_UI.OnResultUI(lakiaroLevel, _progress, _gold, _gameResult);
+        result_UI.OnResultUI(lakiaroLevel, _progress, _gold, _gameResult, isDaily, dailyBonus);
     }
 
     public void OffResultUI()
@@ -248,7 +287,33 @@ public class Lobby_UI : MonoBehaviour
         currState = State.InfoUI;
         currindex = index;
         laKiaroInfo_UI.OnInfo(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].CurrDigging);
+        OffDailyInfo();
         loading.gameObject.SetActive(false);
+    }
+
+    public void CallLakiaroDailyInfo()
+    {
+        if (GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeClear)
+        {
+            dailyClear.SetActive(true);
+            return;
+        }
+
+        int lakiaro = GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel;
+        int manos = GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel;
+        bool IsDailyChallengeCurrDig = GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig;
+
+        dailyInfo_UI.OnInfo(lakiaro, manos, Vector3.zero, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig);
+
+        OffLakiaroInfo();
+        loading.gameObject.SetActive(false);
+        currState = State.DailyInfo;
+    }
+
+    public void OffDailyInfo()
+    {
+        currState = State.None;
+        dailyInfo_UI.OffInfo();
     }
 
     public void OffLakiaroInfo()

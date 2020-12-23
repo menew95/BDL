@@ -57,4 +57,13 @@ public class DataManager : MonoBehaviour
     {
         SaveGameData();
     }
+
+    public void NewDailyData()
+    {
+        gameData.dailyChallengeData.LakiaroLevel = Random.Range(2, 4);
+        gameData.dailyChallengeData.ManosHoeLevel = Mathf.Clamp(Random.Range(gameData.dailyChallengeData.LakiaroLevel - 2, gameData.dailyChallengeData.LakiaroLevel + 1), 0, 4);
+
+        gameData.playerData.IsDailyChallengeClear = false;
+        gameData.playerData.IsDailyChallengeCurrDig = false;
+    }
 }

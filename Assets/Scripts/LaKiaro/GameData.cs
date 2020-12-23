@@ -19,10 +19,12 @@ public class GameData
     public bool isSaveGameData = false;
 
     public LakiaroGameData lakiaroGameData = new LakiaroGameData();
+    public LakiaroGameData dailyChallengeData = new LakiaroGameData();
 
     public PlayerData playerData = new PlayerData();
 
     public List<LakiaroInfoData> LakiaroInfoDataList = new List<LakiaroInfoData> { new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData() };
+
 }
 
 [System.Serializable]
@@ -68,11 +70,17 @@ public class PlayerData
     [SerializeField]
     int stack = 0;
     [SerializeField]
-    int gold = 0;
+    long gold = 0;
     [SerializeField]
     List<int> manosHoes = new List<int>();
+    [SerializeField]
+    bool isDailyChallengeClear = false;
+    [SerializeField]
+    bool isDailyChallengeCurrDig = false;
 
     public int Stack { get => stack; set => stack = value; }
-    public int Gold { get => gold; set => gold = value; }
+    public long Gold { get => gold; set => gold = value; }
     public List<int> ManosHoes { get => manosHoes; set => manosHoes = value; }
+    public bool IsDailyChallengeClear { get => isDailyChallengeClear; set => isDailyChallengeClear = value; }
+    public bool IsDailyChallengeCurrDig { get => isDailyChallengeCurrDig; set => isDailyChallengeCurrDig = value; }
 }

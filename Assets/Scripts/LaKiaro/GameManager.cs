@@ -67,6 +67,10 @@ public class GameManager : MonoBehaviour
                 {
                     UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffLakiaroInfo();
                 }
+                else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.DailyInfo)
+                {
+                    UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffDailyInfo();
+                }
                 else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.loadingUI)
                 {
                     UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffLoading();
@@ -103,7 +107,7 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.R))
         {
-            FinishDigLakiaro(tempLakiaroLevel, tempProgress, tempGameResult);
+            FinishDigLakiaro(tempLakiaroLevel, tempManos, tempProgress, tempGameResult, tempDaily);
         }
         if (Input.GetKeyUp(KeyCode.S))
         {
@@ -129,10 +133,12 @@ public class GameManager : MonoBehaviour
     }
 
     public int tempLakiaroLevel = 4;
+    public int tempManos = 4;
     public float tempProgress = 100;
     public bool tempGameResult = true;
+    public bool tempDaily = false;
 
-    public void FinishDigLakiaro(int _lakiaroLevel, float _progress, bool _gameResult)
+    public void FinishDigLakiaro(int _lakiaroLevel, int _manosLevel, float _progress, bool _gameResult, bool _isDaily)
     {
         /*라키아로 가치에 따른 자원 추가
          */
@@ -181,7 +187,32 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        dataManager.gameData.playerData.Gold += gold;
-        UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
+        if (_isDaily)
+        {
+            int difficult = _lakiaroLevel - _manosLevel;
+            double dailyBonus = 1.1f;
+            switch (difficult)
+            {
+                case 2:
+                    dailyBonus = 2d;
+                    break;
+                case 1:
+                    dailyBonus = 1.6d;
+                    break;
+                case 0:
+                    dailyBonus = 1.3d;
+                    break;
+                case -1:
+                    dailyBonus = 1.1d;
+                    break;
+            }
+            dataManager.gameData.playerData.Gold += (long)(gold * dailyBonus);
+            UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult, _isDaily, dailyBonus);
+        }
+        else
+        {
+            dataManager.gameData.playerData.Gold += gold;
+            UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
+        }
     }
 }
