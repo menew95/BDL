@@ -5,404 +5,63 @@ using UnityEngine.UI;
 
 public class Lobby_UI : MonoBehaviour
 {
-    public RectTransform map;
-    public LakiaroBtn[] lakiaroBtn;
-    public Sprite[] lakiaroSprite;
-    public LaKiaroInfo_UI laKiaroInfo_UI;
-    public LaKiaroInfo_UI dailyInfo_UI;
-    public Gold_UI gold_UI;
-    public Result_UI result_UI;
-    public GameObject currDigging;
-    public RectTransform currDigAnim;
-
-    public GameObject dailyClear;
-    public GameObject dailyLoading;
-
-    public RectTransform[] panel;
-    public RectTransform[] lakiaroPos;
-    public RectTransform loading;
-
-    public enum State
+    public enum LobbyState
     {
-        None,
-        loadingUI,
-        InfoUI,
-        DailyInfo,
-        CurrDinggingUI,
-    }
-    public State currState;
-
-    WaitForSeconds wfsOne = new WaitForSeconds(1f);
-
-    void OnEnable()
-    {
-        StopAllCoroutines();
-        LoadData();
+        Home,
+        Shop,
+        Static,
+        NewGame
     }
 
-    void OnDisable()
+    public LobbyState currState = LobbyState.Home;
+
+    public GameObject home_UI;
+    public GameObject shop_UI;
+    public GameObject static_UI;
+    public GameObject newGame_UI;
+
+    public void CallHomeUI()
     {
-        InitLobbyUI();
+        currState = LobbyState.Home;
+
+        shop_UI.SetActive(false);
+        static_UI.SetActive(false);
+        newGame_UI.SetActive(false);
+
+        home_UI.SetActive(true);
     }
-
-    void InitLobbyUI()
+    public void CallShopUI()
     {
-        currState = State.None;
-        map.anchoredPosition = Vector3.zero;
-        currDigAnim.gameObject.SetActive(false);
-        loading.gameObject.SetActive(false);
-        laKiaroInfo_UI.gameObject.SetActive(false);
-        dailyInfo_UI.gameObject.SetActive(false);
-        currDigging.SetActive(false);
+        currState = LobbyState.Shop;
+
+        home_UI.SetActive(false);
+        static_UI.SetActive(false);
+        newGame_UI.SetActive(false);
+
+        shop_UI.SetActive(true);
     }
-
-    Color[] colors = { new Color(0, 0, 1, 0.4f), new Color(1, 1, 0, 0.4f), new Color(1, 0, 0, 0.4f) };
-
-    public void LoadData()
+    public void ClickDailyBtn()
     {
-        Color setColor;
-        Caltime(); // 쿨타임과 리프레시할 라키아로부터 제설정
-
-        for (int i = 0; i < 5; i++)
-        {
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging) OnDigAnim(i);
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig) continue;
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].LakiaroLevel == 4) setColor = colors[2];
-            else if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].LakiaroLevel > 1) setColor = colors[1];
-            else setColor = colors[0];
-
-            lakiaroBtn[i].SetData(lakiaroSprite[GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].LakiaroLevel], setColor, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].Pos);
-        }
-
-        if (GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig) dailyLoading.SetActive(true);
-
-        StartCoroutine(Timer());
-    }
-
-    public void Caltime() // 이전 접속한 시간과 새로 접속한 시간을 비교후 coolttime과 오래된 라키아로 재생성
-    {
-        System.TimeSpan timespan;
-
-        for (int i = 0; i < 5; i++)
-        {
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging) continue;
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig)
-            {
-                timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.userIndate);
-                GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime -= (int)timespan.TotalSeconds;
-                
-                if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime < 0)
-                {
-                    Debug.Log("쿨타임 끝 라키아로 생성");
-                    CreateNewLakiaro(i);
-                }
-                else
-                {
-
-                    Debug.Log("cooltime");
-                    lakiaroBtn[i].OnLoading();
-                }
-            }
-            else
-            {
-                timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].GenerateTime);
-                
-                if ((int)timespan.TotalMinutes > 30)
-                {
-                    Debug.Log("오래되서 재생성" + i);
-                    CreateNewLakiaro(i);
-                }
-            }
-        }
-
-        // 데일리 데이타 재설정
-        timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.userIndate);
-        if(timespan.Days > 0)
-        {
-            GameManager.Instance.dataManager.NewDailyData();
-        }
-
-        GameManager.Instance.dataManager.gameData.userIndate = System.DateTime.Now.ToString();
-    }
-
-    IEnumerator Timer() // cooltime 및 오래된 라키아로 재생성 타이머
-    {
-        System.TimeSpan timespan;
-        while (true)
-        {
-            yield return wfsOne;
-            for (int i = 0; i < 5; i++)
-            {
-                if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging) continue;
-                if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig)
-                {
-                    GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime -= 1;
-
-                    if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime < 0)
-                    {
-                        CreateNewLakiaro(i);
-                    }
-                }
-                else
-                {
-                    timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].GenerateTime);
-
-                    if ((int)timespan.TotalMinutes > 30)
-                    {
-                        Debug.Log("오래되서 재생성" + i);
-                        CreateNewLakiaro(i);
-                    }
-                }
-            }
-
-        }
-    }
-
-
-    public void CreateNewLakiaro(int index) // 새로운 라키아로 infodata 설정 및 btn에 적용
-    {
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel = Random.Range(0, 4);
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos = lakiaroPos[5 * index + Random.Range(0, 4)].anchoredPosition;
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].CoolTime = 0;
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].GenerateTime = System.DateTime.Now.ToString();
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].IsDig = false;
-
-        Color setColor;
-        if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel == 4) setColor = colors[2];
-        else if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel > 1) setColor = colors[1];
-        else setColor = colors[0];
-
-        lakiaroBtn[index].SetData(lakiaroSprite[GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel], setColor, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos);
-    }
-
-    public void OnClickPlayBtn()
-    {
-        bool currDigging = false;
-        int index = 0;
-        for(int i = 0; i < 5; i++)
-        {
-            if(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging)
-            {
-                if (currindex == i) break;
-                index = i;
-                currDigging = true;
-                break;
-            }
-        }
-        if (!currDigging)
-        {
-            StartNewGame();
-        }
-        else
-        {
-            OnCurrDigging();
-            laKiaroInfo_UI.gameObject.SetActive(false);
-        }
-    }
-
-    public void StartDailyLakiaro()
-    {
-        UIManager.Instance.CallInGameUI();
-        gameObject.SetActive(false);
-
-        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel, GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
-
-        GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = true;
-
-        GameManager.Instance.audioManager.CallAudioClip(1);
-    }
-
-    public void DeleteGameData() // 기존 게임 데이타를 지우고 새로운 게임 시작
-    {
-        for(int i = 0; i < 5; i++)
-        {
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging)
-            {
-                Debug.LogWarning("ssssssssssssSSS");
-                GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging = false;
-                GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig = true;
-                GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime = 30;
-                break;
-            }
-        }
-
-        StartNewGame();
-    }
-
-    public void StartNewGame() // 새로운 게임 시작
-    {
-        UIManager.Instance.CallInGameUI();
-        gameObject.SetActive(false);
-        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging, false);
-
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging = true;
-
-        GameManager.Instance.audioManager.CallAudioClip(1);
-    }
-
-    public void DigFinishLakiaro(bool isDailyGame) 
-    {
-        /* 메인게임이 끝난후 적용할 효과
-         * infodata (isDig, cooltime) 설정
-         * 라키아로 버튼 로딩버튼으로 변경
-         * 게임 결과창 On
-         */
-
-        if (isDailyGame)
-        {
-            dailyLoading.SetActive(false);
-
-            GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeClear = true;
-            GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = false;
-        }
-        else
-        {
-            lakiaroBtn[currindex].OnLoading();
-
-            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].IsDig = true;
-            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging = false;
-            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CoolTime = 600;
-        }
 
     }
-
-    public void OnResultUI(int lakiaroLevel, float _progress, float _gold, bool _gameResult, bool isDaily = false, double dailyBonus = 0)
+    public void CallStaticUI()
     {
-        result_UI.gameObject.SetActive(true);
-        result_UI.OnResultUI(lakiaroLevel, _progress, _gold, _gameResult, isDaily, dailyBonus);
+        currState = LobbyState.Static;
+
+        home_UI.SetActive(false);
+        shop_UI.SetActive(false);
+        newGame_UI.SetActive(false);
+
+        static_UI.SetActive(true);
     }
-
-    public void OffResultUI()
+    public void CallNewGameUI()
     {
-        result_UI.gameObject.SetActive(false);
-        gold_UI.UpdateCoin();
-    }
-    /* UI On Off 시 필요한 작업들
-    * currState변경 및 UI 위치 변경 등
-    */
+        currState = LobbyState.NewGame;
 
-    int currindex; // 현재 선택된 Index => info data index값
-    public void CallLakiaroInfo(int index)
-    {
-        currState = State.InfoUI;
-        currindex = index;
-        laKiaroInfo_UI.OnInfo(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].CurrDigging);
-        OffDailyInfo();
-        loading.gameObject.SetActive(false);
-    }
+        home_UI.SetActive(false);
+        shop_UI.SetActive(false);
+        static_UI.SetActive(false);
 
-    public void CallLakiaroDailyInfo()
-    {
-        if (GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeClear)
-        {
-            dailyClear.SetActive(true);
-            return;
-        }
-
-        int lakiaro = GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel;
-        int manos = GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel;
-        bool IsDailyChallengeCurrDig = GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig;
-
-        dailyInfo_UI.OnInfo(lakiaro, manos, Vector3.zero, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig);
-
-        OffLakiaroInfo();
-        loading.gameObject.SetActive(false);
-        currState = State.DailyInfo;
-    }
-
-    public void OffDailyInfo()
-    {
-        currState = State.None;
-        dailyInfo_UI.OffInfo();
-    }
-
-    public void OffLakiaroInfo()
-    {
-        currState = State.None;
-        laKiaroInfo_UI.OffInfo();
-    }
-
-    public void OnLoading(int index)
-    {
-        currState = State.loadingUI;
-        laKiaroInfo_UI.gameObject.SetActive(false);
-
-        loading.gameObject.SetActive(true);
-        loading.anchoredPosition = GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos;
-    }
-
-    public void OffLoading()
-    {
-        currState = State.None;
-        loading.gameObject.SetActive(false);
-    }
-
-    void OnCurrDigging()
-    {
-        currState = State.CurrDinggingUI;
-        currDigging.SetActive(true);
-    }
-
-    public void OffCurrDigging()
-    {
-        currState = State.InfoUI;
-        currDigging.SetActive(false);
-        laKiaroInfo_UI.gameObject.SetActive(true);
-    }
-
-    void OnDigAnim(int index)
-    {
-        currDigAnim.gameObject.SetActive(true);
-        currDigAnim.SetParent(lakiaroBtn[index].transform);
-        currDigAnim.anchoredPosition = Vector3.zero;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 100;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 1000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 10000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 100000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 1000000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold -= 100;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold -= 1000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold -= 1000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold -= 100000;
-            gold_UI.UpdateCoin();
-        }
+        newGame_UI.SetActive(true);
     }
 }

@@ -107,6 +107,9 @@ TextureImporter:
   - first:
       213: -3651660898082863605
     second: stat_icon
+  - first:
+      213: -6949763105864048383
+    second: HomeIcon
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -925,7 +928,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -933,6 +936,27 @@ TextureImporter:
       bones: []
       spriteID: 5d0f15227940a2c4c96982c2eb6038c2
       internalID: -3651660898082863605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HomeIcon
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf54bdcbd486d0c49b07c05049f57383
+      internalID: -6949763105864048383
       vertices: []
       indices: 
       edges: []

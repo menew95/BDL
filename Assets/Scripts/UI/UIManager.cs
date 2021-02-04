@@ -35,59 +35,34 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public CanvasGroup main_UI_CG;
-    public CanvasGroup practice_UI_CG;
-    public CanvasGroup inGame_UI_CG;
-    public CanvasGroup lobby_UI;
+    public GameObject main_UI;
+    public GameObject inGame_UI;
+    public Lobby_UI lobby_UI;
+    public NewGame_UI newGame_UI;
 
     public enum UIState
     {
         Main,
-        Lobby,
-        Practice,
         InGame
     }
     public UIState currUIState = UIState.Main;
-
-    public void CallPracticeMenu()
-    {
-        currUIState = UIState.Practice;
-
-        practice_UI_CG.gameObject.SetActive(true);
-    }
-
-    public void ExitPracticeMenu()
-    {
-        currUIState = UIState.Main;
-
-        practice_UI_CG.GetComponent<Practice_UI>().OnExitPlayBtn();
-    }
 
     public void CallInGameUI()
     {
         currUIState = UIState.InGame;
 
-        main_UI_CG.gameObject.SetActive(false);
-        inGame_UI_CG.gameObject.SetActive(true);
-        lobby_UI.gameObject.SetActive(false);
+        main_UI.SetActive(false);
+
+        inGame_UI.SetActive(true);
     }
 
     public void CallMainUI()
     {
         currUIState = UIState.Main;
+        
+        main_UI.SetActive(true);
 
-        main_UI_CG.gameObject.SetActive(true);
-        inGame_UI_CG.gameObject.SetActive(false);
-        lobby_UI.gameObject.SetActive(false);
-    }
-
-    public void CallLobbyUI()
-    {
-        currUIState = UIState.Lobby;
-
-        main_UI_CG.gameObject.SetActive(false);
-        inGame_UI_CG.gameObject.SetActive(false);
-        lobby_UI.gameObject.SetActive(true);
+        inGame_UI.SetActive(false);
 
     }
 }

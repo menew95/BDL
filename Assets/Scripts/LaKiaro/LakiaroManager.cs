@@ -629,8 +629,8 @@ public class LakiaroManager : MonoBehaviour
 
     public void ReturnToLobby()
     {
-        UIManager.Instance.CallLobbyUI();
-        UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro(isDailyGame);
+        UIManager.Instance.CallMainUI();
+        UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().DigFinishLakiaro(isDailyGame);
         GameManager.Instance.FinishDigLakiaro(lakiaroLevel, manosHoeLevel, progress, gameResult, isDailyGame);
     }
 

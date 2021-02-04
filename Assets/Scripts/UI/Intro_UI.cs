@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Main_UI : MonoBehaviour
+public class Intro_UI : MonoBehaviour
 {
     public RectTransform BG;
 
@@ -18,7 +18,10 @@ public class Main_UI : MonoBehaviour
 
     public void OnClickStartBtn()
     {
-        UIManager.Instance.CallMainUI();
+        gameObject.SetActive(false);
+
+        UIManager.Instance.lobby_UI.CallHomeUI();
+        UIManager.Instance.lobby_UI.gameObject.SetActive(true);
 
         GameManager.Instance.audioManager.CallAudioClip(1);
     }
@@ -31,4 +34,5 @@ public class Main_UI : MonoBehaviour
         Application.Quit();
 #endif
     }
+
 }

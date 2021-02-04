@@ -43,57 +43,66 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (UIManager.Instance.currUIState == UIManager.UIState.Main)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Input.GetKeyUp(KeyCode.Escape))
+            if (UIManager.Instance.currUIState == UIManager.UIState.Main)
             {
-                dataManager.SaveGameData();
+                if (UIManager.Instance.lobby_UI.currState == Lobby_UI.LobbyState.Home)
+                {
+                    if (Input.GetKeyUp(KeyCode.Escape))
+                    {
+                        dataManager.SaveGameData();
 #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
+                        UnityEditor.EditorApplication.isPlaying = false;
 #else
                 Application.Quit();
 #endif
-            }
-        }
-        else if (UIManager.Instance.currUIState == UIManager.UIState.Lobby)
-        {
-            if (Input.GetKeyUp(KeyCode.Escape))
-            {
-                if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.None)
-                {
-                    UIManager.Instance.CallMainUI();
+                    }
                 }
-                else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.InfoUI)
+                else if (UIManager.Instance.lobby_UI.currState == Lobby_UI.LobbyState.NewGame)
                 {
-                    UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffLakiaroInfo();
+                    if (UIManager.Instance.newGame_UI.currState == NewGame_UI.State.None)
+                    {
+                        UIManager.Instance.lobby_UI.CallHomeUI();
+                    }
+                    else if (UIManager.Instance.newGame_UI.currState == NewGame_UI.State.InfoUI)
+                    {
+                        UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OffLakiaroInfo();
+                    }
+                    else if (UIManager.Instance.newGame_UI.currState == NewGame_UI.State.DailyInfo)
+                    {
+                        UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OffDailyInfo();
+                    }
+                    else if (UIManager.Instance.newGame_UI.currState == NewGame_UI.State.loadingUI)
+                    {
+                        UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OffLoading();
+                    }
+                    else if (UIManager.Instance.newGame_UI.currState == NewGame_UI.State.CurrDinggingUI)
+                    {
+                        UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OffCurrDigging();
+                    }
                 }
-                else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.DailyInfo)
+                else if (UIManager.Instance.lobby_UI.currState == Lobby_UI.LobbyState.Shop)
                 {
-                    UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffDailyInfo();
+                    UIManager.Instance.lobby_UI.CallHomeUI();
                 }
-                else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.loadingUI)
+                else if (UIManager.Instance.lobby_UI.currState == Lobby_UI.LobbyState.Static)
                 {
-                    UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffLoading();
+                    UIManager.Instance.lobby_UI.CallHomeUI();
                 }
-                else if (UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().currState == Lobby_UI.State.CurrDinggingUI)
-                {
-                    UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OffCurrDigging();
-                }
-            }
-        }
 
-        
-        else if (UIManager.Instance.currUIState == UIManager.UIState.Practice)
-        {
-            if (Input.GetKeyUp(KeyCode.Escape))
-            {
-                UIManager.Instance.ExitPracticeMenu();
-            }
 
-        }
-        else if (UIManager.Instance.currUIState == UIManager.UIState.InGame)
-        {
-            if (Input.GetKeyUp(KeyCode.Escape))
+                /*if (Input.GetKeyUp(KeyCode.Escape))
+                {
+                    dataManager.SaveGameData();
+    #if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+    #else
+                    Application.Quit();
+    #endif
+                }*/
+            }
+            else if (UIManager.Instance.currUIState == UIManager.UIState.InGame)
             {
                 if (lakiaroManager.gamePause)
                 {
@@ -111,7 +120,7 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.S))
         {
-            UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().result_UI.Skip();
+            UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().result_UI.Skip();
         }
     }
 
@@ -128,7 +137,7 @@ public class GameManager : MonoBehaviour
 
     void SaveGame()
     {
-        UIManager.Instance.CallLobbyUI();
+        UIManager.Instance.CallMainUI();
         lakiaroManager.SaveGameData();
     }
 
@@ -207,12 +216,12 @@ public class GameManager : MonoBehaviour
                     break;
             }
             dataManager.gameData.playerData.Gold += (long)(gold * dailyBonus);
-            UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult, _isDaily, dailyBonus);
+            UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult, _isDaily, dailyBonus);
         }
         else
         {
             dataManager.gameData.playerData.Gold += gold;
-            UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
+            UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
         }
     }
 }
