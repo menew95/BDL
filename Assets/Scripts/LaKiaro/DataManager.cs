@@ -22,6 +22,7 @@ public class DataManager : MonoBehaviour
 #elif UNITY_IOS
         dataPath = "file://" + Application.streamingAssetsPath + "/SaveData.json";
 #endif
+        Debug.Log(dataPath);
         if (File.Exists(dataPath))
         {
             Debug.Log("로드시작");

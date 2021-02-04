@@ -49,15 +49,12 @@ public class GameManager : MonoBehaviour
             {
                 if (UIManager.Instance.lobby_UI.currState == Lobby_UI.LobbyState.Home)
                 {
-                    if (Input.GetKeyUp(KeyCode.Escape))
-                    {
-                        dataManager.SaveGameData();
+                    dataManager.SaveGameData();
 #if UNITY_EDITOR
-                        UnityEditor.EditorApplication.isPlaying = false;
+                    UnityEditor.EditorApplication.isPlaying = false;
 #else
-                Application.Quit();
+                    Application.Quit();
 #endif
-                    }
                 }
                 else if (UIManager.Instance.lobby_UI.currState == Lobby_UI.LobbyState.NewGame)
                 {

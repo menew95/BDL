@@ -22,6 +22,7 @@ public class GameData
     public LakiaroGameData dailyChallengeData = new LakiaroGameData();
 
     public PlayerData playerData = new PlayerData();
+    public UpgradeData upgradeData = new UpgradeData();
 
     public List<LakiaroInfoData> LakiaroInfoDataList = new List<LakiaroInfoData> { new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData() };
 
@@ -68,19 +69,34 @@ public class LakiaroGameData
 public class PlayerData
 {
     [SerializeField]
-    int stack = 0;
-    [SerializeField]
     long gold = 0;
-    [SerializeField]
-    List<int> manosHoes = new List<int>();
     [SerializeField]
     bool isDailyChallengeClear = false;
     [SerializeField]
     bool isDailyChallengeCurrDig = false;
-
-    public int Stack { get => stack; set => stack = value; }
+    
     public long Gold { get => gold; set => gold = value; }
-    public List<int> ManosHoes { get => manosHoes; set => manosHoes = value; }
     public bool IsDailyChallengeClear { get => isDailyChallengeClear; set => isDailyChallengeClear = value; }
     public bool IsDailyChallengeCurrDig { get => isDailyChallengeCurrDig; set => isDailyChallengeCurrDig = value; }
+}
+
+[System.Serializable]
+public class UpgradeData
+{
+
+    /* 
+     * lakiaroFoundChance 라키아로 고등급 확률 증가
+     * regenerationCooltime 라키아로 리젠 타임 감소
+     * manosHoeSwallowlyDig 얕게파기 횟수증가
+     * manosHoeDeeplyDig 깊게파기 범위 증가
+     */
+
+    [SerializeField]
+    private List<int> levelData = new List<int> { 1, 1, 1, 1 };
+
+    public List<int> LevelData { get => levelData; set => levelData = value; }
+    public int LakiaroFoundChance { get => LevelData[0]; set => LevelData[0] = value; }
+    public int RegenerationCooltime { get => LevelData[1]; set => LevelData[1] = value; }
+    public int ManosHoeSwallowlyDig { get => LevelData[2]; set => LevelData[2] = value; }
+    public int ManosHoeDeeplyDig { get => LevelData[3]; set => LevelData[3] = value; }
 }
