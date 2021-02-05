@@ -16,7 +16,7 @@ public class GameData
 {
     public string userIndate;
 
-    public bool isSaveGameData = false;
+    public bool hasSaveGameData = false;
 
     public LakiaroGameData lakiaroGameData = new LakiaroGameData();
     public LakiaroGameData dailyChallengeData = new LakiaroGameData();
@@ -55,7 +55,9 @@ public class LakiaroGameData
     private int currRemainTryTime;
     [SerializeField]
     private float progress;
-    
+    [SerializeField]
+    private float timer = 0;
+
     public List<LakiaroListData> LakiaroRoot { get => lakiaroRoot; set => lakiaroRoot = value; }
     public List<RootList> RootLists { get => rootLists; set => rootLists = value; }
     public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
@@ -63,6 +65,7 @@ public class LakiaroGameData
     public int ManosHoeLevel { get => manosHoeLevel; set => manosHoeLevel = value; }
     public int CurrRemainTryTime { get => currRemainTryTime; set => currRemainTryTime = value; }
     public float Progress { get => progress; set => progress = value; }
+    public float Timer { get => timer; set => timer = value; }
 }
 
 [System.Serializable]

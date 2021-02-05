@@ -28,18 +28,20 @@ public class Gold_UI : MonoBehaviour
 
     IEnumerator UpdateCoinText()
     {
-        long currGold = int.Parse(goldText.text);
-        long dis = (long)Mathf.Abs(GameManager.Instance.dataManager.gameData.playerData.Gold - currGold);
+        long currGold = long.Parse(goldText.text);
+        long dis = GameManager.Instance.dataManager.gameData.playerData.Gold - currGold;
         float time = 0;
-        while((Mathf.Abs(GameManager.Instance.dataManager.gameData.playerData.Gold - currGold) >= dis * 0.0001f) || Mathf.Abs(GameManager.Instance.dataManager.gameData.playerData.Gold - currGold) > 1)
+        
+        while(time < 2.0f)
         {
             time += Time.deltaTime;
-            currGold = (long)Mathf.Lerp(currGold, GameManager.Instance.dataManager.gameData.playerData.Gold, 0.03f);
 
-            goldText.text = ((int)currGold).ToString();
+            //currGold = Mathf.Lerp(currGold, GameManager.Instance.dataManager.gameData.playerData.Gold, Time.deltaTime);
+
+            goldText.text = (currGold + (long)(dis * (time * 0.5f))).ToString();
             yield return null;
         }
         Debug.Log(GameManager.Instance.dataManager.gameData.playerData.Gold);
-        goldText.text = ((int)GameManager.Instance.dataManager.gameData.playerData.Gold).ToString();
+        goldText.text = (GameManager.Instance.dataManager.gameData.playerData.Gold).ToString();
     }
 }

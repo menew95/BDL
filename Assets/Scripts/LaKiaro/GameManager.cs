@@ -221,4 +221,10 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
         }
     }
+
+    public void ChnageGoldData(long gold)
+    {
+        dataManager.gameData.playerData.Gold += gold;
+        UIManager.Instance.lobby_UI.gold_UI.UpdateCoin();
+    }
 }

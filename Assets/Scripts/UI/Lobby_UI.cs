@@ -20,6 +20,8 @@ public class Lobby_UI : MonoBehaviour
     public GameObject static_UI;
     public GameObject newGame_UI;
 
+    public Gold_UI gold_UI;
+
     public void CallHomeUI()
     {
         currState = LobbyState.Home;
