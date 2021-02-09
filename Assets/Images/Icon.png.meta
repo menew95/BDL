@@ -110,6 +110,9 @@ TextureImporter:
   - first:
       213: -6949763105864048383
     second: HomeIcon
+  - first:
+      213: -4842543511086065322
+    second: Timer_Icon
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -949,7 +952,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -957,6 +960,27 @@ TextureImporter:
       bones: []
       spriteID: bf54bdcbd486d0c49b07c05049f57383
       internalID: -6949763105864048383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Timer_Icon
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 336
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ead88c4d7311a344ca8f5fbcd5bd2f48
+      internalID: -4842543511086065322
       vertices: []
       indices: 
       edges: []

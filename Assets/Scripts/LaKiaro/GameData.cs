@@ -23,6 +23,7 @@ public class GameData
 
     public PlayerData playerData = new PlayerData();
     public UpgradeData upgradeData = new UpgradeData();
+    public StaticData staticData = new StaticData();
 
     public List<LakiaroInfoData> LakiaroInfoDataList = new List<LakiaroInfoData> { new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData(), new LakiaroInfoData() };
 
@@ -102,4 +103,73 @@ public class UpgradeData
     public int RegenerationCooltime { get => LevelData[1]; set => LevelData[1] = value; }
     public int ManosHoeSwallowlyDig { get => LevelData[2]; set => LevelData[2] = value; }
     public int ManosHoeDeeplyDig { get => LevelData[3]; set => LevelData[3] = value; }
+}
+
+[System.Serializable]
+public class StaticData
+{
+    [SerializeField]
+    private LakiaroStaticData[] lakiaroStaticData = new LakiaroStaticData[5];
+
+    public LakiaroStaticData[] LakiaroStaticData { get => lakiaroStaticData; set => lakiaroStaticData = value; }
+}
+
+[System.Serializable]
+public class LakiaroStaticData
+{
+    [SerializeField]
+    private Static_Game static_Game = new Static_Game();
+    [SerializeField]
+    private Static_Time static_Time = new Static_Time();
+    [SerializeField]
+    private Static_ETC static_ETC = new Static_ETC();
+
+    public Static_Game Static_Game { get => static_Game; set => static_Game = value; }
+    public Static_Time Static_Time { get => static_Time; set => static_Time = value; }
+    public Static_ETC Static_ETC { get => static_ETC; set => static_ETC = value; }
+}
+[System.Serializable]
+public class Static_Game
+{
+    [SerializeField]
+    private int found_Lakiaro_Time = 0;
+    [SerializeField]
+    private int perfect_Dig_Lakiaro_Time = 0;
+    [SerializeField]
+    private float perfect_Dig_Rate = 0;
+    [SerializeField]
+    private float min_dameged_Lakiaro_Productivity = 0;
+    [SerializeField]
+    private float avg_dameged_Lakiaro_Productivity = 0;
+
+    public int Found_Lakiaro_Time { get => found_Lakiaro_Time; set => found_Lakiaro_Time = value; }
+    public int Perfect_Dig_Lakiaro_Time { get => perfect_Dig_Lakiaro_Time; set => perfect_Dig_Lakiaro_Time = value; }
+    public float Perfect_Dig_Rate { get => perfect_Dig_Rate; set => perfect_Dig_Rate = value; }
+    public float Min_dameged_Lakiaro_Productivity { get => min_dameged_Lakiaro_Productivity; set => min_dameged_Lakiaro_Productivity = value; }
+    public float Avg_dameged_Lakiaro_Productivity { get => avg_dameged_Lakiaro_Productivity; set => avg_dameged_Lakiaro_Productivity = value; }
+}
+[System.Serializable]
+public class Static_Time
+{
+    [SerializeField]
+    private int min_Dig_Time = 0;
+    [SerializeField]
+    private int avg_Dig_Time = 0;
+
+    public int Min_Dig_Time { get => min_Dig_Time; set => min_Dig_Time = value; }
+    public int Avg_Dig_Time { get => avg_Dig_Time; set => avg_Dig_Time = value; }
+}
+[System.Serializable]
+public class Static_ETC
+{
+    [SerializeField]
+    private int min_Swallowly_Dig_Count = 0;
+    [SerializeField]
+    private int max_Swallowly_Dig_Count = 0;
+    [SerializeField]
+    private float avg_Swallowly_Dig_Count = 0;
+
+    public int Min_Swallowly_Dig_Count { get => min_Swallowly_Dig_Count; set => min_Swallowly_Dig_Count = value; }
+    public int Max_Swallowly_Dig_Count { get => max_Swallowly_Dig_Count; set => max_Swallowly_Dig_Count = value; }
+    public float Avg_Swallowly_Dig_Count { get => avg_Swallowly_Dig_Count; set => avg_Swallowly_Dig_Count = value; }
 }

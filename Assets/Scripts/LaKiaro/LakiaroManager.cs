@@ -28,6 +28,7 @@ public class LakiaroManager : MonoBehaviour
     [SerializeField]
     private int lakiaroLevel, currLakiaroLevel = 0, manosHoeLevel, currRemainTryTime;
     public float progress = 100f;
+    public float timer = 0f;
 
     private bool gameResult = true;
 
@@ -529,8 +530,24 @@ public class LakiaroManager : MonoBehaviour
         }
 
         inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
+        StopAllCoroutines();
+        StartCoroutine(SetTimer());
 
         gamePause = false;
+    }
+
+    IEnumerator SetTimer()
+    {
+        while (true)
+        {
+            yield return null;
+            if (!gamePause)
+            {
+                timer += Time.deltaTime;
+
+                inGame_UI.UpdateTimer((int)timer);
+            }
+        }
     }
 
     void NextGame(int nextLevel, int _manosHoeLevel)
@@ -601,6 +618,7 @@ public class LakiaroManager : MonoBehaviour
         {
             gamePause = true;
             inGame_UI.OnResultUI(gameResult);
+            GameManager.Instance.dataManager.gameData.hasSaveGameData = false;
             /*GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, true);
             UIManager.Instance.CallLobbyUI();
             UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
@@ -630,7 +648,7 @@ public class LakiaroManager : MonoBehaviour
     public void ReturnToLobby()
     {
         UIManager.Instance.CallMainUI();
-        UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().DigFinishLakiaro(isDailyGame);
+        UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().DigFinishLakiaro(isDailyGame);
         GameManager.Instance.FinishDigLakiaro(lakiaroLevel, manosHoeLevel, progress, gameResult, isDailyGame);
     }
 
@@ -1628,7 +1646,7 @@ public class LakiaroManager : MonoBehaviour
         currRemainDirt = 128;
         currRemainRoot = 0;
         currRemainPebble = 0;
-        
+        timer = 0f;
         for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
         {
             for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
@@ -1735,6 +1753,7 @@ public class LakiaroManager : MonoBehaviour
         manosHoeLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeLevel;
         currRemainTryTime = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime;
         progress = GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress;
+        timer = GameManager.Instance.dataManager.gameData.lakiaroGameData.Timer;
         LoadLakiaro();
     }
 
@@ -1808,6 +1827,8 @@ public class LakiaroManager : MonoBehaviour
 
     public void SaveGameData()
     {
+        GameManager.Instance.dataManager.gameData.hasSaveGameData = true;
+
         if (isDailyGame)
         {
             SaveGameDailyData();
@@ -1841,6 +1862,8 @@ public class LakiaroManager : MonoBehaviour
         GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeLevel = manosHoeLevel;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime = currRemainTryTime;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress = progress;
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.Timer = timer;
+
         InitGame();
     }
 
@@ -1884,6 +1907,7 @@ public class LakiaroManager : MonoBehaviour
         manosHoeLevel = GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel;
         currRemainTryTime = GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrRemainTryTime;
         progress = GameManager.Instance.dataManager.gameData.dailyChallengeData.Progress;
+        timer = GameManager.Instance.dataManager.gameData.dailyChallengeData.Timer;
         LoadLakiaro();
     }
 
@@ -1915,6 +1939,8 @@ public class LakiaroManager : MonoBehaviour
         GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel = manosHoeLevel;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrRemainTryTime = currRemainTryTime;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.Progress = progress;
+        GameManager.Instance.dataManager.gameData.dailyChallengeData.Timer = timer;
+
         InitGame();
     }
 }

@@ -37,6 +37,8 @@ public class InGame_UI : MonoBehaviour
     public Text progressText;
     public Image progressGlow;
 
+    public Text timerText;
+
 
     void OnDisable()
     {
@@ -96,6 +98,14 @@ public class InGame_UI : MonoBehaviour
     {
         //Debug.Log(Input.mousePosition);
         //Debug.Log(Camera.main.ViewportToScreenPoint(Vector3.one) + " " +yMax + " " + min + " " + max + " " + viewMin + " " + viewMax + " " + Camera.main.ViewportToWorldPoint(viewMin) + " " + Camera.main.ViewportToWorldPoint(viewMax));
+    }
+
+    public void UpdateTimer(int time)
+    {
+        int m, s;
+        m = time / 60;
+        s = time % 60;
+        timerText.text = string.Format("{0:0#}:{1:0#}", m, s);
     }
 
     public void UpdateRemainTexts(int remainDirt, int remainRoot, int remainPebble, int _remainTryTime, int _currlevel, int _lakiaroLevel, float progress)

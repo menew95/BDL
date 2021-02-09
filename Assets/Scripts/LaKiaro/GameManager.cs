@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.S))
         {
-            UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().result_UI.Skip();
+            UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().result_UI.Skip();
         }
     }
 
@@ -213,12 +213,12 @@ public class GameManager : MonoBehaviour
                     break;
             }
             dataManager.gameData.playerData.Gold += (long)(gold * dailyBonus);
-            UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult, _isDaily, dailyBonus);
+            UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult, _isDaily, dailyBonus);
         }
         else
         {
             dataManager.gameData.playerData.Gold += gold;
-            UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
+            UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
         }
     }
 
