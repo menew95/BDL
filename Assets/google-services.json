@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "25112916354",
+    "firebase_url": "https://bdlakiaro-default-rtdb.firebaseio.com",
+    "project_id": "bdlakiaro",
+    "storage_bucket": "bdlakiaro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25112916354:android:57d7b2441225db9681df9b",
+        "android_client_info": {
+          "package_name": "com.RuNaPi.BDL"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "25112916354-9cas99lq8fj0e0t2k5kd5jnc15sp5981.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.RuNaPi.BDL",
+            "certificate_hash": "ec632c2912b192424b6b51722e74876b5481ecb5"
+          }
+        },
+        {
+          "client_id": "25112916354-ne7dbchcup4fi12k925s8tooqktirr5s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.RuNaPi.BDL",
+            "certificate_hash": "6fbbaa78ca33f9899f0d2606e05017252521249c"
+          }
+        },
+        {
+          "client_id": "25112916354-0bnevbfgljh0gt0hs2gajb3ejp3p7s02.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXoTGH3yy8CgVXiG-0BoFZ6rvrku0aNGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "25112916354-0bnevbfgljh0gt0hs2gajb3ejp3p7s02.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

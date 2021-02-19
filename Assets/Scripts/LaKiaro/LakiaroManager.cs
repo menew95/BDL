@@ -619,6 +619,7 @@ public class LakiaroManager : MonoBehaviour
             gamePause = true;
             inGame_UI.OnResultUI(gameResult);
             GameManager.Instance.dataManager.gameData.hasSaveGameData = false;
+            GameManager.Instance.dataManager.AddStaticData(lakiaroLevel, progress, (int)timer, currRemainTryTime);
             /*GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, true);
             UIManager.Instance.CallLobbyUI();
             UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();

@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
 
     public LakiaroManager lakiaroManager;
 
+    public GoogleManager googleManager;
     public DataManager dataManager;
 
     void Update()
