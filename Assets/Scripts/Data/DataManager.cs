@@ -15,39 +15,12 @@ public class DataManager : MonoBehaviour
 
     public delegate void DelGetDB(object data);
     DatabaseReference reference;
-
-    void Awake()
-    {
-        //.();
-    }
-
-    public void ConnectDatabase()
-    {
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://bdlakiaro-default-rtdb.firebaseio.com");
-
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
-    }
-
+    
     public void SetData(string _userId, string _dataName, int _value)
     {
         reference.Child("users").Child(_userId).Child(_dataName).SetValueAsync(_value);
     }
-
-    public void ApplyData(string _userId)
-    {
-        reference.Child("users").Child(_userId).GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                
-                Debug.LogWarning(snapshot.GetRawJsonValue());
-
-                gameData = JsonUtility.FromJson<GameData>(snapshot.GetRawJsonValue());
-            }
-        });
-    }
-    public UnityEngine.UI.Text text;
+    
     public void GetData(string _userId, string _dataName, DelGetDB _funcDB)
     {
         reference.Child("users").Child(_userId).Child(_dataName).GetValueAsync().ContinueWith(task =>
@@ -59,12 +32,10 @@ public class DataManager : MonoBehaviour
             }
             else if (task.IsFaulted)
             {
-                text.text = "데이터 로딩 실패";
                 Debug.LogWarning("데이터 로딩 실패");
             }
             else
             {
-                text.text = "데이터 로딩 취소";
                 Debug.LogWarning("데이터 로딩 취소");
             }
         });
@@ -98,8 +69,8 @@ public class DataManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("새로운 데이터 생성");
-            gameData = new GameData();
+            Debug.Log("파이어베이스에서 플레이어 데이터 로드");
+            StartFirebase();
         }
     }
 
@@ -117,12 +88,70 @@ public class DataManager : MonoBehaviour
         dataPath = "file://" + Application.streamingAssetsPath + "/SaveData.json";
 #endif
         File.WriteAllText(dataPath, toJsonData);
-        Debug.Log("데이터 저장 완료");
+        Debug.Log("데이터 로컬 저장 완료");
+        
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            SaveGameDataOnFirebase();
+        }
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            LoadGameDataObject();
+        }
+    }
+
+    public void SaveGameDataOnFirebase()
+    {
+        Debug.Log("저장되는지 테스트");
+        string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
+        
+        string data = JsonUtility.ToJson(gameData);
+
+        try
+        {
+            Debug.Log(data);
+            reference.Child("GameData").Child(gameDataKey).SetRawJsonValueAsync(data); //SetRawJsonValueAsync(data);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
+    }
+
+    public void UpdateStaticDataOnFirebase()
+    {
+        string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
+
+        string data = JsonUtility.ToJson(gameData.staticData);
+
+        try
+        {
+            Debug.Log(data);
+            reference.Child("GameData").Child(gameDataKey).Child("staticData").SetRawJsonValueAsync(data);
+        }  catch (Exception) { }
+    }
+
+    public void UpdateUpgradeDataOnFirebase()
+    {
+        string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
+
+        string data = JsonUtility.ToJson(gameData.upgradeData);
+
+        try
+        {
+            Debug.Log(data);
+            reference.Child("GameData").Child(gameDataKey).Child("upgradeData").SetRawJsonValueAsync(data);
+        } catch (Exception) { }
     }
 
     private void OnAppliicationQuit()
     {
         SaveGameData();
+        SaveGameDataOnFirebase();
     }
 
     public void NewDailyData()
@@ -181,8 +210,10 @@ public class DataManager : MonoBehaviour
     bool isFirebaseInitialized = false;
     public void StartFirebase()
     {
-        ConnectDatabase();
-        Debug.LogError("test StartFirebase");
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://bdlakiaro-default-rtdb.firebaseio.com");
+
+        reference = FirebaseDatabase.DefaultInstance.RootReference;
+
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             dependencyStatus = task.Result;
@@ -201,7 +232,6 @@ public class DataManager : MonoBehaviour
     void InitializeFirebase()
     {
         FirebaseApp app = FirebaseApp.DefaultInstance;
-        StartListener();
         isFirebaseInitialized = true;
     }
 
@@ -217,7 +247,6 @@ public class DataManager : MonoBehaviour
             Debug.Log("Receuved valus for Users.");
             if (e2.Snapshot != null && e2.Snapshot.ChildrenCount > 0)
             {
-                GetPlayerData(GameManager.Instance.googleManager.GetFirebaseUserID());
                 Debug.Log("Data is Change");
             }
             else
@@ -231,14 +260,14 @@ public class DataManager : MonoBehaviour
     {
         FirebaseDatabase.DefaultInstance.GetReference("Users").ValueChanged -= null;
     }
-
     public void AddNewPlayer(string _UserID, string _DisplayName)
     {
         DatabaseReference gameDataRef = FirebaseDatabase.DefaultInstance.GetReference("GameData");
         DatabaseReference usersRef = FirebaseDatabase.DefaultInstance.GetReference("Users");
 
-        string gameDataKey = gameDataRef.Push().Key;
-        gameDataRef.Child(gameDataKey).SetRawJsonValueAsync(JsonUtility.ToJson(new GameData()));
+        gameDataKey = gameDataRef.Push().Key;
+        gameData = new GameData();
+        gameDataRef.Child(gameDataKey).SetRawJsonValueAsync(JsonUtility.ToJson(gameData));
         
         Dictionary<string, string> data = new Dictionary<string, string> { { "DisplayName", "" }, {"GameDataKey", ""} };
 
@@ -247,7 +276,7 @@ public class DataManager : MonoBehaviour
 
         usersRef.Child(_UserID).SetValueAsync(data);
     }
-
+    string gameDataKey;
     public void GetPlayerData(string _userID)
     {
         reference.Child("Users").Child(_userID).GetValueAsync().ContinueWithOnMainThread(task =>
@@ -270,8 +299,8 @@ public class DataManager : MonoBehaviour
                 {
                     //GetGameData(snapShot.Value);
                     Debug.Log("data is Exist");
-                    Debug.Log(snapShot.Child("GameDataKey"));
-                    GetGameData(snapShot.Child("GameDataKey").Value as string);
+                    gameDataKey = snapShot.Child("GameDataKey").Value as string;
+                    GetGameData(gameDataKey);
                 }
                 else
                 {

@@ -72,4 +72,25 @@ public class Home_UI : MonoBehaviour
         resumeText.text = string.Format("{0:0#}:{1:0#} - {2} 라키아로", m, s, lakiaro);
 
     }
+
+    public void StartDailyLakiaro()
+    {
+        UIManager.Instance.CallInGameUI();
+        gameObject.SetActive(false);
+
+        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel, GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
+
+        GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = true;
+
+        GameManager.Instance.audioManager.CallAudioClip(1);
+    }
+
+    public void OnClickResumeGameBtn()
+    {
+        UIManager.Instance.CallInGameUI();
+
+        GameManager.Instance.lakiaroManager.LoadGameData();
+
+        GameManager.Instance.audioManager.CallAudioClip(1);
+    }
 }

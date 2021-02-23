@@ -176,39 +176,22 @@ public class NewGame_UI : MonoBehaviour
 
     public void OnClickPlayBtn()
     {
-        bool currDigging = false;
-        int index = 0;
-        for (int i = 0; i < 5; i++)
+        if (GameManager.Instance.dataManager.gameData.hasSaveGameData)
         {
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging)
+            if (GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex == currindex)
             {
-                if (currindex == i) break;
-                index = i;
-                currDigging = true;
-                break;
+                StartGame();
             }
-        }
-        if (!currDigging)
-        {
-            StartNewGame();
+            else
+            {
+                OnCurrDigging();
+                laKiaroInfo_UI.gameObject.SetActive(false);
+            }
         }
         else
         {
-            OnCurrDigging();
-            laKiaroInfo_UI.gameObject.SetActive(false);
+            StartGame();
         }
-    }
-
-    public void StartDailyLakiaro()
-    {
-        UIManager.Instance.CallInGameUI();
-        gameObject.SetActive(false);
-
-        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel, GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
-
-        GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = true;
-
-        GameManager.Instance.audioManager.CallAudioClip(1);
     }
 
     public void DeleteGameData() // 기존 게임 데이타를 지우고 새로운 게임 시작
@@ -224,10 +207,10 @@ public class NewGame_UI : MonoBehaviour
             }
         }
 
-        StartNewGame();
+        StartGame();
     }
 
-    public void StartNewGame() // 새로운 게임 시작
+    public void StartGame() // 새로운 게임 시작
     {
         UIManager.Instance.CallInGameUI();
 

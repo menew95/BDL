@@ -257,6 +257,10 @@ public class LakiaroManager : MonoBehaviour
                 else if (Input.touchCount == 2)
                 {
                     touchs = true;
+                    if (Input.touches[0].phase == TouchPhase.Began || Input.touches[1].phase == TouchPhase.Began)
+                    {
+                        oldTouchDis = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
+                    }
                     if (Input.touches[0].phase == TouchPhase.Moved || Input.touches[1].phase == TouchPhase.Moved)
                     {
                         float touchDis = (Input.touches[0].position - Input.touches[1].position).sqrMagnitude;
@@ -620,6 +624,7 @@ public class LakiaroManager : MonoBehaviour
             inGame_UI.OnResultUI(gameResult);
             GameManager.Instance.dataManager.gameData.hasSaveGameData = false;
             GameManager.Instance.dataManager.AddStaticData(lakiaroLevel, progress, (int)timer, currRemainTryTime);
+            InitGame();
             /*GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, true);
             UIManager.Instance.CallLobbyUI();
             UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
@@ -1747,7 +1752,6 @@ public class LakiaroManager : MonoBehaviour
                 rootLists[i].rootList.Add(root);
             }
         }
-        //rootLists = GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists;
 
         lakiaroLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroLevel;
         currLakiaroLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrLevel;
@@ -1864,8 +1868,9 @@ public class LakiaroManager : MonoBehaviour
         GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime = currRemainTryTime;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress = progress;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.Timer = timer;
-
         InitGame();
+
+        GameManager.Instance.dataManager.SaveGameDataOnFirebase();
     }
 
     public void LoadGameDailyData()

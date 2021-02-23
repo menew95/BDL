@@ -19,7 +19,6 @@ public class GoogleManager : MonoBehaviour
 {
     public GameObject btn;
     private string authCode;
-    public Text text;
     Firebase.Auth.FirebaseAuth auth;
 
     // Start is called before the first frame update
@@ -79,6 +78,7 @@ public class GoogleManager : MonoBehaviour
             FirebaseUser user = task.Result;
             Debug.LogFormat("사용자가 성공적으로 로그인함 : {0}  ({1})", user.DisplayName, user.UserId);
 
+            btn.SetActive(true);
             GameManager.Instance.dataManager.StartFirebase();
         });
     }

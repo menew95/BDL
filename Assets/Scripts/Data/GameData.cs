@@ -14,7 +14,7 @@ public class GameDataScriptableObject : ScriptableObject
 [System.Serializable]
 public class GameData
 {
-    public string userIndate;
+    public string userIndate = System.DateTime.Now.ToString();
 
     public bool hasSaveGameData = false;
 
@@ -47,6 +47,8 @@ public class LakiaroGameData
     private List<RootList> rootLists = new List<RootList>();
 
     [SerializeField]
+    private int lakiaroInfoIndex;
+    [SerializeField]
     private int lakiaroLevel;
     [SerializeField]
     private int currLevel;
@@ -59,6 +61,7 @@ public class LakiaroGameData
     [SerializeField]
     private float timer = 0;
 
+    public int LakiaroInfoIndex { get => lakiaroInfoIndex; set => lakiaroInfoIndex = value; }
     public List<LakiaroListData> LakiaroRoot { get => lakiaroRoot; set => lakiaroRoot = value; }
     public List<RootList> RootLists { get => rootLists; set => rootLists = value; }
     public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
