@@ -73,8 +73,6 @@ public class NewGame_UI : MonoBehaviour
             lakiaroBtn[i].SetData(lakiaroSprite[GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].LakiaroLevel], setColor, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].Pos);
         }
 
-        if (GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig) dailyLoading.SetActive(true);
-
         StartCoroutine(Timer());
     }
 
@@ -214,8 +212,8 @@ public class NewGame_UI : MonoBehaviour
     {
         UIManager.Instance.CallInGameUI();
 
-        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging, false);
-
+        GameManager.Instance.lakiaroManager.GameSetting(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging, false);
+        GameManager.Instance.lakiaroManager.StartGame();
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging = true;
 
         GameManager.Instance.audioManager.CallAudioClip(1);

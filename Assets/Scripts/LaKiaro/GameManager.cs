@@ -130,6 +130,7 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         lakiaroManager.gamePause = true;
+        lakiaroManager.clickPause = true;
         lakiaroManager.inGame_UI.Pause();
     }
 

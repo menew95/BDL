@@ -92,18 +92,6 @@ public class DataManager : MonoBehaviour
         
     }
 
-    void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.S))
-        {
-            SaveGameDataOnFirebase();
-        }
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            LoadGameDataObject();
-        }
-    }
-
     public void SaveGameDataOnFirebase()
     {
         Debug.Log("저장되는지 테스트");
@@ -114,7 +102,7 @@ public class DataManager : MonoBehaviour
         try
         {
             Debug.Log(data);
-            reference.Child("GameData").Child(gameDataKey).SetRawJsonValueAsync(data); //SetRawJsonValueAsync(data);
+            reference.Child("GameData").Child(gameDataKey).SetRawJsonValueAsync(data);
         }
         catch (Exception e)
         {
@@ -202,6 +190,8 @@ public class DataManager : MonoBehaviour
         {
             gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Max_Swallowly_Dig_Count = remainSwallowCount;
         }
+
+        UpdateStaticDataOnFirebase();
 
     }
 

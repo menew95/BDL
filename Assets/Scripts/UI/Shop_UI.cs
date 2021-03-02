@@ -33,22 +33,18 @@ public class Shop_UI : MonoBehaviour
     public List<GameObject> gold = new List<GameObject>();
     public List<Button> upgradeBtnList = new List<Button>();
     public List<Text> desTextList = new List<Text>();
+
     void OnEnable()
     {
-
-    }
-
-    void OnDisable()
-    {
-
+        LoadDataUpgradeData();
     }
 
     void Awake()
     {
-        LoadData();
+        
     }
 
-    void LoadData()
+    public void LoadDataUpgradeData()
     {
         for(int i = 0; i < levelTextList.Count; i++)
         {
@@ -89,6 +85,7 @@ public class Shop_UI : MonoBehaviour
             GameManager.Instance.ChnageGoldData(-upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] - 1]);
             GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] += 1;
             ChangeUI(currSelect);
+            GameManager.Instance.dataManager.UpdateUpgradeDataOnFirebase();
         }
     }
 

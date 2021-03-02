@@ -23,19 +23,11 @@
           }
         },
         {
-          "client_id": "25112916354-gl8h5cnvlhsm9rf6dts281993f91foft.apps.googleusercontent.com",
+          "client_id": "25112916354-ne7dbchcup4fi12k925s8tooqktirr5s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.RuNaPi.BDL",
-            "certificate_hash": "536774715c2b50bc48033e36bb85cdb0823e2fda"
-          }
-        },
-        {
-          "client_id": "25112916354-jhl55qhue3mdm44j2n17ligaua77i4h1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.RuNaPi.BDL",
-            "certificate_hash": "e8138db28e3ccbde329def1c9b1a440ea32d159e"
+            "certificate_hash": "6fbbaa78ca33f9899f0d2606e05017252521249c"
           }
         },
         {

@@ -78,7 +78,7 @@ public class Home_UI : MonoBehaviour
         UIManager.Instance.CallInGameUI();
         gameObject.SetActive(false);
 
-        GameManager.Instance.lakiaroManager.StartGame(GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel, GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
+        GameManager.Instance.lakiaroManager.GameSetting(5, GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
 
         GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = true;
 

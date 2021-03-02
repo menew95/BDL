@@ -61,8 +61,7 @@ public class UIManager : MonoBehaviour
         currUIState = UIState.Main;
         
         main_UI.SetActive(true);
-
+        lobby_UI.CallHomeUI();
         inGame_UI.SetActive(false);
-
     }
 }

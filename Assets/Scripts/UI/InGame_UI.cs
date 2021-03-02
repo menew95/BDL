@@ -66,10 +66,9 @@ public class InGame_UI : MonoBehaviour
         two[0].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -topH / 2);
         two[1].GetComponent<RectTransform>().sizeDelta = new Vector2(two[1].GetComponent<RectTransform>().sizeDelta.x, botH);
         two[1].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, botH / 2);
-        //two[0].GetComponent<RectTransform>().rect.Set(0, -(topH / 2f), two[0].GetComponent<RectTransform>().rect.width,topH);
-        //two[1].GetComponent<RectTransform>().rect.Set(0, -(botH / 2f), two[1].GetComponent<RectTransform>().rect.width, botH);
 
-        Debug.LogWarning(topH + " " + botH);
+        Debug.LogFormat("Screen : ({0},{1}) top SizeDelta : {2} bot SizeDelta : {3}",Screen.width,Screen.height, two[0].GetComponent<RectTransform>().sizeDelta, two[0].GetComponent<RectTransform>().sizeDelta);
+
     }
 
     // Start is called before the first frame update
@@ -92,14 +91,7 @@ public class InGame_UI : MonoBehaviour
         Debug.LogWarning(viewMax + " " + viewMin + " " + (two[0].GetComponent<RectTransform>().sizeDelta.y / 1920f) + " " + (1920f - two[1].GetComponent<RectTransform>().sizeDelta.y) / 1920f);
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //Debug.Log(Input.mousePosition);
-        //Debug.Log(Camera.main.ViewportToScreenPoint(Vector3.one) + " " +yMax + " " + min + " " + max + " " + viewMin + " " + viewMax + " " + Camera.main.ViewportToWorldPoint(viewMin) + " " + Camera.main.ViewportToWorldPoint(viewMax));
-    }
-
+    
     public void UpdateTimer(int time)
     {
         int m, s;

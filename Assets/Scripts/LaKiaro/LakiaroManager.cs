@@ -41,6 +41,7 @@ public class LakiaroManager : MonoBehaviour
     public TileBase temp;
 
     public bool gamePause = true;
+    public bool clickPause = false;
 
     [Header("Lakiaro Flower TileBase")]
     public List<TileBase> lakiaro_Flower_TileBase = new List<TileBase>();
@@ -197,6 +198,8 @@ public class LakiaroManager : MonoBehaviour
     Vector3 vtowMin, vtowMax, cen;
     float xSize, ySize;
     Vector3 initPos = new Vector3(6f, 7f, -10f);
+
+    public GameObject clickPosition;
     // Update is called once per frame
     void Update()
     {
@@ -206,6 +209,11 @@ public class LakiaroManager : MonoBehaviour
         }
         else
         {
+            if (clickPause)
+            {
+                clickPause = false;
+                return;
+            }
             if (Application.platform == RuntimePlatform.Android)
             {
                 if (Input.touchCount == 1)
@@ -214,17 +222,20 @@ public class LakiaroManager : MonoBehaviour
                     {
                         SetCamMoveBox();
                         oldTouchPos = Input.GetTouch(0).position;
+                        OnClickPosition(Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position));
                     }
                     else if (Input.GetTouch(0).phase == TouchPhase.Moved)
                     {
                         Vector3 cPos = oldTouchPos - Input.GetTouch(0).position;
                         if (cPos.sqrMagnitude > 100)
                         {
+                            clickPosition.SetActive(false);
                             moved = true;
 
                             MoveCam(cPos, Input.GetTouch(0).position);
 
                             oldTouchPos = Input.GetTouch(0).position;
+
                         }
                     }
                     else if (Input.GetTouch(0).phase == TouchPhase.Ended)
@@ -251,6 +262,8 @@ public class LakiaroManager : MonoBehaviour
                                 mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
                                 DeeplyDig(mousePosition);
                             }
+
+                            clickPosition.SetActive(false);
                         }
                     }
                 }
@@ -290,6 +303,10 @@ public class LakiaroManager : MonoBehaviour
             }
             else
             {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    OnClickPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                }
                 if (Input.GetMouseButtonUp(0))
                 {
                     if (inGame_UI.currDig == 0)
@@ -305,11 +322,14 @@ public class LakiaroManager : MonoBehaviour
                         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         DeeplyDig(mousePosition);
                     }
+                    clickPosition.SetActive(false);
                 }
                 if (Input.GetMouseButtonDown(1))
                 {
                     SetCamMoveBox();
                     oldTouchPos = Input.mousePosition;
+
+                    OnClickPosition(Camera.main.ScreenToWorldPoint(Input.mousePosition));
                 }
                 if (Input.GetMouseButton(1))
                 {
@@ -318,11 +338,24 @@ public class LakiaroManager : MonoBehaviour
                     if (cPos.sqrMagnitude > 100)
                     {
                         MoveCam(cPos, Input.mousePosition);
+                        clickPosition.SetActive(false);
                     }
                 }
             }
         }
 
+    }
+
+    void OnClickPosition(Vector2 point)
+    {
+        Debug.Log(point);
+        if (0 > point.x || point.x > 12 || 0 > point.y || point.y > 12) return;
+        if (4 < point.x && point.x < 8 && 4 < point.y && point.y < 8) return;
+
+        clickPosition.gameObject.SetActive(true);
+        point.x = (int)point.x;
+        point.y = (int)point.y;
+        clickPosition.transform.position = point;
     }
 
     Vector2 minCamBox = Vector2.zero, maxCamBox = Vector2.one, centerBox = Vector2.zero;
@@ -492,8 +525,122 @@ public class LakiaroManager : MonoBehaviour
 
         return isDirt;
     }
+    public bool startGame;
+    public void StartGame()
+    {
+        startGame = true;
+    }
 
-    public void StartGame(int _lakiaroLevel, int _manosHoeLevel, bool isLoad, bool _isDailyGame)
+    IEnumerator StartGameCoroutine()
+    {
+        startGame = false;
+        while (!startGame) yield return null;
+        WaitForSeconds wfs = new WaitForSeconds(0.02f);
+        TileBase[,] temp = new TileBase[12, 12];
+        for (int i = 0; i < 12; i++)
+        {
+            for (int j = 0; j < 12; j++)
+            {
+                vector3Int.x = i;
+                vector3Int.y = j;
+                if(lakiaroRootTileMap.GetTile(vector3Int) != null)
+                {
+                    temp[i, j] = lakiaroRootTileMap.GetTile(vector3Int);
+                }
+            }
+        }
+
+        lakiaroRootTileMap.ClearAllTiles();
+        lakiaroDirtTilemap_Upper.ClearAllTiles();
+        lakiaroDirtTileMap_Lower.ClearAllTiles();
+        int x,y;
+
+        for(int i = 0; i < 12; i++)
+        {
+            for(int j = 0; j < i + 1; j++)
+            {
+                x = i - j;
+                y = 11 - j;
+                if (x < 8 && x > 3 && y > 3 && y < 8) continue;
+                vector3Int.x = x;
+                vector3Int.y = y;
+                if (lakiaroRoot[x, j].type == Lakiaro.Type.Root)
+                {
+                    lakiaroRootTileMap.SetTile(vector3Int, temp[x, y]);
+                }
+                else if (lakiaroRoot[x, y].type == Lakiaro.Type.Pebble)
+                {
+                    lakiaroRootTileMap.SetTile(vector3Int, pebbleTile[Random.Range(0, pebbleTile.Count)]);
+                }
+                if (!lakiaroRoot[x, y].isChecked)
+                {
+                    lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[currLakiaroLevel][Random.Range(0, basicTile[currLakiaroLevel].Count)]);
+                }
+                lakiaroDirtTileMap_Lower.SetTile(vector3Int, basicTile[currLakiaroLevel + 1][Random.Range(0, basicTile[currLakiaroLevel + 1].Count)]);
+
+            }
+            yield return wfs;
+        }
+
+        for (int i = 1; i < 12; i++)
+        {
+            for (int j = 0; j < 12 - i; j++)
+            {
+                x = i + j;
+                y = j;
+                if (x < 8 && x > 3 && y > 3 && y < 8) continue;
+                vector3Int.x = x;
+                vector3Int.y = y;
+                if (lakiaroRoot[x, y].type == Lakiaro.Type.Root)
+                {
+                    lakiaroRootTileMap.SetTile(vector3Int, temp[x, y]);
+                }
+                else if (lakiaroRoot[x, y].type == Lakiaro.Type.Pebble)
+                {
+                    lakiaroRootTileMap.SetTile(vector3Int, pebbleTile[Random.Range(0, pebbleTile.Count)]);
+                }
+                if (!lakiaroRoot[x, y].isChecked)
+                {
+                    lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[currLakiaroLevel][Random.Range(0, basicTile[currLakiaroLevel].Count)]);
+                }
+                lakiaroDirtTileMap_Lower.SetTile(vector3Int, basicTile[currLakiaroLevel + 1][Random.Range(0, basicTile[currLakiaroLevel + 1].Count)]);
+
+            }
+            yield return wfs;
+        }
+
+        /*for (int j = 11; j >= 0; j--)
+        {
+            index++;
+            for (int i = 0; i < index; i++)
+            {
+                if (i < 8 && i > 3 && j > 3 && j < 8) continue;
+                vector3Int.x = i;
+                vector3Int.y = j;
+                if (lakiaroRoot[i, j].type == Lakiaro.Type.Root)
+                {
+                    lakiaroRootTileMap.SetTile(vector3Int, temp[i, j]);
+                }
+                else if (lakiaroRoot[i, j].type == Lakiaro.Type.Pebble)
+                {
+                    lakiaroRootTileMap.SetTile(vector3Int, pebbleTile[Random.Range(0, pebbleTile.Count)]);
+                }
+                if (!lakiaroRoot[i, j].isChecked)
+                {
+                    lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[currLakiaroLevel][Random.Range(0, basicTile[currLakiaroLevel].Count)]);
+                }
+                lakiaroDirtTileMap_Lower.SetTile(vector3Int, basicTile[currLakiaroLevel + 1][Random.Range(0, basicTile[currLakiaroLevel + 1].Count)]);
+
+                yield return wfs;
+            }
+        }*/
+
+        StartCoroutine(SetTimer());
+
+        gamePause = false;
+    }
+
+    public void GameSetting(int _lakiaroLevel, int _manosHoeLevel, bool isLoad, bool _isDailyGame)
     {
         lakiaroLevel = _lakiaroLevel;
         manosHoeLevel = _manosHoeLevel;
@@ -534,10 +681,7 @@ public class LakiaroManager : MonoBehaviour
         }
 
         inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
-        StopAllCoroutines();
-        StartCoroutine(SetTimer());
-
-        gamePause = false;
+        StartCoroutine(StartGameCoroutine());
     }
 
     IEnumerator SetTimer()
@@ -604,20 +748,6 @@ public class LakiaroManager : MonoBehaviour
 
         float timer = 0f;
 
-        /*if (!lastRound)
-        {
-            inGame_UI.EnableRound();
-
-            lakiaroDirtTilemap_Upper.ClearAllTiles();
-
-            while (timer < 3f)
-            {
-                yield return null;
-                timer += Time.deltaTime;
-            }
-            inGame_UI.DisableRound();
-        }*/
-
         if (lastRound)
         {
             gamePause = true;
@@ -625,6 +755,8 @@ public class LakiaroManager : MonoBehaviour
             GameManager.Instance.dataManager.gameData.hasSaveGameData = false;
             GameManager.Instance.dataManager.AddStaticData(lakiaroLevel, progress, (int)timer, currRemainTryTime);
             InitGame();
+            UIManager.Instance.lobby_UI.GetComponent<NewGame_UI>().DigFinishLakiaro(isDailyGame);
+            
             /*GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, true);
             UIManager.Instance.CallLobbyUI();
             UIManager.Instance.lobby_UI.GetComponent<Lobby_UI>().DigFinishLakiaro();
