@@ -85,7 +85,7 @@ public class NewGame_UI : MonoBehaviour
             if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging) continue;
             if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig)
             {
-                timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.userIndate);
+                timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.playerData.UserIndate);
                 GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime -= (int)timespan.TotalSeconds;
 
                 if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime < 0)
@@ -113,13 +113,13 @@ public class NewGame_UI : MonoBehaviour
         }
 
         // 데일리 데이타 재설정
-        timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.userIndate);
+        timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.playerData.UserIndate);
         if (timespan.Days > 0)
         {
             GameManager.Instance.dataManager.NewDailyData();
         }
 
-        GameManager.Instance.dataManager.gameData.userIndate = System.DateTime.Now.ToString();
+        GameManager.Instance.dataManager.gameData.playerData.UserIndate = System.DateTime.Now.ToString();
     }
 
     IEnumerator Timer() // cooltime 및 오래된 라키아로 재생성 타이머
@@ -170,11 +170,13 @@ public class NewGame_UI : MonoBehaviour
         else setColor = colors[0];
 
         lakiaroBtn[index].SetData(lakiaroSprite[GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel], setColor, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos);
+
+        GameManager.Instance.dataManager.UpdateLakiaroInfoDataOnFirebase(index);
     }
 
     public void OnClickPlayBtn()
     {
-        if (GameManager.Instance.dataManager.gameData.hasSaveGameData)
+        if (GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData)
         {
             if (GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex == currindex)
             {
@@ -212,14 +214,14 @@ public class NewGame_UI : MonoBehaviour
     {
         UIManager.Instance.CallInGameUI();
 
-        GameManager.Instance.lakiaroManager.GameSetting(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging, false);
+        GameManager.Instance.lakiaroManager.GameSetting(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging, false);
         GameManager.Instance.lakiaroManager.StartGame();
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging = true;
 
         GameManager.Instance.audioManager.CallAudioClip(1);
     }
 
-    public void DigFinishLakiaro(bool isDailyGame)
+    public void DigFinishLakiaro(int lakiaroLevel, float _progress, float _gold, bool _gameResult, bool _isDaily, double dailyBonus)
     {
         /* 메인게임이 끝난후 적용할 효과
          * infodata (isDig, cooltime) 설정
@@ -227,23 +229,14 @@ public class NewGame_UI : MonoBehaviour
          * 게임 결과창 On
          */
 
-        if (isDailyGame)
-        {
-            dailyLoading.SetActive(false);
-
-            GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeClear = true;
-            GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = false;
-        }
-        else
+        if (!_isDaily)
         {
             lakiaroBtn[currindex].OnLoading();
-
-            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].IsDig = true;
-            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging = false;
-            GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CoolTime = 600;
+            
         }
 
-        LoadData();
+        result_UI.gameObject.SetActive(true);
+        result_UI.OnResultUI(lakiaroLevel, _progress, _gold, _gameResult, _isDaily, dailyBonus);
     }
 
     public void OnResultUI(int lakiaroLevel, float _progress, float _gold, bool _gameResult, bool isDaily = false, double dailyBonus = 0)
@@ -282,10 +275,9 @@ public class NewGame_UI : MonoBehaviour
         }
 
         int lakiaro = GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel;
-        int manos = GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel;
         bool IsDailyChallengeCurrDig = GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig;
 
-        dailyInfo_UI.OnInfo(lakiaro, manos, Vector3.zero, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig);
+        dailyInfo_UI.OnInfo(lakiaro, GameManager.Instance.dataManager.gameData.upgradeData.ManosHoeSwallowlyDig, Vector3.zero, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig);
 
         OffLakiaroInfo();
         loading.gameObject.SetActive(false);

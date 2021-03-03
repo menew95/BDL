@@ -112,10 +112,6 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyUp(KeyCode.R))
-        {
-            FinishDigLakiaro(tempLakiaroLevel, tempManos, tempProgress, tempGameResult, tempDaily);
-        }
         if (Input.GetKeyUp(KeyCode.S))
         {
             UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().result_UI.Skip();
@@ -146,7 +142,7 @@ public class GameManager : MonoBehaviour
     public bool tempGameResult = true;
     public bool tempDaily = false;
 
-    public void FinishDigLakiaro(int _lakiaroLevel, int _manosLevel, float _progress, bool _gameResult, bool _isDaily)
+    public void FinishDigLakiaro(int _lakiaroLevel, float _progress, bool _gameResult, bool _isDaily, int _timer, int _currRemainTryTime)
     {
         /*라키아로 가치에 따른 자원 추가
          */
@@ -197,8 +193,9 @@ public class GameManager : MonoBehaviour
 
         if (_isDaily)
         {
-            int difficult = _lakiaroLevel - _manosLevel;
-            double dailyBonus = 1.1f;
+            int difficult = _lakiaroLevel - (int)((dataManager.gameData.upgradeData.ManosHoeSwallowlyDig +
+                (dataManager.gameData.upgradeData.ManosHoeDeeplyDig * 2)) * 0.5f);
+            double dailyBonus = 1.1d;
             switch (difficult)
             {
                 case 2:
@@ -215,13 +212,18 @@ public class GameManager : MonoBehaviour
                     break;
             }
             dataManager.gameData.playerData.Gold += (long)(gold * dailyBonus);
-            UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult, _isDaily, dailyBonus);
+            dataManager.gameData.playerData.IsDailyChallengeClear = true;
+            dataManager.gameData.playerData.IsDailyChallengeCurrDig = false;
         }
         else
         {
             dataManager.gameData.playerData.Gold += gold;
-            UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OnResultUI(_lakiaroLevel + 5, _progress, (_gameResult) ? gold : 0, _gameResult);
+            dataManager.gameData.playerData.HasSaveGameData = false;
+
+            dataManager.SaveLakiaroInfoData();
         }
+        dataManager.UpdatePlayerDataDataOnFirebase();
+        dataManager.AddStaticData(_lakiaroLevel, _progress, _timer, _currRemainTryTime);
     }
 
     public void ChnageGoldData(long gold)

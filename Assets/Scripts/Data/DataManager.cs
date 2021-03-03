@@ -76,7 +76,7 @@ public class DataManager : MonoBehaviour
 
     public void SaveGameData()
     {
-        gameData.userIndate = System.DateTime.Now.ToString();
+        gameData.playerData.UserIndate = System.DateTime.Now.ToString();
 
         string toJsonData = JsonUtility.ToJson(gameData);
         string dataPath;
@@ -108,6 +108,81 @@ public class DataManager : MonoBehaviour
         {
             Debug.Log(e.Message);
         }
+    }
+
+    public void SaveLakiaroInfoData()
+    {
+        int index = gameData.lakiaroGameData.LakiaroInfoIndex;
+        
+        gameData.LakiaroInfoDataList[index].IsDig = true;
+        gameData.LakiaroInfoDataList[index].CurrDigging = false;
+        gameData.LakiaroInfoDataList[index].CoolTime = 1800 - (gameData.upgradeData.RegenerationCooltime * 120);
+        UpdateLakiaroInfoDataOnFirebase(index);
+    }
+
+    public void UpdateLakiaroInfoDataOnFirebase(int index)
+    {
+        string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
+
+        string data = JsonUtility.ToJson(gameData.LakiaroInfoDataList[index]);
+
+        try
+        {
+            reference.Child("GameData").Child(gameDataKey).Child("LakiaroInfoDataList").Child(index.ToString()).SetRawJsonValueAsync(data);
+        }
+        catch (Exception) { }
+    }
+
+    public void UpdatePlayerDataDataOnFirebase()
+    {
+        string data = JsonUtility.ToJson(gameData.playerData);
+
+        try
+        {
+            reference.Child("GameData").Child(gameDataKey).Child("playerData").Child("isDailyChallengeClear").SetRawJsonValueAsync(data);
+        }
+        catch (Exception) { }
+
+        reference.Child("GameData").Child(gameDataKey).Child("playerData").Child("gold").SetValueAsync(gameData.playerData.Gold);
+
+    }
+
+    /*public void SaveLakiaroInfoDataOnFirebase(int index)
+    {
+        string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
+
+        string data = JsonUtility.ToJson(gameData.LakiaroInfoDataList[index]);
+
+        try
+        {
+            reference.Child("GameData").Child(gameDataKey).Child("LakiaroInfoDataList").Child(index.ToString()).SetRawJsonValueAsync(data);
+        }
+        catch (Exception) { }
+    }*/
+
+    public void SaveDailyChallengeDataOnFirebase()
+    {
+        string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
+
+        string data = JsonUtility.ToJson(gameData.dailyChallengeData);
+
+        try
+        {
+            reference.Child("GameData").Child(gameDataKey).Child("dailyChallengeData").SetRawJsonValueAsync(data);
+        }
+        catch (Exception) { }
+    }
+
+    public void SaveLakiaroGameDataOnFirebase()
+    {
+        string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
+
+        string data = JsonUtility.ToJson(gameData.lakiaroGameData);
+
+        try
+        {
+            reference.Child("GameData").Child(gameDataKey).Child("lakiaroGameData").SetRawJsonValueAsync(data);
+        } catch (Exception) { }
     }
 
     public void UpdateStaticDataOnFirebase()
@@ -144,11 +219,25 @@ public class DataManager : MonoBehaviour
 
     public void NewDailyData()
     {
-        gameData.dailyChallengeData.LakiaroLevel = UnityEngine.Random.Range(2, 4);
-        gameData.dailyChallengeData.ManosHoeLevel = Mathf.Clamp(UnityEngine.Random.Range(gameData.dailyChallengeData.LakiaroLevel - 2, gameData.dailyChallengeData.LakiaroLevel + 1), 0, 4);
-
-        gameData.playerData.IsDailyChallengeClear = false;
-        gameData.playerData.IsDailyChallengeCurrDig = false;
+        if (gameData.playerData.IsDailyChallengeClear)
+        {
+            gameData.playerData.IsDailyChallengeClear = false;
+            try
+            {
+                reference.Child("GameData").Child(gameDataKey).Child("playerData").Child("IsDailyChallengeClear").SetValueAsync(false);
+            }
+            catch (Exception) { }
+        }
+        if (gameData.playerData.IsDailyChallengeCurrDig)
+        {
+            gameData.playerData.IsDailyChallengeCurrDig = false;
+            try
+            {
+                reference.Child("GameData").Child(gameDataKey).Child("playerData").Child("IsDailyChallengeCurrDig").SetValueAsync(false);
+            }
+            catch (Exception) { }
+        }
+        
     }
 
     public void AddStaticData(int lakiaroLevel, float progress, int time, int remainSwallowCount)

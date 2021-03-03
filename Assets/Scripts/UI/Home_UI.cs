@@ -13,7 +13,7 @@ public class Home_UI : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
-        if (GameManager.Instance.dataManager.gameData.hasSaveGameData)
+        if (GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData)
         {
             OnResumeBtn();
         }
@@ -78,7 +78,7 @@ public class Home_UI : MonoBehaviour
         UIManager.Instance.CallInGameUI();
         gameObject.SetActive(false);
 
-        GameManager.Instance.lakiaroManager.GameSetting(5, GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeLevel, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
+        GameManager.Instance.lakiaroManager.GameSetting(5, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
 
         GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = true;
 

@@ -44,7 +44,7 @@ public class Result_UI : MonoBehaviour
         dailyBonusUI.SetActive(false);
     }
 
-    public void OnResultUI(int _lakiaroLevel, float _progress, float _gold, bool _gameResult, bool _isDaily = false, double _dailyBonus = 0)
+    public void OnResultUI(int _lakiaroLevel, float _progress, float _gold, bool _gameResult, bool _isDaily, double _dailyBonus)
     {
         lakiaroLevel = _lakiaroLevel;
         lakiaroImage.sprite = lakiaroSprite[lakiaroLevel];

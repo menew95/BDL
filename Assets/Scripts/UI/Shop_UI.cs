@@ -16,13 +16,13 @@ public class Shop_UI : MonoBehaviour
     private List<string> desList = new List<string>
     {
         "고등급 라키아로 발견 확률 {0}% 증가",
-        "라키아로 재생성 시간 {0}% 감소",
+        "라키아로 탐색 레벨 증가",
         "얕게파기 횟수 {0}회 증가",
         "깊게 파기시 주변 흙 확인 범위 {0}칸 증가"
     };
     private List<int> desPerList = new List<int>
     {
-        5,5,1,1
+        5,1,1,1
     };
     private List<bool> desPerList2 = new List<bool>
     {

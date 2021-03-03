@@ -14,10 +14,6 @@ public class GameDataScriptableObject : ScriptableObject
 [System.Serializable]
 public class GameData
 {
-    public string userIndate = System.DateTime.Now.ToString();
-
-    public bool hasSaveGameData = false;
-
     public LakiaroGameData lakiaroGameData = new LakiaroGameData();
     public LakiaroGameData dailyChallengeData = new LakiaroGameData();
 
@@ -53,9 +49,9 @@ public class LakiaroGameData
     [SerializeField]
     private int currLevel;
     [SerializeField]
-    private int manosHoeLevel;
-    [SerializeField]
     private int currRemainTryTime;
+    [SerializeField]
+    private int manosHoeDeeplyDig;
     [SerializeField]
     private float progress;
     [SerializeField]
@@ -66,8 +62,8 @@ public class LakiaroGameData
     public List<RootList> RootLists { get => rootLists; set => rootLists = value; }
     public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
     public int CurrLevel { get => currLevel; set => currLevel = value; }
-    public int ManosHoeLevel { get => manosHoeLevel; set => manosHoeLevel = value; }
     public int CurrRemainTryTime { get => currRemainTryTime; set => currRemainTryTime = value; }
+    public int ManosHoeDeeplyDig { get => manosHoeDeeplyDig; set => manosHoeDeeplyDig = value; }
     public float Progress { get => progress; set => progress = value; }
     public float Timer { get => timer; set => timer = value; }
 }
@@ -76,15 +72,21 @@ public class LakiaroGameData
 public class PlayerData
 {
     [SerializeField]
+    string userIndate = System.DateTime.Now.ToString();
+    [SerializeField]
+    bool hasSaveGameData = false;
+    [SerializeField]
     long gold = 0;
     [SerializeField]
     bool isDailyChallengeClear = false;
     [SerializeField]
     bool isDailyChallengeCurrDig = false;
-    
+
+    public string UserIndate { get => userIndate; set => userIndate = value; }
     public long Gold { get => gold; set => gold = value; }
     public bool IsDailyChallengeClear { get => isDailyChallengeClear; set => isDailyChallengeClear = value; }
     public bool IsDailyChallengeCurrDig { get => isDailyChallengeCurrDig; set => isDailyChallengeCurrDig = value; }
+    public bool HasSaveGameData { get => hasSaveGameData; set => hasSaveGameData = value; }
 }
 
 [System.Serializable]
