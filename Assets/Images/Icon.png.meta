@@ -113,6 +113,15 @@ TextureImporter:
   - first:
       213: -4842543511086065322
     second: Timer_Icon
+  - first:
+      213: -6622488603477140916
+    second: Hint_Icon
+  - first:
+      213: -5705093070170424318
+    second: HintAd_Icon
+  - first:
+      213: -2296187403958194156
+    second: Icon_31
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -173,7 +182,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -185,7 +194,7 @@ TextureImporter:
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -197,7 +206,7 @@ TextureImporter:
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -973,7 +982,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -981,6 +990,69 @@ TextureImporter:
       bones: []
       spriteID: ead88c4d7311a344ca8f5fbcd5bd2f48
       internalID: -4842543511086065322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hint_Icon
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 336
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25842855e11f6064db9b45fa9618ed8a
+      internalID: -6622488603477140916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HintAd_Icon
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 336
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76462219354843348b4410edcebd9614
+      internalID: -5705093070170424318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon_31
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 336
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c1ee907a486af64e988f77eb242ad15
+      internalID: -2296187403958194156
       vertices: []
       indices: 
       edges: []

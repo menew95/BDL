@@ -26,7 +26,7 @@ public class LakiaroManager : MonoBehaviour
     private List<RootList> rootLists = new List<RootList>();
     public Lakiaro[,] lakiaroRoot = new Lakiaro[12, 12];
     [SerializeField]
-    private int lakiaroLevel, currLakiaroLevel = 0, manosHoeDeeplyDig, currRemainTryTime;
+    private int lakiaroLevel, currLakiaroLevel = 0, manosHoeDeeplyDig, currRemainTryTime, hintCount;
     public float progress = 100f;
     public float timer = 0f;
 
@@ -256,6 +256,10 @@ public class LakiaroManager : MonoBehaviour
                                     mousePosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
                                     SwallowlyDig(mousePosition);
                                 }
+                                else if(hintCount > 0)
+                                {
+                                    inGame_UI.CheckUseHintUI(hintCount, (lakiaroLevel < 3) ? 1 : 2);
+                                }
                             }
                             else
                             {
@@ -386,6 +390,10 @@ public class LakiaroManager : MonoBehaviour
         oldTouchPos = mousePos;
     }
 
+    public void CheckUseHintUI()
+    {
+        inGame_UI.CheckUseHintUI(hintCount, (lakiaroLevel < 3) ? 1 : 2);
+    }
     Vector3Int vector3Int = new Vector3Int();
     public bool SwallowlyDig(Vector2 point)
     {
@@ -639,6 +647,7 @@ public class LakiaroManager : MonoBehaviour
         }
         else
         {
+            hintCount = (_lakiaroLevel < 3) ? 1 : 2;
             manosHoeDeeplyDig = GameManager.Instance.dataManager.gameData.upgradeData.ManosHoeDeeplyDig;
             currRemainTryTime = 18 + GameManager.Instance.dataManager.gameData.upgradeData.ManosHoeSwallowlyDig;
             GenerateLakiaro(0);
@@ -1878,6 +1887,7 @@ public class LakiaroManager : MonoBehaviour
         currLakiaroLevel = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrLevel;
         manosHoeDeeplyDig = GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeDeeplyDig;
         currRemainTryTime = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime;
+        hintCount = GameManager.Instance.dataManager.gameData.lakiaroGameData.HintCount;
         progress = GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress;
         timer = GameManager.Instance.dataManager.gameData.lakiaroGameData.Timer;
         LoadLakiaro();
@@ -1987,6 +1997,7 @@ public class LakiaroManager : MonoBehaviour
         GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrLevel = currLakiaroLevel;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeDeeplyDig = manosHoeDeeplyDig;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime = currRemainTryTime;
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.HintCount = hintCount;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress = progress;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.Timer = timer;
         InitGame();
@@ -2033,6 +2044,7 @@ public class LakiaroManager : MonoBehaviour
         currLakiaroLevel = GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrLevel;
         manosHoeDeeplyDig = GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeDeeplyDig;
         currRemainTryTime = GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrRemainTryTime;
+        hintCount = GameManager.Instance.dataManager.gameData.dailyChallengeData.HintCount;
         progress = GameManager.Instance.dataManager.gameData.dailyChallengeData.Progress;
         timer = GameManager.Instance.dataManager.gameData.dailyChallengeData.Timer;
         LoadLakiaro();
@@ -2065,6 +2077,7 @@ public class LakiaroManager : MonoBehaviour
         GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrLevel = currLakiaroLevel;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeDeeplyDig = manosHoeDeeplyDig;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrRemainTryTime = currRemainTryTime;
+        GameManager.Instance.dataManager.gameData.dailyChallengeData.HintCount = hintCount;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.Progress = progress;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.Timer = timer;
 

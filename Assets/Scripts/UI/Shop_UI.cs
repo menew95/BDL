@@ -39,11 +39,6 @@ public class Shop_UI : MonoBehaviour
         LoadDataUpgradeData();
     }
 
-    void Awake()
-    {
-        
-    }
-
     public void LoadDataUpgradeData()
     {
         for(int i = 0; i < levelTextList.Count; i++)

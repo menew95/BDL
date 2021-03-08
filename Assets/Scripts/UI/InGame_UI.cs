@@ -263,4 +263,22 @@ public class InGame_UI : MonoBehaviour
     {
         resumeBtn.SetActive(true);
     }
+
+    public GameObject checkUseHintUI;
+    public GameObject useHintOverUI;
+    public Text hintRemainText;
+
+    public void CheckUseHintUI(int remainTime, int hintCount)
+    {
+        if(remainTime == 0)
+        {
+            useHintOverUI.SetActive(true);
+        }
+        else
+        {
+            hintRemainText.text = string.Format("{0} / {1}", remainTime, hintCount);
+            checkUseHintUI.SetActive(true);
+        }
+    }
+
 }

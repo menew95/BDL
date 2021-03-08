@@ -49,7 +49,7 @@ public class LakiaroGameData
     [SerializeField]
     private int currLevel;
     [SerializeField]
-    private int currRemainTryTime;
+    private int currRemainTryTime, hintCount;
     [SerializeField]
     private int manosHoeDeeplyDig;
     [SerializeField]
@@ -63,6 +63,7 @@ public class LakiaroGameData
     public int LakiaroLevel { get => lakiaroLevel; set => lakiaroLevel = value; }
     public int CurrLevel { get => currLevel; set => currLevel = value; }
     public int CurrRemainTryTime { get => currRemainTryTime; set => currRemainTryTime = value; }
+    public int HintCount { get => hintCount; set => hintCount = value; }
     public int ManosHoeDeeplyDig { get => manosHoeDeeplyDig; set => manosHoeDeeplyDig = value; }
     public float Progress { get => progress; set => progress = value; }
     public float Timer { get => timer; set => timer = value; }
@@ -101,7 +102,7 @@ public class UpgradeData
      */
 
     [SerializeField]
-    private List<int> levelData = new List<int> { 1, 1, 1, 1 };
+    private List<int> levelData = new List<int> { 0 , 0, 0, 0 };
 
     public List<int> LevelData { get => levelData; set => levelData = value; }
     public int LakiaroFoundChance { get => LevelData[0]; set => LevelData[0] = value; }

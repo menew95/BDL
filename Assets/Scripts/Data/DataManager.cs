@@ -15,31 +15,6 @@ public class DataManager : MonoBehaviour
 
     public delegate void DelGetDB(object data);
     DatabaseReference reference;
-    
-    public void SetData(string _userId, string _dataName, int _value)
-    {
-        reference.Child("users").Child(_userId).Child(_dataName).SetValueAsync(_value);
-    }
-    
-    public void GetData(string _userId, string _dataName, DelGetDB _funcDB)
-    {
-        reference.Child("users").Child(_userId).Child(_dataName).GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                _funcDB(snapshot.Value);
-            }
-            else if (task.IsFaulted)
-            {
-                Debug.LogWarning("데이터 로딩 실패");
-            }
-            else
-            {
-                Debug.LogWarning("데이터 로딩 취소");
-            }
-        });
-    }
 
     void HandleChildAdded(object sender, ChildChangedEventArgs args)
     {
@@ -115,15 +90,12 @@ public class DataManager : MonoBehaviour
         int index = gameData.lakiaroGameData.LakiaroInfoIndex;
         
         gameData.LakiaroInfoDataList[index].IsDig = true;
-        gameData.LakiaroInfoDataList[index].CurrDigging = false;
         gameData.LakiaroInfoDataList[index].CoolTime = 1800 - (gameData.upgradeData.RegenerationCooltime * 120);
         UpdateLakiaroInfoDataOnFirebase(index);
     }
 
     public void UpdateLakiaroInfoDataOnFirebase(int index)
     {
-        string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
-
         string data = JsonUtility.ToJson(gameData.LakiaroInfoDataList[index]);
 
         try
@@ -139,11 +111,9 @@ public class DataManager : MonoBehaviour
 
         try
         {
-            reference.Child("GameData").Child(gameDataKey).Child("playerData").Child("isDailyChallengeClear").SetRawJsonValueAsync(data);
+            reference.Child("GameData").Child(gameDataKey).Child("playerData").SetRawJsonValueAsync(data);
         }
         catch (Exception) { }
-
-        reference.Child("GameData").Child(gameDataKey).Child("playerData").Child("gold").SetValueAsync(gameData.playerData.Gold);
 
     }
 
@@ -347,15 +317,33 @@ public class DataManager : MonoBehaviour
         gameDataKey = gameDataRef.Push().Key;
         gameData = new GameData();
         gameDataRef.Child(gameDataKey).SetRawJsonValueAsync(JsonUtility.ToJson(gameData));
-        
-        Dictionary<string, string> data = new Dictionary<string, string> { { "DisplayName", "" }, {"GameDataKey", ""} };
+
+        Dictionary<string, string> data = new Dictionary<string, string> { { "DisplayName", "" }, { "GameDataKey", "" } };
 
         data["DisplayName"] = _DisplayName;
         data["GameDataKey"] = gameDataKey;
 
         usersRef.Child(_UserID).SetValueAsync(data);
     }
+
     string gameDataKey;
+    public void AddNewGameData()
+    {
+        DatabaseReference gameDataRef = FirebaseDatabase.DefaultInstance.GetReference("GameData");
+        DatabaseReference usersRef = FirebaseDatabase.DefaultInstance.GetReference("Users");
+
+        gameDataKey = gameDataRef.Push().Key;
+        gameData = new GameData();
+        gameDataRef.Child(gameDataKey).SetRawJsonValueAsync(JsonUtility.ToJson(gameData));
+
+        Dictionary<string, string> data = new Dictionary<string, string> { { "DisplayName", "" }, { "GameDataKey", "" } };
+
+        data["DisplayName"] = GameManager.Instance.googleManager.GetFirebaseUserName();
+        data["GameDataKey"] = gameDataKey;
+
+        usersRef.Child(GameManager.Instance.googleManager.GetFirebaseUserID()).SetValueAsync(data);
+        Debug.Log("게임 데이터 새로 만듬");
+    }
     public void GetPlayerData(string _userID)
     {
         reference.Child("Users").Child(_userID).GetValueAsync().ContinueWithOnMainThread(task =>
@@ -376,7 +364,6 @@ public class DataManager : MonoBehaviour
 
                 if(snapShot.Value != null)
                 {
-                    //GetGameData(snapShot.Value);
                     Debug.Log("data is Exist");
                     gameDataKey = snapShot.Child("GameDataKey").Value as string;
                     GetGameData(gameDataKey);
@@ -384,7 +371,7 @@ public class DataManager : MonoBehaviour
                 else
                 {
                     AddNewPlayer(_userID, GameManager.Instance.googleManager.GetFirebaseUserName());
-                    Debug.LogError("data is not Exist");
+                    Debug.LogError("Player data is not Exist");
                 }
             }
         });
@@ -416,7 +403,8 @@ public class DataManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("data is not Exist");
+                    AddNewGameData();
+                    Debug.LogWarning("Game data is not Exist");
                 }
             }
         });

@@ -17,14 +17,11 @@ namespace DataInfo
         int coolTime = 0; // 라키아로 캔후 재생성까지 걸릴 시간
         [SerializeField]
         bool isDig = false; // 수확이 끝난 라키아로 확인
-        [SerializeField]
-        bool currDigging = false; // 진행중이던 게임 확인
 
         public LakiaroInfoData()
         {
             coolTime = 0;
             IsDig = true;
-            CurrDigging = false;
         }
 
         public LakiaroInfoData(Vector3 _pos, int _lakiaroLevel)
@@ -40,7 +37,6 @@ namespace DataInfo
         public int CoolTime { get => coolTime; set => coolTime = value; }
         public string GenerateTime { get => generateTime; set => generateTime = value; }
         public bool IsDig { get => isDig; set => isDig = value; }
-        public bool CurrDigging { get => currDigging; set => currDigging = value; }
     }
 
 

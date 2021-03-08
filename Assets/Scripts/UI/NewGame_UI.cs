@@ -62,9 +62,10 @@ public class NewGame_UI : MonoBehaviour
         Color setColor;
         Caltime(); // 쿨타임과 리프레시할 라키아로부터 제설정
 
+        if (GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData) OnDigAnim(GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex);
+
         for (int i = 0; i < 5; i++)
         {
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging) OnDigAnim(i);
             if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig) continue;
             if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].LakiaroLevel == 4) setColor = colors[2];
             else if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].LakiaroLevel > 1) setColor = colors[1];
@@ -82,7 +83,10 @@ public class NewGame_UI : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging) continue;
+            if (GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData)
+            {
+                if (GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex == i) continue;
+            }
             if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig)
             {
                 timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.playerData.UserIndate);
@@ -130,7 +134,10 @@ public class NewGame_UI : MonoBehaviour
             yield return wfsOne;
             for (int i = 0; i < 5; i++)
             {
-                if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging) continue;
+                if (GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData)
+                {
+                    if (GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex == i) continue;
+                }
                 if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig)
                 {
                     GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime -= 1;
@@ -180,7 +187,7 @@ public class NewGame_UI : MonoBehaviour
         {
             if (GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex == currindex)
             {
-                StartGame();
+                StartGame(true);
             }
             else
             {
@@ -190,33 +197,25 @@ public class NewGame_UI : MonoBehaviour
         }
         else
         {
-            StartGame();
+            StartGame(false);
         }
     }
 
     public void DeleteGameData() // 기존 게임 데이타를 지우고 새로운 게임 시작
     {
-        for (int i = 0; i < 5; i++)
-        {
-            if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging)
-            {
-                GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CurrDigging = false;
-                GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig = true;
-                GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime = 30;
-                break;
-            }
-        }
+        int index = GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex;
+        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].IsDig = true;
+        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].CoolTime = 1800 - (GameManager.Instance.dataManager.gameData.upgradeData.RegenerationCooltime * 120);
 
-        StartGame();
+        StartGame(false);
     }
 
-    public void StartGame() // 새로운 게임 시작
+    public void StartGame(bool isLoad) // 새로운 게임 시작
     {
         UIManager.Instance.CallInGameUI();
 
-        GameManager.Instance.lakiaroManager.GameSetting(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging, false);
+        GameManager.Instance.lakiaroManager.GameSetting(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, isLoad, false);
         GameManager.Instance.lakiaroManager.StartGame();
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].CurrDigging = true;
 
         GameManager.Instance.audioManager.CallAudioClip(1);
     }
@@ -261,8 +260,15 @@ public class NewGame_UI : MonoBehaviour
         currState = State.InfoUI;
         Debug.Log((int)currState);
         currindex = index;
-        laKiaroInfo_UI.OnInfo(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].CurrDigging);
-        
+        if (GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData)
+        {
+            laKiaroInfo_UI.OnInfo(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos, GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex == index);
+        }
+        else
+        {
+            laKiaroInfo_UI.OnInfo(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel, 3, GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos, false);
+        }
+
         loading.gameObject.SetActive(false);
     }
 
