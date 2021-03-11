@@ -213,8 +213,8 @@ public class NewGame_UI : MonoBehaviour
     public void StartGame(bool isLoad) // 새로운 게임 시작
     {
         UIManager.Instance.CallInGameUI();
-
         GameManager.Instance.lakiaroManager.GameSetting(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, isLoad, false);
+        
         GameManager.Instance.lakiaroManager.StartGame();
 
         GameManager.Instance.audioManager.CallAudioClip(1);

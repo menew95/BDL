@@ -390,6 +390,12 @@ public class LakiaroManager : MonoBehaviour
         oldTouchPos = mousePos;
     }
 
+    public void OnUserEarnedReward(int reward)
+    {
+        currRemainTryTime++;
+        inGame_UI.UpdateRemainTryTime(currRemainTryTime);
+    }
+
     public void CheckUseHintUI()
     {
         inGame_UI.CheckUseHintUI(hintCount, (lakiaroLevel < 3) ? 1 : 2);
@@ -399,6 +405,7 @@ public class LakiaroManager : MonoBehaviour
     {
         Debug.Log(point);
         if (0 > point.x || point.x > 12 || 0 > point.y || point.y > 12) return false;
+        if (4 < point.x && point.x < 8 && 4 < point.y && point.y < 8) return false;
         if (lakiaroRoot[(int)point.x, (int)point.y].isChecked) return false; // 이미 확인한 곳이면 스킾
 
         bool isRoot = false;
@@ -439,6 +446,7 @@ public class LakiaroManager : MonoBehaviour
     public bool DeeplyDig(Vector2 point)
     {
         if (0 > point.x || point.x > 12 || 0 > point.y || point.y > 12) return false;
+        if (4 < point.x && point.x < 8 && 4 < point.y && point.y < 8) return false;
         if (lakiaroRoot[(int)point.x, (int)point.y].isChecked) return false; // 이미 확인한 곳이면 스킾
 
         bool isDirt = false;
@@ -525,21 +533,7 @@ public class LakiaroManager : MonoBehaviour
         startGame = false;
         while (!startGame) yield return null;
         WaitForSeconds wfs = new WaitForSeconds(0.02f);
-        TileBase[,] temp = new TileBase[12, 12];
-        for (int i = 0; i < 12; i++)
-        {
-            for (int j = 0; j < 12; j++)
-            {
-                vector3Int.x = i;
-                vector3Int.y = j;
-                if(lakiaroRootTileMap.GetTile(vector3Int) != null)
-                {
-                    temp[i, j] = lakiaroRootTileMap.GetTile(vector3Int);
-                }
-            }
-        }
-
-        lakiaroRootTileMap.ClearAllTiles();
+        lakiaroRootTileMap.gameObject.SetActive(false);
         lakiaroDirtTilemap_Upper.ClearAllTiles();
         lakiaroDirtTileMap_Lower.ClearAllTiles();
         int x,y;
@@ -553,14 +547,6 @@ public class LakiaroManager : MonoBehaviour
                 if (x < 8 && x > 3 && y > 3 && y < 8) continue;
                 vector3Int.x = x;
                 vector3Int.y = y;
-                if (lakiaroRoot[x, j].type == Lakiaro.Type.Root)
-                {
-                    lakiaroRootTileMap.SetTile(vector3Int, temp[x, y]);
-                }
-                else if (lakiaroRoot[x, y].type == Lakiaro.Type.Pebble)
-                {
-                    lakiaroRootTileMap.SetTile(vector3Int, pebbleTile[Random.Range(0, pebbleTile.Count)]);
-                }
                 if (!lakiaroRoot[x, y].isChecked)
                 {
                     lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[currLakiaroLevel][Random.Range(0, basicTile[currLakiaroLevel].Count)]);
@@ -580,14 +566,6 @@ public class LakiaroManager : MonoBehaviour
                 if (x < 8 && x > 3 && y > 3 && y < 8) continue;
                 vector3Int.x = x;
                 vector3Int.y = y;
-                if (lakiaroRoot[x, y].type == Lakiaro.Type.Root)
-                {
-                    lakiaroRootTileMap.SetTile(vector3Int, temp[x, y]);
-                }
-                else if (lakiaroRoot[x, y].type == Lakiaro.Type.Pebble)
-                {
-                    lakiaroRootTileMap.SetTile(vector3Int, pebbleTile[Random.Range(0, pebbleTile.Count)]);
-                }
                 if (!lakiaroRoot[x, y].isChecked)
                 {
                     lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[currLakiaroLevel][Random.Range(0, basicTile[currLakiaroLevel].Count)]);
@@ -598,32 +576,7 @@ public class LakiaroManager : MonoBehaviour
             yield return wfs;
         }
 
-        /*for (int j = 11; j >= 0; j--)
-        {
-            index++;
-            for (int i = 0; i < index; i++)
-            {
-                if (i < 8 && i > 3 && j > 3 && j < 8) continue;
-                vector3Int.x = i;
-                vector3Int.y = j;
-                if (lakiaroRoot[i, j].type == Lakiaro.Type.Root)
-                {
-                    lakiaroRootTileMap.SetTile(vector3Int, temp[i, j]);
-                }
-                else if (lakiaroRoot[i, j].type == Lakiaro.Type.Pebble)
-                {
-                    lakiaroRootTileMap.SetTile(vector3Int, pebbleTile[Random.Range(0, pebbleTile.Count)]);
-                }
-                if (!lakiaroRoot[i, j].isChecked)
-                {
-                    lakiaroDirtTilemap_Upper.SetTile(vector3Int, basicTile[currLakiaroLevel][Random.Range(0, basicTile[currLakiaroLevel].Count)]);
-                }
-                lakiaroDirtTileMap_Lower.SetTile(vector3Int, basicTile[currLakiaroLevel + 1][Random.Range(0, basicTile[currLakiaroLevel + 1].Count)]);
-
-                yield return wfs;
-            }
-        }*/
-
+        lakiaroRootTileMap.gameObject.SetActive(true);
         StartCoroutine(SetTimer());
 
         gamePause = false;
@@ -631,6 +584,7 @@ public class LakiaroManager : MonoBehaviour
 
     public void GameSetting(int _lakiaroLevel, bool isLoad, bool _isDailyGame)
     {
+        inGame_UI.SetUISize();
         lakiaroLevel = _lakiaroLevel;
         currLakiaroLevel = 0; progress = 100f;
         isDailyGame = _isDailyGame;

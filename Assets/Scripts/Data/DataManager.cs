@@ -409,4 +409,61 @@ public class DataManager : MonoBehaviour
             }
         });
     }
+
+    bool canBuy = false;
+    public void CheckGold(long price)
+    {
+        StartCoroutine(CheckGoldCoroutine(price));
+    }
+    IEnumerator CheckGoldCoroutine(long price)
+    {
+        float timer = 0;
+        bool istask = false;
+        reference.Child("GameData").Child(gameDataKey).Child("playerData").Child("gold").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled)
+            {
+                Debug.LogWarning("Get gold is Cancled");
+                return;
+            }
+            else if (task.IsFaulted)
+            {
+                Debug.LogWarning("Get gold is Faulted");
+                return;
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                if(!snapshot.Exists)
+                {
+                    UIManager.Instance.lobby_UI.shop_UI.GetComponent<Shop_UI>().Alert("서버 통신 오류.");
+                }
+                else
+                {
+                    if(price < (long)snapshot.Value)
+                    {
+                        Debug.LogWarning("구매 가능");
+                        UIManager.Instance.lobby_UI.shop_UI.GetComponent<Shop_UI>().Upgrade();
+                        UIManager.Instance.lobby_UI.shop_UI.GetComponent<Shop_UI>().Alert("업그레이드 되었습니다.");
+                    }
+                    else
+                    {
+                        UIManager.Instance.lobby_UI.shop_UI.GetComponent<Shop_UI>().Alert("골드가 부족합니다.");
+                    }
+                }
+                istask = true;
+            }
+        });
+        while (!istask)
+        {
+            timer += Time.deltaTime;
+            Debug.Log(timer.ToString());
+            yield return null;
+            if(timer > 10f)
+            {
+                UIManager.Instance.lobby_UI.shop_UI.GetComponent<Shop_UI>().Alert("서버 통신 시간 초과.");
+                break;
+            }
+        }
+    }
 }

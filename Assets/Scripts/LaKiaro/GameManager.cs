@@ -116,6 +116,11 @@ public class GameManager : MonoBehaviour
         {
             UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().result_UI.Skip();
         }
+
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            dataManager.CheckGold(2000);
+        }
     }
 
     public void Resume()
@@ -129,7 +134,11 @@ public class GameManager : MonoBehaviour
         lakiaroManager.clickPause = true;
         lakiaroManager.inGame_UI.Pause();
     }
-
+    public void AdPause()
+    {
+        lakiaroManager.gamePause = true;
+        lakiaroManager.clickPause = true;
+    }
     void SaveGame()
     {
         UIManager.Instance.CallMainUI();
@@ -226,7 +235,7 @@ public class GameManager : MonoBehaviour
         dataManager.AddStaticData(_lakiaroLevel, _progress, _timer, _currRemainTryTime);
     }
 
-    public void ChnageGoldData(long gold)
+    public void ChangeGoldData(long gold)
     {
         dataManager.gameData.playerData.Gold += gold;
         UIManager.Instance.lobby_UI.gold_UI.UpdateCoin();

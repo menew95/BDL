@@ -54,7 +54,7 @@ public class InGame_UI : MonoBehaviour
 
     public RectTransform top, bottom;
 
-    void SetUISize()
+    public void SetUISize()
     {
         float topH = Camera.main.WorldToScreenPoint(Vector3.up * 12f).y;
         float botH = Camera.main.WorldToScreenPoint(Vector3.zero).y;
@@ -69,13 +69,6 @@ public class InGame_UI : MonoBehaviour
 
         Debug.LogFormat("Screen : ({0},{1}) top SizeDelta : {2} bot SizeDelta : {3}",Screen.width,Screen.height, two[0].GetComponent<RectTransform>().sizeDelta, two[0].GetComponent<RectTransform>().sizeDelta);
 
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        SetUISize();
-
         yMin = two[1].GetComponent<RectTransform>().rect.y * 2;
         yMax = two[0].GetComponent<RectTransform>().rect.y * 2;
         min = Vector3.zero;
@@ -87,9 +80,6 @@ public class InGame_UI : MonoBehaviour
         viewMax = Camera.main.ScreenToViewportPoint(max);
         viewMin = new Vector3(0f, (two[0].GetComponent<RectTransform>().sizeDelta.y / 1920f), 0f);
         viewMax = new Vector3(1f, (1920f - two[1].GetComponent<RectTransform>().sizeDelta.y) / 1920f, 0f);
-
-        Debug.LogWarning(viewMax + " " + viewMin + " " + (two[0].GetComponent<RectTransform>().sizeDelta.y / 1920f) + " " + (1920f - two[1].GetComponent<RectTransform>().sizeDelta.y) / 1920f);
-
     }
     
     public void UpdateTimer(int time)
@@ -280,5 +270,10 @@ public class InGame_UI : MonoBehaviour
             checkUseHintUI.SetActive(true);
         }
     }
-
+    public GameObject alertObj;
+    public void OnAlert()
+    {
+        GameManager.Instance.AdPause();
+        alertObj.SetActive(true);
+    }
 }

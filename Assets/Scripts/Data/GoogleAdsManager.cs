@@ -9,8 +9,11 @@ public class GoogleAdsManager : MonoBehaviour
     private readonly string unitID = "ca-app-pub-7286134024153012/9403667362";
     private readonly string test_unitID = "ca-app-pub-3940256099942544/5224354917";
 
+    private readonly string dailyGame_unitID = "ca-app-pub-7286134024153012/9403667362";
+    private readonly string swallowHint_Reward_unitID = "ca-app-pub-7286134024153012/8592565419";
+    private readonly string dailyGame_interstitial_unitID = "ca-app-pub-7286134024153012/3508346427";
+    
     private readonly string test_DeviceID = "16C3DA15AF9B24A8B0A12CFF5D913282";
-    private readonly string test_PDeviceID = "16C3DA15AF9B24A8B0A12CFF5D913282";
 
     private RewardedAd videoAd;
     public static bool ShowAd = false;
@@ -18,49 +21,63 @@ public class GoogleAdsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MobileAds.Initialize("ca-app-pub-7286134024153012/9403667362");
-        videoAd = new RewardedAd(test_unitID);
-        
-        Handle(videoAd);
-        Load();
-
+        MobileAds.Initialize("ca-app-pub-7286134024153012~9163708801");
         RequestInterstitial();
     }
 
-    private void RequestReward()
+    public enum RewardAdType
     {
-        videoAd = new RewardedAd(test_unitID);
-
-        Handle(videoAd);
-
-        AdRequest request = new AdRequest.Builder().Build();
-
-        videoAd.LoadAd(request);
-    }
-    void OnDestroy()
-    {
-        videoAd.OnAdLoaded -= HandleOnAdLoaded;
-        videoAd.OnAdFailedToLoad -= HandleOnAdFailedToLoad;
-        videoAd.OnAdFailedToShow -= HandleOnAdFailedToShow;
-        videoAd.OnAdOpening -= HandleOnAdOpening;
-        videoAd.OnAdClosed -= HandleOnAdClosed;
-        videoAd.OnUserEarnedReward -= HandleOnUserEarnedReward;
+        DailyGameRewardAd,
+        SwallowlyDigCountRewardAd
     }
 
-    private void Handle(RewardedAd videoAd)
+    public void RequestReward(int type)
+    {
+        string unitID = "";
+        switch (type)
+        {
+            case (int)RewardAdType.DailyGameRewardAd:
+                break;
+            case (int)RewardAdType.SwallowlyDigCountRewardAd:
+                unitID = swallowHint_Reward_unitID;
+                break;
+            default:
+                Debug.Log("광고 재생 오류");
+                return;
+        }
+        videoAd = new RewardedAd(unitID);
+
+        Handle(videoAd, type);
+
+        Load();
+        Show();
+    }
+
+    private void Handle(RewardedAd videoAd, int Type)
     {
         videoAd.OnAdLoaded += HandleOnAdLoaded;
         videoAd.OnAdFailedToLoad += HandleOnAdFailedToLoad;
         videoAd.OnAdFailedToShow += HandleOnAdFailedToShow;
         videoAd.OnAdOpening += HandleOnAdOpening;
         videoAd.OnAdClosed += HandleOnAdClosed;
-        videoAd.OnUserEarnedReward += HandleOnUserEarnedReward;
+        switch (Type)
+        {
+            case (int)RewardAdType.DailyGameRewardAd:
+                videoAd.OnUserEarnedReward += HandleOnUserEarnedReward_DailyGameRewardAd;
+                break;
+            case (int)RewardAdType.SwallowlyDigCountRewardAd:
+                videoAd.OnUserEarnedReward += HandleOnUserEarnedReward_SwallowlyDigCount;
+                break;
+            default:
+                Debug.Log("광고 재생 오류");
+                return;
+        }
     }
 
     private void Load()
     {
-        //AdRequest request = new AdRequest.Builder().AddTestDevice(test_DeviceID).AddTestDevice(test_PDeviceID).Build();
-        AdRequest request = new AdRequest.Builder().Build();
+        AdRequest request = new AdRequest.Builder().AddTestDevice(test_DeviceID).Build();
+        //AdRequest request = new AdRequest.Builder().Build();
 
         videoAd.LoadAd(request);
     }
@@ -69,7 +86,7 @@ public class GoogleAdsManager : MonoBehaviour
     {
         Debug.Log("RewardAd is Reload");
         RewardedAd videoAd = new RewardedAd(test_unitID);
-        Handle(videoAd);
+        //Handle(videoAd);
         AdRequest request = new AdRequest.Builder().Build();
 
         videoAd.LoadAd(request);
@@ -109,10 +126,16 @@ public class GoogleAdsManager : MonoBehaviour
     public void HandleOnAdClosed(object sender, EventArgs args)
     {
         Debug.Log("RewardAd is Closed");
-        this.videoAd = ReloadAd();
+        //this.videoAd = ReloadAd();
     }
-    public void HandleOnUserEarnedReward(object sender, EventArgs args)
+    public void HandleOnUserEarnedReward_DailyGameRewardAd(object sender, Reward args)
     {
+        GameManager.Instance.lakiaroManager.inGame_UI.OnAlert();
+        Debug.Log("RewardAd can received Reward");
+    }
+    public void HandleOnUserEarnedReward_SwallowlyDigCount(object sender, Reward args)
+    {
+        GameManager.Instance.lakiaroManager.OnUserEarnedReward((int)args.Amount);
         Debug.Log("RewardAd can received Reward");
     }
 
@@ -120,9 +143,7 @@ public class GoogleAdsManager : MonoBehaviour
 
     private void RequestInterstitial()
     {
-        string adUnitId = "ca-app-pub-3940256099942544/1033173712";
-
-        this.interstitial = new InterstitialAd(adUnitId);
+        this.interstitial = new InterstitialAd(dailyGame_interstitial_unitID);
 
         this.interstitial.OnAdLoaded += InterstitialAd_HandleOnAdLoaded;
         this.interstitial.OnAdFailedToLoad += InterstitialAd_HandleOnAdFailedToLoad;
@@ -130,7 +151,7 @@ public class GoogleAdsManager : MonoBehaviour
         this.interstitial.OnAdClosed += InterstitialAd_HandleOnAdClosed;
         this.interstitial.OnAdLeavingApplication += InterstitialAd_HandleOnAdLeavingApplication;
 
-        AdRequest request = new AdRequest.Builder().Build();
+        AdRequest request = new AdRequest.Builder().AddTestDevice(test_DeviceID).Build();
 
         this.interstitial.LoadAd(request);
     }

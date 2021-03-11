@@ -8,9 +8,9 @@ public class Shop_UI : MonoBehaviour
     private List<int> maxLevelData = new List<int> { 6, 6, 10, 5 };
     private List<List<long>> upgradeGoldData = new List<List<long>>
     {
-        new List<long> { 5000000,25000000,100000000,500000000, 2500000000 },
-        new List<long> { 5000000,25000000,100000000,500000000, 2500000000 },
-        new List<long> { 10000000, 25000000,60000000,140000000, 300000000, 640000000, 1270000000, 2420000000, 4360000000 },
+        new List<long> { 10000000, 25000000, 100000000, 500000000, 1500000000, 4000000000 },
+        new List<long> { 10000000, 25000000, 100000000, 500000000, 1500000000, 4000000000 },
+        new List<long> { 10000000, 25000000, 60000000, 135000000, 295000000, 610000000, 1180000000, 2185000000, 3780000000, 6124000000 },
         new List<long> { 60000000, 300000000, 1300000000, 4500000000 }
     };
     private List<string> desList = new List<string>
@@ -34,6 +34,10 @@ public class Shop_UI : MonoBehaviour
     public List<Button> upgradeBtnList = new List<Button>();
     public List<Text> desTextList = new List<Text>();
 
+    public GameObject loadingObj;
+    public GameObject alertObj;
+    public Text alertText;
+
     void OnEnable()
     {
         LoadDataUpgradeData();
@@ -43,50 +47,14 @@ public class Shop_UI : MonoBehaviour
     {
         for(int i = 0; i < levelTextList.Count; i++)
         {
-            if(maxLevelData[i] == GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i])
-            {
-                levelTextList[i].text = "Lv Max";
-
-                gold[i].SetActive(false);
-
-                upgradeBtnList[i].interactable = false;
-                upgradeBtnList[i].GetComponentInChildren<Text>().text = "Max";
-                upgradeBtnList[i].GetComponentInChildren<Text>().color = Color.white;
-            }
-            else
-            {
-                Debug.Log(GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i]);
-                levelTextList[i].text = string.Format("Lv {0}", GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i]);
-                gold[i].GetComponentInChildren<Text>().text = upgradeGoldData[i][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i] - 1].ToString();
-            }
-
-            if (desPerList2[i])
-            {
-                desTextList[i].text = string.Format(desList[i], GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i] * desPerList[i]);
-            }
-            else
-            {
-                desTextList[i].text = string.Format(desList[i], GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i]);
-            }
-
-        }
-    }
-
-    public void OnClickUpgradeBtn()
-    {
-        if (GameManager.Instance.dataManager.gameData.playerData.Gold >=
-            upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] - 1])
-        {
-            GameManager.Instance.ChnageGoldData(-upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] - 1]);
-            GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] += 1;
-            ChangeUI(currSelect);
-            GameManager.Instance.dataManager.UpdateUpgradeDataOnFirebase();
+            ChangeUI(i);
         }
     }
 
     void ChangeUI(int i)
     {
-        if (maxLevelData[i] == GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i])
+        int level = GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i];
+        if (maxLevelData[i] == level)
         {
             levelTextList[i].text = "Lv Max";
 
@@ -97,11 +65,43 @@ public class Shop_UI : MonoBehaviour
             upgradeBtnList[i].GetComponentInChildren<Text>().color = Color.white;
         }
         else
-        { 
+        {
+            level++;
             Debug.Log(GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i]);
-            levelTextList[i].text = string.Format("Lv {0}", GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i]);
-            gold[i].GetComponentInChildren<Text>().text = upgradeGoldData[i][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i] - 1].ToString();
+            levelTextList[i].text = string.Format("Lv {0}", level);
+            gold[i].GetComponentInChildren<Text>().text = upgradeGoldData[i][level].ToString();
         }
+
+        if (desPerList2[i])
+        {
+            desTextList[i].text = string.Format(desList[i], level * desPerList[i]);
+        }
+        else
+        {
+            desTextList[i].text = string.Format(desList[i], level);
+        }
+    }
+
+    public void OnClickUpgradeBtn()
+    {
+        loadingObj.SetActive(true);
+        GameManager.Instance.dataManager.CheckGold(upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] + 1]);
+    }
+
+    public void Upgrade()
+    {
+        loadingObj.SetActive(false);
+        GameManager.Instance.ChangeGoldData(-upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] + 1]);
+        GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] += 1;
+        ChangeUI(currSelect);
+        GameManager.Instance.dataManager.UpdateUpgradeDataOnFirebase();
+        GameManager.Instance.dataManager.UpdatePlayerDataDataOnFirebase();
+    }
+
+    public void Alert(string msg)
+    {
+        alertObj.SetActive(true);
+        alertText.text = msg;
     }
 
     public GameObject upgradeAlert;
