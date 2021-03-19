@@ -50,6 +50,7 @@ public class Static_UI : MonoBehaviour
         if (currIndex == index) return;
         currIndex = index;
         StartCoroutine(Snap(index));
+        AudioManager.Instance.CallAudioClip(6);
     }
 
     IEnumerator Snap(int index)
@@ -67,10 +68,18 @@ public class Static_UI : MonoBehaviour
         main.anchoredPosition = pos;
     }
 
+    public void test(int i)
+    {
+        SetDataOnGameStatic(i);
+        SetDataOnTimeStatic(i);
+        SetDataOnETCStatic(i);
+    }
+
     void SetStaticData()
     {
         for(int i = 0; i < 5; i++)
         {
+            if (GameManager.Instance.dataManager.gameData.staticData.LakiaroStaticData[i].Static_Game.Found_Lakiaro_Time == 0) continue;
             SetDataOnGameStatic(i);
             SetDataOnTimeStatic(i);
             SetDataOnETCStatic(i);
@@ -81,7 +90,7 @@ public class Static_UI : MonoBehaviour
     {
         found_Lakiaro_Times[index].text = string.Format("{0}회",GameManager.Instance.dataManager.gameData.staticData.LakiaroStaticData[index].Static_Game.Found_Lakiaro_Time);
         perfect_Dig_Lakiaro_Times[index].text = string.Format("{0}회", GameManager.Instance.dataManager.gameData.staticData.LakiaroStaticData[index].Static_Game.Perfect_Dig_Lakiaro_Time);
-        perfect_Dig_Rate[index].text = string.Format("{0}회", GameManager.Instance.dataManager.gameData.staticData.LakiaroStaticData[index].Static_Game.Perfect_Dig_Rate);
+        perfect_Dig_Rate[index].text = string.Format("{0}%", GameManager.Instance.dataManager.gameData.staticData.LakiaroStaticData[index].Static_Game.Perfect_Dig_Rate);
         min_dameged_Lakiaro_Productivity[index].text = string.Format("{0}%", GameManager.Instance.dataManager.gameData.staticData.LakiaroStaticData[index].Static_Game.Min_dameged_Lakiaro_Productivity);
         avg_dameged_Lakiaro_Productivity[index].text= string.Format("{0}%",GameManager.Instance.dataManager.gameData.staticData.LakiaroStaticData[index].Static_Game.Avg_dameged_Lakiaro_Productivity);
     }

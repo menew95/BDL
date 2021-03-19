@@ -84,7 +84,7 @@ public class Practice_UI : MonoBehaviour
     public void OnClickCancleBtn()
     {
         Init();
-        GameManager.Instance.audioManager.CallAudioClip(1);
+        AudioManager.Instance.CallAudioClip(1);
     }
 
     public void OnClickManosHoe(int index = 0)
@@ -113,7 +113,7 @@ public class Practice_UI : MonoBehaviour
                 currDifficultyText[0].text = 28.ToString();
                 break;
         }
-        GameManager.Instance.audioManager.CallAudioClip(1);
+        AudioManager.Instance.CallAudioClip(1);
     }
 
     public void OnClickLakiaroBtn(int index = 0)
@@ -126,7 +126,7 @@ public class Practice_UI : MonoBehaviour
 
         currDifficultyText[1].text = LakiaroBtns[index].name;
 
-        GameManager.Instance.audioManager.CallAudioClip(1);
+        AudioManager.Instance.CallAudioClip(1);
     }
 
     public void ChagneManosHoe(int index = 0) // 호미 버튼을 눌렀을때 적용되는 효과
@@ -162,7 +162,7 @@ public class Practice_UI : MonoBehaviour
             Init();
         }
 
-        GameManager.Instance.audioManager.CallAudioClip(1);
+        AudioManager.Instance.CallAudioClip(1);
     }
 
     public void OnEnterPlayBtn()

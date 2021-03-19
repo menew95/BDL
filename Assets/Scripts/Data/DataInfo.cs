@@ -217,5 +217,10 @@ namespace DataInfo
             this.nextRooty = _root.nextRooty;
             this.IsDameaed = _root.IsDameaed;
         }
+
+        public void InitRoot()
+        {
+            isDameaed = false;
+        }
     }
 }

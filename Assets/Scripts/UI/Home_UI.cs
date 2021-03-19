@@ -78,19 +78,28 @@ public class Home_UI : MonoBehaviour
         UIManager.Instance.CallInGameUI();
         gameObject.SetActive(false);
 
-        GameManager.Instance.lakiaroManager.GameSetting(5, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
+        GameManager.Instance.lakiaroManager.GameSetting(4, GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig, true);
 
         GameManager.Instance.dataManager.gameData.playerData.IsDailyChallengeCurrDig = true;
 
-        GameManager.Instance.audioManager.CallAudioClip(1);
+        AudioManager.Instance.CallAudioClip(1);
     }
 
     public void OnClickResumeGameBtn()
     {
         UIManager.Instance.CallInGameUI();
 
-        GameManager.Instance.lakiaroManager.LoadGameData();
+        GameManager.Instance.lakiaroManager.GameSetting(GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroLevel, true, false);
 
-        GameManager.Instance.audioManager.CallAudioClip(1);
+        if (0.25f > Random.Range(0f, 1f))
+        {
+            GameManager.Instance.googleAdsManager.ShowInterstitialAd();
+        }
+        else
+        {
+            GameManager.Instance.lakiaroManager.StartGame();
+        }
+
+        AudioManager.Instance.CallAudioClip(1);
     }
 }

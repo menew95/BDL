@@ -54,6 +54,7 @@ public class Result_UI : MonoBehaviour
         isDaily = _isDaily;
         dailyBonus = _dailyBonus;
         goldText.text = "";
+        Debug.Log(_gold + " " + gold);
         StartCoroutine(OnResultCG());
     }
 
@@ -81,6 +82,7 @@ public class Result_UI : MonoBehaviour
 
     IEnumerator SetSuccessProgress()
     {
+        AudioManager.Instance.CallAudioClip(3);
         float time = 0;
         float currProgressText = 100f;
         float currProgress = 120f;
@@ -116,6 +118,7 @@ public class Result_UI : MonoBehaviour
 
     IEnumerator SetFailProgress()
     {
+        AudioManager.Instance.CallAudioClip(4);
         float time = 0;
         float currProgressText = 100f;
         float currProgress = 120f;
@@ -241,6 +244,7 @@ public class Result_UI : MonoBehaviour
         else if(progress == 0) lakiaroImage.sprite = lakiaroSprite[lakiaroLevel - 5 + 10];
 
         ((gameResult) ? successUI : failUI).alpha = 1f;
+        AudioManager.Instance.CallAudioClip((gameResult) ? 3 : 4);
         resultglow.alpha = 0f;
 
         if (isDaily)

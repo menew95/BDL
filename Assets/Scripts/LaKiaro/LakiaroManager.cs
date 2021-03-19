@@ -26,7 +26,7 @@ public class LakiaroManager : MonoBehaviour
     private List<RootList> rootLists = new List<RootList>();
     public Lakiaro[,] lakiaroRoot = new Lakiaro[12, 12];
     [SerializeField]
-    private int lakiaroLevel, currLakiaroLevel = 0, manosHoeDeeplyDig, currRemainTryTime, hintCount;
+    private int lakiaroLevel, currLakiaroLevel = 0, manosHoeDeeplyDig, currRemainTryTime, hintCount, useSwallowCount;
     public float progress = 100f;
     public float timer = 0f;
 
@@ -74,6 +74,8 @@ public class LakiaroManager : MonoBehaviour
     public TileBase[] end;//아래쪽_왼쪽
 
 
+    public ParticleSystem[] particleSystems;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -92,25 +94,25 @@ public class LakiaroManager : MonoBehaviour
     {
         for (int i = 0; i < rootDataInfo.up_RootDataList.Count; i++)
         {
-            Debug.Log((i + 1) + "번째 뿌리");
+            //debug.Log((i + 1) + "번째 뿌리");
             string s = "";
             for (int j = 0; j < rootDataInfo.up_RootDataList[i].third.Count; j++)
             {
                 s += rootDataInfo.up_RootDataList[i].third[j].ToString() + ", ";
             }
-            Debug.Log("Third(" + rootDataInfo.up_RootDataList[i].third.Count + ") : " + s);
+            //debug.Log("Third(" + rootDataInfo.up_RootDataList[i].third.Count + ") : " + s);
             s = "";
             for (int j = 0; j < rootDataInfo.up_RootDataList[i].fourth.Count; j++)
             {
                 s += rootDataInfo.up_RootDataList[i].fourth[j].ToString() + ", ";
             }
-            Debug.Log("Fourth(" + rootDataInfo.up_RootDataList[i].fourth.Count + ") : " + s);
+            //debug.Log("Fourth(" + rootDataInfo.up_RootDataList[i].fourth.Count + ") : " + s);
             s = "";
             for (int j = 0; j < rootDataInfo.up_RootDataList[i].fifth.Count; j++)
             {
                 s += rootDataInfo.up_RootDataList[i].fifth[j].ToString() + ", ";
             }
-            Debug.Log("Fifth(" + rootDataInfo.up_RootDataList[i].fifth.Count + ") : " + s);
+            //debug.Log("Fifth(" + rootDataInfo.up_RootDataList[i].fifth.Count + ") : " + s);
         }
     }
 
@@ -209,6 +211,10 @@ public class LakiaroManager : MonoBehaviour
         }
         else
         {
+            if (Input.GetKeyUp(KeyCode.F))
+            {
+                StartCoroutine(FinishDig(currLakiaroLevel, true));
+            }
             if (clickPause)
             {
                 clickPause = false;
@@ -352,7 +358,7 @@ public class LakiaroManager : MonoBehaviour
 
     void OnClickPosition(Vector2 point)
     {
-        Debug.Log(point);
+        //debug.Log(point);
         if (0 > point.x || point.x > 12 || 0 > point.y || point.y > 12) return;
         if (4 < point.x && point.x < 8 && 4 < point.y && point.y < 8) return;
 
@@ -375,7 +381,7 @@ public class LakiaroManager : MonoBehaviour
         minCamBox.x = width / 2f; minCamBox.y = height / 2f + offset;
         maxCamBox.x = 12f - width / 2f; maxCamBox.y = 12f - height / 2f + offset;
 
-        Debug.LogWarning("MinCamBox : " + minCamBox + " MaxCamBox : " + offset);
+        //debug.LogWarning("MinCamBox : " + minCamBox + " MaxCamBox : " + offset);
     }
 
     void MoveCam(Vector3 cPos, Vector2 mousePos)
@@ -393,6 +399,7 @@ public class LakiaroManager : MonoBehaviour
     public void OnUserEarnedReward(int reward)
     {
         currRemainTryTime++;
+        hintCount--;
         inGame_UI.UpdateRemainTryTime(currRemainTryTime);
     }
 
@@ -403,46 +410,50 @@ public class LakiaroManager : MonoBehaviour
     Vector3Int vector3Int = new Vector3Int();
     public bool SwallowlyDig(Vector2 point)
     {
-        Debug.Log(point);
+        //debug.Log(point);
         if (0 > point.x || point.x > 12 || 0 > point.y || point.y > 12) return false;
         if (4 < point.x && point.x < 8 && 4 < point.y && point.y < 8) return false;
         if (lakiaroRoot[(int)point.x, (int)point.y].isChecked) return false; // 이미 확인한 곳이면 스킾
 
         bool isRoot = false;
 
-        GameManager.Instance.audioManager.CallAudioClip(2);
+        AudioManager.Instance.CallAudioClip(2);
         if (lakiaroRoot[(int)point.x, (int)point.y] != null)
         {
             if (lakiaroRoot[(int)point.x, (int)point.y].type == Lakiaro.Type.Root)
             {
                 isRoot = true;
                 currRemainRoot--;
+                useSwallowCount++;
 
                 vector3Int.x = (int)point.x;
                 vector3Int.y = (int)point.y;
                 lakiaroDirtTilemap_Upper.SetTile(vector3Int, null);
                 lakiaroRoot[vector3Int.x, vector3Int.y].isChecked = true;
-                Debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 뿌리이다.");
+                //debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 뿌리이다.");
 
                 inGame_UI.UpdateRemainLakiaroText(1 ,currRemainRoot);
+
+                DirtDigEffect(vector3Int, 0);
+
             }
             else if (lakiaroRoot[(int)point.x, (int)point.y].type == Lakiaro.Type.Pebble)
             {
-                Debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 자갈이다.");
+                //debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 자갈이다.");
             }
 
             if (lakiaroRoot[(int)point.x, (int)point.y].type != Lakiaro.Type.Flower) currRemainTryTime--;
         }
         else
         {
-            Debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 흙이다.");
+            //debug.Log((int)mousePosition.x + ", " + (int)mousePosition.y + " 는 흙이다.");
         }
         
         inGame_UI.UpdateRemainTryTime(currRemainTryTime);
 
         return isRoot;
     }
-
+    
     public bool DeeplyDig(Vector2 point)
     {
         if (0 > point.x || point.x > 12 || 0 > point.y || point.y > 12) return false;
@@ -453,7 +464,7 @@ public class LakiaroManager : MonoBehaviour
 
         int currCheck = 0;
 
-        GameManager.Instance.audioManager.CallAudioClip(0);
+        AudioManager.Instance.CallAudioClip(0);
         bool dirt = false, root = false, pebble = false;
         for (int y = 1; y > -2; y--)
         {
@@ -475,6 +486,7 @@ public class LakiaroManager : MonoBehaviour
                     lakiaroRoot[vector3Int.x, vector3Int.y].isChecked = true;
 
                     dirt = true;
+                    DirtDigEffect(vector3Int, currCheck);
                 }
                 else
                 {
@@ -496,6 +508,7 @@ public class LakiaroManager : MonoBehaviour
 
                         lakiaroDirtTilemap_Upper.SetTile(vector3Int, null);
                         lakiaroRoot[vector3Int.x, vector3Int.y].isChecked = true;
+                        DirtDigEffect(vector3Int, currCheck);
                     }
                 }
 
@@ -522,6 +535,13 @@ public class LakiaroManager : MonoBehaviour
 
         return isDirt;
     }
+
+    void DirtDigEffect(Vector3 setpos, int index)
+    {
+        particleSystems[index].transform.position = setpos;
+        particleSystems[index].Play();
+    }
+
     public bool startGame;
     public void StartGame()
     {
@@ -601,6 +621,8 @@ public class LakiaroManager : MonoBehaviour
         }
         else
         {
+            timer = 0f;
+            useSwallowCount = 0;
             hintCount = (_lakiaroLevel < 3) ? 1 : 2;
             manosHoeDeeplyDig = GameManager.Instance.dataManager.gameData.upgradeData.ManosHoeDeeplyDig;
             currRemainTryTime = 18 + GameManager.Instance.dataManager.gameData.upgradeData.ManosHoeSwallowlyDig;
@@ -636,18 +658,18 @@ public class LakiaroManager : MonoBehaviour
 
     IEnumerator FinishDig(int nextLevel, bool lastRound)
     {
+        lakiaroDirtTilemap_Upper.ClearAllTiles();
         if (lastRound)
         {
+            StopAllCoroutines();
             gamePause = true;
             inGame_UI.OnResultUI(gameResult); // 인게임 수확 종료 버튼 활성화
-            GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, gameResult, isDailyGame, (int)timer, currRemainTryTime);
-            InitGame();
+            GameManager.Instance.FinishDigLakiaro(lakiaroLevel, progress, gameResult, isDailyGame, (int)timer, useSwallowCount);
+            
         }
         else
         {
             inGame_UI.EnableRound();
-
-            lakiaroDirtTilemap_Upper.ClearAllTiles();
 
             float timer = 0f;
 
@@ -666,6 +688,7 @@ public class LakiaroManager : MonoBehaviour
 
             inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
         }
+
     }
 
     public void ReturnToLobby()
@@ -680,7 +703,7 @@ public class LakiaroManager : MonoBehaviour
             else if (20 <= progress && progress < 40) _lakiaroLevel -= 4;
             else if (0 < progress && progress < 20) _lakiaroLevel -= 5;
 
-            switch (lakiaroLevel)
+            switch (_lakiaroLevel)
             {
                 case 0:
                     gold = 100000;
@@ -725,17 +748,20 @@ public class LakiaroManager : MonoBehaviour
                     dailyBonus = 2d;
                     break;
                 case 1:
-                    dailyBonus = 1.6d;
+                    dailyBonus = 1.7d;
                     break;
                 case 0:
-                    dailyBonus = 1.3d;
+                    dailyBonus = 1.4d;
                     break;
                 case -1:
+                    dailyBonus = 1.2d;
+                    break;
+                default:
                     dailyBonus = 1.1d;
                     break;
             }
         }
-
+        InitGame();
         UIManager.Instance.CallMainUI();
         UIManager.Instance.lobby_UI.CallNewGameUI();
         UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().DigFinishLakiaro(lakiaroLevel + 5, progress, gold, gameResult, isDailyGame, dailyBonus);
@@ -873,7 +899,7 @@ public class LakiaroManager : MonoBehaviour
                 index = 0;
                 break;
         }
-        Debug.LogWarning(index.ToString() + " "  + currLakiaroLevel.ToString());
+        //Debug.LogWarning(index.ToString() + " "  + currLakiaroLevel.ToString());
 
         lakiaroFlowerTileMap.SetTile(new Vector3Int(4,7,0), lakiaro_Flower_TileBase[index + currLakiaroLevel]);
     }
@@ -907,7 +933,7 @@ public class LakiaroManager : MonoBehaviour
                     vector3Int.x = i;
                     vector3Int.y = j;
                     lakiaroDirtTilemap_Upper.SetTile(vector3Int, lakiaroDirtTileMap_Lower.GetTile(vector3Int));
-                    Debug.Log(lakiaroDirtTileMap_Lower.GetTile(vector3Int).name + " " + lakiaroDirtTilemap_Upper.GetTile(vector3Int).name);
+                    //debug.Log(lakiaroDirtTileMap_Lower.GetTile(vector3Int).name + " " + lakiaroDirtTilemap_Upper.GetTile(vector3Int).name);
                 }
             }
         }
@@ -921,7 +947,7 @@ public class LakiaroManager : MonoBehaviour
                 vector3Int.x = i;
                 vector3Int.y = j;
                 lakiaroDirtTileMap_Lower.SetTile(vector3Int, basicTile[level + 1][Random.Range(0, basicTile2.Count)]);
-                Debug.Log(lakiaroDirtTileMap_Lower.GetTile(vector3Int).name + " " + lakiaroDirtTilemap_Upper.GetTile(vector3Int).name);
+                //debug.Log(lakiaroDirtTileMap_Lower.GetTile(vector3Int).name + " " + lakiaroDirtTilemap_Upper.GetTile(vector3Int).name);
             }
         }
     }
@@ -939,7 +965,7 @@ public class LakiaroManager : MonoBehaviour
 
         int currRootCount = 0, rootCount = Random.Range(5, 9); // 생성될 뿌리 5~9개 랜덤
 
-        Debug.Log("rootCount : " + rootCount);
+        //debug.Log("rootCount : " + rootCount);
         List<int> checkedStartPosList = new List<int>();
         
         while (currRootCount != rootCount)
@@ -948,7 +974,7 @@ public class LakiaroManager : MonoBehaviour
 
             if (checkedStartPosList.Count >= 16)
             {
-                Debug.LogWarning("뿌리를 전부다 생성 실패");
+                //debug.LogWarning("뿌리를 전부다 생성 실패");
                 break;
             }
 
@@ -956,10 +982,10 @@ public class LakiaroManager : MonoBehaviour
             else checkedStartPosList.Add(startPosIndex);
             
 
-            Debug.Log(startPosIndex + " " + startPos[startPosIndex] + " " + startPosIndex / 4);
+            //debug.Log(startPosIndex + " " + startPos[startPosIndex] + " " + startPosIndex / 4);
             if (!CheckCanMakeThickRoot(startPos[startPosIndex], startPosIndex / 4))
             {
-                Debug.LogWarning(startPos[startPosIndex].ToString() + currRootCount + " 굵은 뿌리 생성에서 에러가 발생");
+                //debug.LogWarning(startPos[startPosIndex].ToString() + currRootCount + " 굵은 뿌리 생성에서 에러가 발생");
             }
             else  currRootCount++;
         }
@@ -976,7 +1002,7 @@ public class LakiaroManager : MonoBehaviour
         {
             for(int j =  0; j < rootLists[i].rootList.Count; j++)
             {
-                Debug.Log(i + "." + j + "번째 뿌리 :" + rootLists[i].rootList[j].GetCurrRoot() + " : " + rootLists[i].rootList[j].rootState + " : " + rootLists[i].rootList[j].GetDirection);
+                //debug.Log(i + "." + j + "번째 뿌리 :" + rootLists[i].rootList[j].GetCurrRoot() + " : " + rootLists[i].rootList[j].rootState + " : " + rootLists[i].rootList[j].GetDirection);
             }
         }
 
@@ -1033,7 +1059,7 @@ public class LakiaroManager : MonoBehaviour
                 if (lakiaroRoot[x, y].type != Lakiaro.Type.Dirt)
                 {
 
-                    Debug.LogWarning("["+x+","+ y + "] "+ + (randomIndex + 1) + "형태의 "+ (i + 1) + "번째 뿌리 위치");
+                    //debug.LogWarning("["+x+","+ y + "] "+ + (randomIndex + 1) + "형태의 "+ (i + 1) + "번째 뿌리 위치");
 
                     cantMake = true;
                     if (i == 1)
@@ -1073,7 +1099,7 @@ public class LakiaroManager : MonoBehaviour
             }
             if (cantMake)
             {
-                Debug.LogWarning("3~5 번째 뿌리에서 뿌리 발견 생성 불가");
+                //debug.LogWarning("3~5 번째 뿌리에서 뿌리 발견 생성 불가");
                 continue;
             }
 
@@ -1102,18 +1128,18 @@ public class LakiaroManager : MonoBehaviour
                 }
                 if (lakiaroRoot[x, y].type == Lakiaro.Type.Dirt)
                 {
-                    Debug.Log(x + " " + y + "가능");
+                    //debug.Log(x + " " + y + "가능");
                     sixth.Add(i);
                 }
                 else
                 {
-                    Debug.LogWarning(x + " " + y + "불가능");
+                    //debug.LogWarning(x + " " + y + "불가능");
                 }
             }
 
             if (sixth.Count == 0)
             {
-                Debug.Log("가능한 6번째 뿌리가 없음");
+                //debug.Log("가능한 6번째 뿌리가 없음");
                 continue;
             }
             else
@@ -1121,8 +1147,6 @@ public class LakiaroManager : MonoBehaviour
                 ranSixth = sixth[Random.Range(0, sixth.Count)];
                 canMake = true;
             }
-
-            if(canMake) Debug.Log(randomIndex + "가능");
         }
 
 
@@ -1191,7 +1215,7 @@ public class LakiaroManager : MonoBehaviour
             {
                 s += tempIndexList[i] + " ";
             }
-            Debug.LogWarning(s + "확인이 끝남");
+            //debug.LogWarning(s + "확인이 끝남");
         }
         tempIndexList.Clear();
 
@@ -1310,7 +1334,7 @@ public class LakiaroManager : MonoBehaviour
             if(dirList.Count == 0)
             {
                 rootList.rootList[index].rootState = 3;
-                Debug.LogWarning("더이상 진행 불가능 마지막 뿌리 설정");
+                //debug.LogWarning("더이상 진행 불가능 마지막 뿌리 설정");
                 break;
             }
             else
@@ -1365,7 +1389,7 @@ public class LakiaroManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning(rootList.rootList[index].GetDirection + "마지막 뿌리 설정 에러");
+                    //debug.LogWarning(rootList.rootList[index].GetDirection + "마지막 뿌리 설정 에러");
                 }
 
                 root.SetPreRoot(rootList.rootList[index].GetCurrRoot());
@@ -1375,12 +1399,12 @@ public class LakiaroManager : MonoBehaviour
                 rootList.rootList.Add(root);
                 dirtPool.Enqueue(lakiaroRoot[root.GetCurrRoot().x, root.GetCurrRoot().y] as Dirt);
                 lakiaroRoot[root.GetCurrRoot().x, root.GetCurrRoot().y] = root;
-                Debug.Log(index + " 번째 얇은뿌리 : " + rootList.rootList[index].GetCurrRoot() + " : " + rootList.rootList.Count);
+                //debug.Log(index + " 번째 얇은뿌리 : " + rootList.rootList[index].GetCurrRoot() + " : " + rootList.rootList.Count);
             }
 
             if (Random.Range(0f, 1f) < 0.1f || index == 7)
             {
-                Debug.Log("마지막 뿌리 설정 " + index);
+                //debug.Log("마지막 뿌리 설정 " + index);
                 rootList.rootList[rootList.rootList.Count - 1].rootState = 3;
                 break;
             }
@@ -1393,7 +1417,7 @@ public class LakiaroManager : MonoBehaviour
 
         for (int i = 0; i < rootList.rootList.Count; i++)
         {
-            Debug.Log(i + " 번째 뿌리 : " + rootList.rootList[i].GetCurrRoot());
+            //debug.Log(i + " 번째 뿌리 : " + rootList.rootList[i].GetCurrRoot());
         }
 
         return canMake;
@@ -1461,7 +1485,7 @@ public class LakiaroManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("방향 설정 에러");
+                //debug.LogWarning("방향 설정 에러");
             }
         }
 
@@ -1531,7 +1555,7 @@ public class LakiaroManager : MonoBehaviour
                     tileBaseList = right_Upper;
                     break;
                 default:
-                    Debug.LogWarning(root.GetDirection);
+                    //debug.LogWarning(root.GetDirection);
                     return false;
             }
             
@@ -1556,7 +1580,7 @@ public class LakiaroManager : MonoBehaviour
                 lakiaroRootTileMap.SetTile(root.GetCurrRoot(), end[1]);
                 break;
             default:
-                Debug.Log((rootList.rootList.Count - 1) + " : " + root.GetDirection);
+                //debug.Log((rootList.rootList.Count - 1) + " : " + root.GetDirection);
                 break;
         }
 
@@ -1632,13 +1656,13 @@ public class LakiaroManager : MonoBehaviour
             if (remainCheck.Count == 0) break;
 
             checkPos = remainCheck.Dequeue();
-            Debug.Log("현재 위치" + checkPos);
+            //debug.Log("현재 위치" + checkPos);
             if(checkPos.z == 0 || checkPos.z != 2)
                 if (checkPos.x + 1 >= 0 && checkPos.x + 1 <= 11 && checkPos.y >= 0 && checkPos.y <= 11)
                     if (lakiaroRoot[checkPos.x + 1, checkPos.y] != null)
                         if (lakiaroRoot[checkPos.x + 1, checkPos.y].type == Lakiaro.Type.Dirt)
                         {
-                            Debug.Log(remainCheck.Count + "개");
+                            //debug.Log(remainCheck.Count + "개");
                             remainCheck.Enqueue(new Vector3Int(checkPos.x + 1, checkPos.y, 1)); count++;
                         }
             if (checkPos.z == 0 || checkPos.z != 1)
@@ -1646,7 +1670,7 @@ public class LakiaroManager : MonoBehaviour
                     if (lakiaroRoot[checkPos.x - 1, checkPos.y] != null)
                         if (lakiaroRoot[checkPos.x - 1, checkPos.y].type == Lakiaro.Type.Dirt)
                         {
-                            Debug.Log(remainCheck.Count + "개");
+                            //debug.Log(remainCheck.Count + "개");
                             remainCheck.Enqueue(new Vector3Int(checkPos.x - 1, checkPos.y, 2)); count++;
                         }
             if (checkPos.z == 0 || checkPos.z != 4)
@@ -1654,7 +1678,7 @@ public class LakiaroManager : MonoBehaviour
                     if (lakiaroRoot[checkPos.x, checkPos.y + 1] != null)
                         if (lakiaroRoot[checkPos.x, checkPos.y + 1].type == Lakiaro.Type.Dirt)
                         {
-                            Debug.Log(remainCheck.Count + "개");
+                            //debug.Log(remainCheck.Count + "개");
                             remainCheck.Enqueue(new Vector3Int(checkPos.x, checkPos.y + 1, 3)); count++;
                         }
             if (checkPos.z == 0 || checkPos.z != 3)
@@ -1662,16 +1686,13 @@ public class LakiaroManager : MonoBehaviour
                     if (lakiaroRoot[checkPos.x, checkPos.y - 1] != null)
                         if (lakiaroRoot[checkPos.x, checkPos.y - 1].type == Lakiaro.Type.Dirt)
                         {
-                            Debug.Log(remainCheck.Count + "개");
+                            //debug.Log(remainCheck.Count + "개");
                             remainCheck.Enqueue(new Vector3Int(checkPos.x, checkPos.y - 1, 4)); count++;
                         }
 
-            Debug.Log("현재" + remainCheck.Count + "개");
+            //debug.Log("현재" + remainCheck.Count + "개");
             if (count >= 8) canMake = true; // 빈공간이 8개 일 경우 어떤 형태라도 1개는 생성 가능
         }
-
-        if (canMake) Debug.Log("8개이상 발견으로 생성 가능");
-        else Debug.LogWarning(count + "개 발견으로 생성 불가능");
 
         return canMake;
     }
@@ -1725,7 +1746,7 @@ public class LakiaroManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning(x + ", " + y + "에 " + lakiaroRoot[x, y].type + "가 존재");
+                //debug.LogWarning(x + ", " + y + "에 " + lakiaroRoot[x, y].type + "가 존재");
             }
         }
     }
@@ -1736,7 +1757,7 @@ public class LakiaroManager : MonoBehaviour
         currRemainDirt = 128;
         currRemainRoot = 0;
         currRemainPebble = 0;
-        timer = 0f;
+        
         for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
         {
             for (int j = 0; j < lakiaroRoot.GetLength(1); j++)
@@ -1747,6 +1768,7 @@ public class LakiaroManager : MonoBehaviour
 
                 if (lakiaroRoot[i, j].type == Lakiaro.Type.Root)
                 {
+                    (lakiaroRoot[i, j] as Root).InitRoot();
                     rootPool.Enqueue(lakiaroRoot[i, j] as Root);
                     lakiaroRoot[i, j] = dirtPool.Dequeue();
                 }
@@ -1792,15 +1814,15 @@ public class LakiaroManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogWarning(dirtPool.Count);
-            Debug.LogWarning(rootPool.Count);
-            Debug.LogWarning(pebblePool.Count);
-            Debug.LogWarning(e);
+            //debug.LogWarning(dirtPool.Count);
+            //debug.LogWarning(rootPool.Count);
+            //debug.LogWarning(pebblePool.Count);
+            //debug.LogWarning(e);
         }
 
-        Debug.Log(dirtPool.Count);
-        Debug.Log(rootPool.Count);
-        Debug.Log(pebblePool.Count);
+        //debug.Log(dirtPool.Count);
+        //debug.Log(rootPool.Count);
+        //debug.Log(pebblePool.Count);
     }
 
     public void LoadGameData()
@@ -1842,6 +1864,7 @@ public class LakiaroManager : MonoBehaviour
         manosHoeDeeplyDig = GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeDeeplyDig;
         currRemainTryTime = GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime;
         hintCount = GameManager.Instance.dataManager.gameData.lakiaroGameData.HintCount;
+        useSwallowCount = GameManager.Instance.dataManager.gameData.lakiaroGameData.UseSwallowCount;
         progress = GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress;
         timer = GameManager.Instance.dataManager.gameData.lakiaroGameData.Timer;
         LoadLakiaro();
@@ -1917,6 +1940,7 @@ public class LakiaroManager : MonoBehaviour
 
     public void SaveGameData()
     {
+        StopAllCoroutines();
         GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData = true;
 
         if (isDailyGame)
@@ -1952,6 +1976,7 @@ public class LakiaroManager : MonoBehaviour
         GameManager.Instance.dataManager.gameData.lakiaroGameData.ManosHoeDeeplyDig = manosHoeDeeplyDig;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrRemainTryTime = currRemainTryTime;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.HintCount = hintCount;
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.UseSwallowCount = useSwallowCount;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.Progress = progress;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.Timer = timer;
         InitGame();
@@ -1999,6 +2024,7 @@ public class LakiaroManager : MonoBehaviour
         manosHoeDeeplyDig = GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeDeeplyDig;
         currRemainTryTime = GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrRemainTryTime;
         hintCount = GameManager.Instance.dataManager.gameData.dailyChallengeData.HintCount;
+        useSwallowCount = GameManager.Instance.dataManager.gameData.dailyChallengeData.UseSwallowCount;
         progress = GameManager.Instance.dataManager.gameData.dailyChallengeData.Progress;
         timer = GameManager.Instance.dataManager.gameData.dailyChallengeData.Timer;
         LoadLakiaro();
@@ -2032,6 +2058,7 @@ public class LakiaroManager : MonoBehaviour
         GameManager.Instance.dataManager.gameData.dailyChallengeData.ManosHoeDeeplyDig = manosHoeDeeplyDig;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrRemainTryTime = currRemainTryTime;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.HintCount = hintCount;
+        GameManager.Instance.dataManager.gameData.dailyChallengeData.UseSwallowCount = useSwallowCount;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.Progress = progress;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.Timer = timer;
 

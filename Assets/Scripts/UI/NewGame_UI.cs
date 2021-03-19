@@ -59,6 +59,7 @@ public class NewGame_UI : MonoBehaviour
 
     public void LoadData()
     {
+        Debug.Log("??");
         Color setColor;
         Caltime(); // 쿨타임과 리프레시할 라키아로부터 제설정
 
@@ -79,6 +80,7 @@ public class NewGame_UI : MonoBehaviour
 
     public void Caltime() // 이전 접속한 시간과 새로 접속한 시간을 비교후 coolttime과 오래된 라키아로 재생성
     {
+        Debug.Log("Caltime");
         System.TimeSpan timespan;
 
         for (int i = 0; i < 5; i++)
@@ -89,18 +91,18 @@ public class NewGame_UI : MonoBehaviour
             }
             if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].IsDig)
             {
+                Debug.Log(i + " : 라키아로 파져있음");
                 timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.playerData.UserIndate);
                 GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime -= (int)timespan.TotalSeconds;
 
                 if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime < 0)
                 {
-                    Debug.Log("쿨타임 끝 라키아로 생성");
+                    Debug.Log(i + " : 라키아로 쿨타임 완료 재생성");
                     CreateNewLakiaro(i);
                 }
                 else
                 {
-
-                    Debug.Log("cooltime");
+                    Debug.Log(i + " : 라키아로 재생성중");
                     lakiaroBtn[i].OnLoading();
                 }
             }
@@ -108,9 +110,8 @@ public class NewGame_UI : MonoBehaviour
             {
                 timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].GenerateTime);
 
-                if ((int)timespan.TotalMinutes > 30)
+                if ((int)timespan.TotalMinutes > 120)
                 {
-                    Debug.Log("오래되서 재생성" + i);
                     CreateNewLakiaro(i);
                 }
             }
@@ -151,9 +152,8 @@ public class NewGame_UI : MonoBehaviour
                 {
                     timespan = System.DateTime.Now - System.Convert.ToDateTime(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].GenerateTime);
 
-                    if ((int)timespan.TotalMinutes > 30)
+                    if ((int)timespan.TotalMinutes > 120)
                     {
-                        Debug.Log("오래되서 재생성" + i);
                         CreateNewLakiaro(i);
                     }
                 }
@@ -162,10 +162,34 @@ public class NewGame_UI : MonoBehaviour
         }
     }
 
+    int[][] percent = new int[][]
+    {
+        new int[]{0, 0, 5, 20, 100 },
+        new int[]{1, 6, 16, 36, 100 },
+        new int[]{2, 8, 21, 46, 100 },
+        new int[]{3, 10, 26, 56, 100 },
+        new int[]{4, 12, 31, 66, 100 },
+        new int[]{5, 14, 36, 76, 100 },
+        new int[]{6, 17, 42, 80, 100 },
+        new int[]{7, 20, 48, 80, 100 },
+        new int[]{8, 23, 54, 80, 100 },
+        new int[]{9, 26, 54, 80, 100 },
+        new int[]{10, 30, 55, 80, 100 }
+    };
 
     public void CreateNewLakiaro(int index) // 새로운 라키아로 infodata 설정 및 btn에 적용
     {
-        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel = Random.Range(0, 4);
+        var ran = Random.Range(0, 100);
+        var lakiaroLevel = 0;
+        for (int i = 0; i < 5; i++)
+        {
+            if (ran < percent[GameManager.Instance.dataManager.gameData.upgradeData.LakiaroFoundChance][i])
+            {
+                lakiaroLevel = 4 - i;
+                break;
+            }
+        }
+        GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].LakiaroLevel = lakiaroLevel;
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].Pos = lakiaroPos[5 * index + Random.Range(0, 4)].anchoredPosition;
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].CoolTime = 0;
         GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[index].GenerateTime = System.DateTime.Now.ToString();
@@ -210,14 +234,21 @@ public class NewGame_UI : MonoBehaviour
         StartGame(false);
     }
 
-    public void StartGame(bool isLoad) // 새로운 게임 시작
+    public void StartGame(bool isLoad) // 라키아로 불러오거나 새로운 게임 로딩 밎 광고 로딩
     {
         UIManager.Instance.CallInGameUI();
         GameManager.Instance.lakiaroManager.GameSetting(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[currindex].LakiaroLevel, isLoad, false);
-        
-        GameManager.Instance.lakiaroManager.StartGame();
+        GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroInfoIndex = currindex;
+        if (0.25f > Random.Range(0f, 1f))
+        {
+            GameManager.Instance.googleAdsManager.ShowInterstitialAd();
+        }
+        else
+        {
+            GameManager.Instance.lakiaroManager.StartGame();
+        }
 
-        GameManager.Instance.audioManager.CallAudioClip(1);
+        AudioManager.Instance.CallAudioClip(1);
     }
 
     public void DigFinishLakiaro(int lakiaroLevel, float _progress, float _gold, bool _gameResult, bool _isDaily, double dailyBonus)
@@ -258,7 +289,6 @@ public class NewGame_UI : MonoBehaviour
     {
         OffDailyInfo();
         currState = State.InfoUI;
-        Debug.Log((int)currState);
         currindex = index;
         if (GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData)
         {
@@ -335,55 +365,5 @@ public class NewGame_UI : MonoBehaviour
         currDigAnim.gameObject.SetActive(true);
         currDigAnim.SetParent(lakiaroBtn[index].transform);
         currDigAnim.anchoredPosition = Vector3.zero;
-        Debug.Log("디그 애님 : " + index);
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 100;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 1000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 10000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 100000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold += 1000000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold -= 100;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold -= 1000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold -= 1000;
-            gold_UI.UpdateCoin();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            GameManager.Instance.dataManager.gameData.playerData.Gold -= 100000;
-            gold_UI.UpdateCoin();
-        }
     }
 }

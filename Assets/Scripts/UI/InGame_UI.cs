@@ -269,6 +269,7 @@ public class InGame_UI : MonoBehaviour
             hintRemainText.text = string.Format("{0} / {1}", remainTime, hintCount);
             checkUseHintUI.SetActive(true);
         }
+        AudioManager.Instance.CallAudioClip(5);
     }
     public GameObject alertObj;
     public void OnAlert()

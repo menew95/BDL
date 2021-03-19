@@ -100,10 +100,12 @@ public class GoogleAdsManager : MonoBehaviour
 
     private IEnumerator ShowReWardAd()
     {
+        GameManager.Instance.LoadingStart();
         while (!videoAd.IsLoaded())
         {
             yield return null;
         }
+        GameManager.Instance.LoadingFinish();
         videoAd.Show();
     }
 
@@ -114,6 +116,7 @@ public class GoogleAdsManager : MonoBehaviour
     public void HandleOnAdFailedToLoad(object sender, AdErrorEventArgs args)
     {
         Debug.Log("RewardAd load Failed : " + args.Message);
+
     }
     public void HandleOnAdFailedToShow(object sender, AdErrorEventArgs args)
     {
@@ -130,7 +133,6 @@ public class GoogleAdsManager : MonoBehaviour
     }
     public void HandleOnUserEarnedReward_DailyGameRewardAd(object sender, Reward args)
     {
-        GameManager.Instance.lakiaroManager.inGame_UI.OnAlert();
         Debug.Log("RewardAd can received Reward");
     }
     public void HandleOnUserEarnedReward_SwallowlyDigCount(object sender, Reward args)
@@ -170,6 +172,8 @@ public class GoogleAdsManager : MonoBehaviour
     }
     public void InterstitialAd_HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
     {
+        RequestInterstitial();
+        GameManager.Instance.lakiaroManager.StartGame();
         Debug.Log("InterstitialAd_ load Failed : " + args.Message);
     }
     public void InterstitialAd_HandleOnAdOpening(object sender, EventArgs args)

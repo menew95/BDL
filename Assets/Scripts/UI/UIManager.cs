@@ -40,6 +40,8 @@ public class UIManager : MonoBehaviour
     public Lobby_UI lobby_UI;
     public NewGame_UI newGame_UI;
 
+    public GameObject loadingObj;
+
     public enum UIState
     {
         Main,
@@ -63,5 +65,15 @@ public class UIManager : MonoBehaviour
         main_UI.SetActive(true);
         lobby_UI.CallHomeUI();
         inGame_UI.SetActive(false);
+    }
+
+    public void LoadingStart()
+    {
+        loadingObj.SetActive(true);
+    }
+
+    public void LoadingFinish()
+    {
+        loadingObj.SetActive(false);
     }
 }

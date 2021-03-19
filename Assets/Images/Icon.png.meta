@@ -122,6 +122,12 @@ TextureImporter:
   - first:
       213: -2296187403958194156
     second: Icon_31
+  - first:
+      213: -8795753301911706734
+    second: Progress_lakiaroBG
+  - first:
+      213: -1264041032083308920
+    second: Icon_32
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -1000,7 +1006,7 @@ TextureImporter:
         serializedVersion: 2
         x: 272
         y: 336
-        width: 48
+        width: 80
         height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1016,10 +1022,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HintAd_Icon
+      name: Icon_31
       rect:
         serializedVersion: 2
-        x: 320
+        x: 368
         y: 336
         width: 48
         height: 48
@@ -1030,18 +1036,39 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 76462219354843348b4410edcebd9614
-      internalID: -5705093070170424318
+      spriteID: 3c1ee907a486af64e988f77eb242ad15
+      internalID: -2296187403958194156
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Icon_31
+      name: Progress_lakiaroBG
       rect:
         serializedVersion: 2
-        x: 368
-        y: 336
+        x: 224
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eafd2d484af46754388815b5e390dab1
+      internalID: -8795753301911706734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon_32
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 240
         width: 48
         height: 48
       alignment: 0
@@ -1051,8 +1078,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c1ee907a486af64e988f77eb242ad15
-      internalID: -2296187403958194156
+      spriteID: c59bb6aaa6f85bd4cae86ccc540c5ec1
+      internalID: -1264041032083308920
       vertices: []
       indices: 
       edges: []

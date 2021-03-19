@@ -23,7 +23,7 @@ public class Intro_UI : MonoBehaviour
         UIManager.Instance.lobby_UI.CallHomeUI();
         UIManager.Instance.lobby_UI.gameObject.SetActive(true);
 
-        GameManager.Instance.audioManager.CallAudioClip(1);
+        AudioManager.Instance.CallAudioClip(1);
     }
 
     public void OnClickExitBtn()

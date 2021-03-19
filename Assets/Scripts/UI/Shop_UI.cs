@@ -5,18 +5,18 @@ using UnityEngine.UI;
 
 public class Shop_UI : MonoBehaviour
 {
-    private List<int> maxLevelData = new List<int> { 6, 6, 10, 5 };
+    private List<int> maxLevelData = new List<int> { 10, 6, 10, 5 };
     private List<List<long>> upgradeGoldData = new List<List<long>>
     {
-        new List<long> { 10000000, 25000000, 100000000, 500000000, 1500000000, 4000000000 },
+        new List<long> { 10000000, 25000000, 60000000, 130000000, 260000000, 500000000, 900000000, 1600000000, 2700000000, 4000000000 },
         new List<long> { 10000000, 25000000, 100000000, 500000000, 1500000000, 4000000000 },
         new List<long> { 10000000, 25000000, 60000000, 135000000, 295000000, 610000000, 1180000000, 2185000000, 3780000000, 6124000000 },
         new List<long> { 60000000, 300000000, 1300000000, 4500000000 }
     };
     private List<string> desList = new List<string>
     {
-        "고등급 라키아로 발견 확률 {0}% 증가",
-        "라키아로 탐색 레벨 증가",
+        "고등급 라키아로 발견 확률 증가",
+        "라키아로 탐색 시간 감소",
         "얕게파기 횟수 {0}회 증가",
         "깊게 파기시 주변 흙 확인 범위 {0}칸 증가"
     };
@@ -33,8 +33,7 @@ public class Shop_UI : MonoBehaviour
     public List<GameObject> gold = new List<GameObject>();
     public List<Button> upgradeBtnList = new List<Button>();
     public List<Text> desTextList = new List<Text>();
-
-    public GameObject loadingObj;
+    
     public GameObject alertObj;
     public Text alertText;
 
@@ -66,9 +65,7 @@ public class Shop_UI : MonoBehaviour
         }
         else
         {
-            level++;
-            Debug.Log(GameManager.Instance.dataManager.gameData.upgradeData.LevelData[i]);
-            levelTextList[i].text = string.Format("Lv {0}", level);
+            levelTextList[i].text = string.Format("Lv {0}", level + 1);
             gold[i].GetComponentInChildren<Text>().text = upgradeGoldData[i][level].ToString();
         }
 
@@ -84,14 +81,14 @@ public class Shop_UI : MonoBehaviour
 
     public void OnClickUpgradeBtn()
     {
-        loadingObj.SetActive(true);
-        GameManager.Instance.dataManager.CheckGold(upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] + 1]);
+        AudioManager.Instance.CallAudioClip(1);
+        GameManager.Instance.LoadingStart();
+        GameManager.Instance.dataManager.CheckGold(upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect]]);
     }
 
     public void Upgrade()
     {
-        loadingObj.SetActive(false);
-        GameManager.Instance.ChangeGoldData(-upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] + 1]);
+        GameManager.Instance.ChangeGoldData(-upgradeGoldData[currSelect][GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect]]);
         GameManager.Instance.dataManager.gameData.upgradeData.LevelData[currSelect] += 1;
         ChangeUI(currSelect);
         GameManager.Instance.dataManager.UpdateUpgradeDataOnFirebase();
@@ -100,6 +97,7 @@ public class Shop_UI : MonoBehaviour
 
     public void Alert(string msg)
     {
+        upgradeAlert.SetActive(false);
         alertObj.SetActive(true);
         alertText.text = msg;
     }
@@ -108,12 +106,14 @@ public class Shop_UI : MonoBehaviour
     int currSelect = 0;
     public void OnUpgradeAlert(int index)
     {
+        AudioManager.Instance.CallAudioClip(1);
         currSelect = index;
         upgradeAlert.SetActive(true);
     }
 
     public void OffUpgradeAlert()
     {
+        AudioManager.Instance.CallAudioClip(1);
         upgradeAlert.SetActive(false);
     }
 }

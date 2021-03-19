@@ -35,15 +35,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public AudioManager audioManager;
-
     public LakiaroManager lakiaroManager;
 
     public GoogleManager googleManager;
+    public GoogleAdsManager googleAdsManager;
     public DataManager dataManager;
+
+    public bool gameManagerPause = false;
 
     void Update()
     {
+        if (gameManagerPause) return;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (UIManager.Instance.currUIState == UIManager.UIState.Main)
@@ -88,17 +90,6 @@ public class GameManager : MonoBehaviour
                 {
                     UIManager.Instance.lobby_UI.CallHomeUI();
                 }
-
-
-                /*if (Input.GetKeyUp(KeyCode.Escape))
-                {
-                    dataManager.SaveGameData();
-    #if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-    #else
-                    Application.Quit();
-    #endif
-                }*/
             }
             else if (UIManager.Instance.currUIState == UIManager.UIState.InGame)
             {
@@ -114,7 +105,7 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.S))
         {
-            UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().result_UI.Skip();
+            dataManager.tempTest_AddStaticData();
         }
 
         if (Input.GetKeyUp(KeyCode.C))
@@ -134,6 +125,28 @@ public class GameManager : MonoBehaviour
         lakiaroManager.clickPause = true;
         lakiaroManager.inGame_UI.Pause();
     }
+
+    public void LoadingStart()
+    {
+        UIManager.Instance.LoadingStart();
+        gameManagerPause = true;
+        if (UIManager.Instance.currUIState == UIManager.UIState.InGame)
+        {
+            lakiaroManager.gamePause = true;
+            lakiaroManager.clickPause = true;
+        }
+    }
+    public void LoadingFinish()
+    {
+        UIManager.Instance.LoadingFinish();
+        gameManagerPause = false;
+        if (UIManager.Instance.currUIState == UIManager.UIState.InGame)
+        {
+            lakiaroManager.gamePause = false;
+            lakiaroManager.clickPause = false;
+        }
+    }
+
     public void AdPause()
     {
         lakiaroManager.gamePause = true;
@@ -141,8 +154,8 @@ public class GameManager : MonoBehaviour
     }
     void SaveGame()
     {
-        UIManager.Instance.CallMainUI();
         lakiaroManager.SaveGameData();
+        UIManager.Instance.CallMainUI();
     }
 
     public int tempLakiaroLevel = 4;
@@ -151,7 +164,7 @@ public class GameManager : MonoBehaviour
     public bool tempGameResult = true;
     public bool tempDaily = false;
 
-    public void FinishDigLakiaro(int _lakiaroLevel, float _progress, bool _gameResult, bool _isDaily, int _timer, int _currRemainTryTime)
+    public void FinishDigLakiaro(int _lakiaroLevel, float _progress, bool _gameResult, bool _isDaily, int _timer, int _useTryTimeCount)
     {
         /*라키아로 가치에 따른 자원 추가
          */
@@ -232,7 +245,7 @@ public class GameManager : MonoBehaviour
             dataManager.SaveLakiaroInfoData();
         }
         dataManager.UpdatePlayerDataDataOnFirebase();
-        dataManager.AddStaticData(_lakiaroLevel, _progress, _timer, _currRemainTryTime);
+        dataManager.AddStaticData(_lakiaroLevel, _progress, _timer, _useTryTimeCount);
     }
 
     public void ChangeGoldData(long gold)

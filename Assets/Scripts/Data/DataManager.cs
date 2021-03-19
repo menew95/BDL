@@ -18,7 +18,7 @@ public class DataManager : MonoBehaviour
 
     void HandleChildAdded(object sender, ChildChangedEventArgs args)
     {
-        if(args.DatabaseError != null)
+        if (args.DatabaseError != null)
         {
             return;
         }
@@ -64,14 +64,14 @@ public class DataManager : MonoBehaviour
 #endif
         File.WriteAllText(dataPath, toJsonData);
         Debug.Log("데이터 로컬 저장 완료");
-        
+
     }
 
     public void SaveGameDataOnFirebase()
     {
         Debug.Log("저장되는지 테스트");
         string userID = GameManager.Instance.googleManager.GetFirebaseUserID();
-        
+
         string data = JsonUtility.ToJson(gameData);
 
         try
@@ -88,7 +88,7 @@ public class DataManager : MonoBehaviour
     public void SaveLakiaroInfoData()
     {
         int index = gameData.lakiaroGameData.LakiaroInfoIndex;
-        
+
         gameData.LakiaroInfoDataList[index].IsDig = true;
         gameData.LakiaroInfoDataList[index].CoolTime = 1800 - (gameData.upgradeData.RegenerationCooltime * 120);
         UpdateLakiaroInfoDataOnFirebase(index);
@@ -165,7 +165,7 @@ public class DataManager : MonoBehaviour
         {
             Debug.Log(data);
             reference.Child("GameData").Child(gameDataKey).Child("staticData").SetRawJsonValueAsync(data);
-        }  catch (Exception) { }
+        } catch (Exception) { }
     }
 
     public void UpdateUpgradeDataOnFirebase()
@@ -207,10 +207,22 @@ public class DataManager : MonoBehaviour
             }
             catch (Exception) { }
         }
-        
+
     }
 
-    public void AddStaticData(int lakiaroLevel, float progress, int time, int remainSwallowCount)
+    [Header("테스트 환경")]
+    public int tempLakiarolevel = 1;
+    public float tempProgress = 100f;
+    public int tempTime = 60;
+    public int tempRemainSwallowCount = 10;
+
+    public void tempTest_AddStaticData()
+    {
+        AddStaticData(tempLakiarolevel, tempProgress, tempTime, tempRemainSwallowCount);
+        UIManager.Instance.lobby_UI.static_UI.GetComponent<Static_UI>().test(tempLakiarolevel);
+    }
+
+    public void AddStaticData(int lakiaroLevel, float progress, int time, int useSwallowCount)
     {
         // Static_Game 데이터 추가
 
@@ -220,14 +232,19 @@ public class DataManager : MonoBehaviour
             gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Perfect_Dig_Lakiaro_Time += 1;
         }
         gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Perfect_Dig_Rate =
-            (gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Perfect_Dig_Lakiaro_Time / gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time) * 100f;
+            ((float)gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Perfect_Dig_Lakiaro_Time / (float)gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time) * 100f;
         if(gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Min_dameged_Lakiaro_Productivity > progress)
         {
             gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Min_dameged_Lakiaro_Productivity = progress;
         }
-        gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Avg_dameged_Lakiaro_Productivity =
-            ((gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Avg_dameged_Lakiaro_Productivity * (gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time - 1)) + progress)
-            / (float)gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time * 100f;
+        if(progress < 100f)
+        {
+            gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Avg_dameged_Lakiaro_Productivity =
+               ((gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Avg_dameged_Lakiaro_Productivity
+               * (gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time - 1 - gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Perfect_Dig_Lakiaro_Time)) + progress)
+               / gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time;
+        }
+        
 
         // Static_Time 데이터 추가
 
@@ -236,20 +253,22 @@ public class DataManager : MonoBehaviour
             gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Time.Min_Dig_Time = time;
         }
         gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Time.Avg_Dig_Time =
-            (int)((((gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Time.Avg_Dig_Time * (float)(gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time - 1)) + time)
-            / gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time) * 100f);
+            (int)(((gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Time.Avg_Dig_Time * (float)(gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time - 1)) + time)
+            / gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time);
 
         // Static_ETC 데이터 추가
 
-        if(gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Min_Swallowly_Dig_Count > remainSwallowCount)
+        if(gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Min_Swallowly_Dig_Count > useSwallowCount)
         {
-            gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Min_Swallowly_Dig_Count = remainSwallowCount;
+            gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Min_Swallowly_Dig_Count = useSwallowCount;
         }
-        if (gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Max_Swallowly_Dig_Count < remainSwallowCount)
+        if (gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Max_Swallowly_Dig_Count < useSwallowCount)
         {
-            gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Max_Swallowly_Dig_Count = remainSwallowCount;
+            gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Max_Swallowly_Dig_Count = useSwallowCount;
         }
-
+        gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Avg_Swallowly_Dig_Count =
+            ((gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_ETC.Avg_Swallowly_Dig_Count * (gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time - 1)) + useSwallowCount)
+            / gameData.staticData.LakiaroStaticData[lakiaroLevel].Static_Game.Found_Lakiaro_Time;
         UpdateStaticDataOnFirebase();
 
     }
@@ -373,6 +392,7 @@ public class DataManager : MonoBehaviour
                     AddNewPlayer(_userID, GameManager.Instance.googleManager.GetFirebaseUserName());
                     Debug.LogError("Player data is not Exist");
                 }
+                GameManager.Instance.googleManager.btn.SetActive(true);
             }
         });
     }
@@ -397,7 +417,6 @@ public class DataManager : MonoBehaviour
 
                 if (snapShot.Value != null)
                 {
-                    Debug.Log(snapShot.GetRawJsonValue());
                     gameData = JsonUtility.FromJson<GameData>(snapShot.GetRawJsonValue());
                     Debug.Log("GameData is Exist and aync Completed");
                 }
@@ -406,6 +425,7 @@ public class DataManager : MonoBehaviour
                     AddNewGameData();
                     Debug.LogWarning("Game data is not Exist");
                 }
+                GameManager.Instance.googleManager.btn.SetActive(true);
             }
         });
     }
@@ -413,6 +433,7 @@ public class DataManager : MonoBehaviour
     bool canBuy = false;
     public void CheckGold(long price)
     {
+        Debug.Log(price);
         StartCoroutine(CheckGoldCoroutine(price));
     }
     IEnumerator CheckGoldCoroutine(long price)
@@ -440,7 +461,8 @@ public class DataManager : MonoBehaviour
                 }
                 else
                 {
-                    if(price < (long)snapshot.Value)
+                    gameData.playerData.Gold = (long)snapshot.Value;
+                    if (price <= (long)snapshot.Value)
                     {
                         Debug.LogWarning("구매 가능");
                         UIManager.Instance.lobby_UI.shop_UI.GetComponent<Shop_UI>().Upgrade();
@@ -451,6 +473,7 @@ public class DataManager : MonoBehaviour
                         UIManager.Instance.lobby_UI.shop_UI.GetComponent<Shop_UI>().Alert("골드가 부족합니다.");
                     }
                 }
+                GameManager.Instance.LoadingFinish();
                 istask = true;
             }
         });
@@ -462,6 +485,7 @@ public class DataManager : MonoBehaviour
             if(timer > 10f)
             {
                 UIManager.Instance.lobby_UI.shop_UI.GetComponent<Shop_UI>().Alert("서버 통신 시간 초과.");
+                GameManager.Instance.LoadingFinish();
                 break;
             }
         }

@@ -7,6 +7,8 @@ public class Map_UI : MonoBehaviour
     public RectTransform rectTransform;
     public LaKiaroInfo_UI lakiaroInfo;
     Vector3 oldPos, newPos;
+    [SerializeField]
+    float speed = 1f;
 
     public void OnBeginDrag()
     {
@@ -34,7 +36,7 @@ public class Map_UI : MonoBehaviour
 
         Vector3 cPos = newPos - oldPos;
         cPos.y = 0;
-        cPos.x = Mathf.Clamp(rectTransform.anchoredPosition.x + cPos.x * 0.5f, -764, 764);
+        cPos.x = Mathf.Clamp(rectTransform.anchoredPosition.x + cPos.x * speed, -764, 764);
         rectTransform.anchoredPosition = cPos;
         oldPos = newPos;
     }

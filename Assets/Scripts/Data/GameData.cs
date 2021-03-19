@@ -49,7 +49,7 @@ public class LakiaroGameData
     [SerializeField]
     private int currLevel;
     [SerializeField]
-    private int currRemainTryTime, hintCount;
+    private int currRemainTryTime, hintCount, useSwallowCount;
     [SerializeField]
     private int manosHoeDeeplyDig;
     [SerializeField]
@@ -64,6 +64,7 @@ public class LakiaroGameData
     public int CurrLevel { get => currLevel; set => currLevel = value; }
     public int CurrRemainTryTime { get => currRemainTryTime; set => currRemainTryTime = value; }
     public int HintCount { get => hintCount; set => hintCount = value; }
+    public int UseSwallowCount { get => useSwallowCount; set => useSwallowCount = value; }
     public int ManosHoeDeeplyDig { get => manosHoeDeeplyDig; set => manosHoeDeeplyDig = value; }
     public float Progress { get => progress; set => progress = value; }
     public float Timer { get => timer; set => timer = value; }
@@ -144,7 +145,7 @@ public class Static_Game
     [SerializeField]
     private float perfect_Dig_Rate = 0;
     [SerializeField]
-    private float min_dameged_Lakiaro_Productivity = 0;
+    private float min_dameged_Lakiaro_Productivity = float.MaxValue;
     [SerializeField]
     private float avg_dameged_Lakiaro_Productivity = 0;
 
@@ -158,7 +159,7 @@ public class Static_Game
 public class Static_Time
 {
     [SerializeField]
-    private int min_Dig_Time = 0;
+    private int min_Dig_Time = int.MaxValue;
     [SerializeField]
     private int avg_Dig_Time = 0;
 
@@ -169,7 +170,7 @@ public class Static_Time
 public class Static_ETC
 {
     [SerializeField]
-    private int min_Swallowly_Dig_Count = 0;
+    private int min_Swallowly_Dig_Count = int.MaxValue;
     [SerializeField]
     private int max_Swallowly_Dig_Count = 0;
     [SerializeField]

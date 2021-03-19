@@ -72,8 +72,7 @@ public class GoogleManager : MonoBehaviour
 
             FirebaseUser user = task.Result;
             Debug.LogFormat("사용자가 성공적으로 로그인함 : {0}  ({1})", user.DisplayName, user.UserId);
-
-            btn.SetActive(true);
+            
             GameManager.Instance.dataManager.StartFirebase();
         });
     }
