@@ -21,6 +21,8 @@ public class NewGame_UI : MonoBehaviour
     public RectTransform[] lakiaroPos;
     public RectTransform loading;
 
+    public GameObject helper2Obj;
+
     public enum State
     {
         None,
@@ -28,6 +30,7 @@ public class NewGame_UI : MonoBehaviour
         InfoUI,
         DailyInfo,
         CurrDinggingUI,
+        Helper
     }
     public State currState;
 
@@ -37,6 +40,11 @@ public class NewGame_UI : MonoBehaviour
     {
         StopAllCoroutines();
         LoadData();
+        if (!GameManager.Instance.dataManager.gameData.playerData.HelperEvent2)
+        {
+            GameManager.Instance.dataManager.gameData.playerData.HelperEvent2 = true;
+            CallHelper2();
+        }
     }
 
     void OnDisable()
@@ -146,6 +154,10 @@ public class NewGame_UI : MonoBehaviour
                     if (GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime < 0)
                     {
                         CreateNewLakiaro(i);
+                    }
+                    else
+                    {
+                        lakiaroBtn[i].ChangeCoolTimeText(GameManager.Instance.dataManager.gameData.LakiaroInfoDataList[i].CoolTime);
                     }
                 }
                 else
@@ -365,5 +377,17 @@ public class NewGame_UI : MonoBehaviour
         currDigAnim.gameObject.SetActive(true);
         currDigAnim.SetParent(lakiaroBtn[index].transform);
         currDigAnim.anchoredPosition = Vector3.zero;
+    }
+
+    public void CallHelper2()
+    {
+        currState = State.Helper;
+        helper2Obj.SetActive(true);
+    }
+
+    public void OffHelper2()
+    {
+        currState = State.None;
+        helper2Obj.SetActive(false);
     }
 }

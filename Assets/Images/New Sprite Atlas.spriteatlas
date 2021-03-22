@@ -31,11 +31,11 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 1bf20a6d0bad8c8469e76d847956dc1a, type: 3}
-    totalSpriteSurfaceArea: 10970615
+    totalSpriteSurfaceArea: 11489015
     bindAsDefault: 1
     storedHash:
       serializedVersion: 2
-      Hash: 5b21677f36371267459cace9ed8e8d24
+      Hash: 5da3c6608700cefdb20436598fd0e3a6
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: ce2bbab03f7c930449dc62adaea2a84d, type: 3}
@@ -54,6 +54,12 @@ SpriteAtlas:
   - {fileID: -1603128876111191756, guid: bcafc452a797b994e911bf307eaf631c, type: 3}
   - {fileID: 1888647446610107602, guid: bcafc452a797b994e911bf307eaf631c, type: 3}
   - {fileID: 2371935438544373715, guid: bcafc452a797b994e911bf307eaf631c, type: 3}
+  - {fileID: 5093384728157848506, guid: f9f95cc20da767e4b852c1bc2c1fb500, type: 3}
+  - {fileID: 7387014785835021380, guid: f9f95cc20da767e4b852c1bc2c1fb500, type: 3}
+  - {fileID: -8830631827948125259, guid: f9f95cc20da767e4b852c1bc2c1fb500, type: 3}
+  - {fileID: 8913487870443593254, guid: f9f95cc20da767e4b852c1bc2c1fb500, type: 3}
+  - {fileID: -3952937185757198653, guid: f9f95cc20da767e4b852c1bc2c1fb500, type: 3}
+  - {fileID: -2269696116885840314, guid: f9f95cc20da767e4b852c1bc2c1fb500, type: 3}
   - {fileID: -7167903241650779449, guid: 6c57b533e90c7474ebf1e8b65333aa55, type: 3}
   - {fileID: 6620578356024548496, guid: 6c57b533e90c7474ebf1e8b65333aa55, type: 3}
   - {fileID: -5742038745608774589, guid: 6c57b533e90c7474ebf1e8b65333aa55, type: 3}
@@ -497,6 +503,12 @@ SpriteAtlas:
   - Lakiaro_Flower_2
   - Lakiaro_Flower_9
   - Lakiaro_Flower_8
+  - mask1_5
+  - mask1_4
+  - mask1_1
+  - mask1_0
+  - mask1_3
+  - mask1_2
   - roots_70
   - roots_71
   - roots_72

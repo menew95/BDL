@@ -211,10 +211,7 @@ public class LakiaroManager : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyUp(KeyCode.F))
-            {
-                StartCoroutine(FinishDig(currLakiaroLevel, true));
-            }
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
             if (clickPause)
             {
                 clickPause = false;
@@ -602,6 +599,15 @@ public class LakiaroManager : MonoBehaviour
         gamePause = false;
     }
 
+    IEnumerator FirstGameStart()
+    {
+        inGame_UI.CallHelper();
+        while (!inGame_UI.isFinishHelper) yield return null;
+
+        StartCoroutine(StartGameCoroutine());
+        StartGame();
+    }
+
     public void GameSetting(int _lakiaroLevel, bool isLoad, bool _isDailyGame)
     {
         inGame_UI.SetUISize();
@@ -630,7 +636,16 @@ public class LakiaroManager : MonoBehaviour
         }
 
         inGame_UI.UpdateRemainTexts(currRemainDirt, currRemainRoot, currRemainPebble, currRemainTryTime, currLakiaroLevel, lakiaroLevel, progress);
-        StartCoroutine(StartGameCoroutine());
+        if (!GameManager.Instance.dataManager.gameData.playerData.HelperEvent)
+        {
+            startGame = false;
+            GameManager.Instance.dataManager.gameData.playerData.HelperEvent = true;
+            StartCoroutine(FirstGameStart());
+        }
+        else
+        {
+            StartCoroutine(StartGameCoroutine());
+        }
     }
 
     IEnumerator SetTimer()
@@ -1941,7 +1956,6 @@ public class LakiaroManager : MonoBehaviour
     public void SaveGameData()
     {
         StopAllCoroutines();
-        GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData = true;
 
         if (isDailyGame)
         {
@@ -1949,9 +1963,9 @@ public class LakiaroManager : MonoBehaviour
             return;
         }
 
+        GameManager.Instance.dataManager.gameData.playerData.HasSaveGameData = true;
         if (GameManager.Instance.dataManager.gameData.lakiaroGameData == null) GameManager.Instance.dataManager.gameData.lakiaroGameData = new LakiaroGameData();
         GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot.Clear();
-        //GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot = lakiaroRoot;
         for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
         {
             GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroRoot.Add(new LakiaroListData());
@@ -1969,7 +1983,6 @@ public class LakiaroManager : MonoBehaviour
                 GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists[i].rootList.Add(new Root(rootLists[i].rootList[j]));
             }
         }
-        //GameManager.Instance.dataManager.gameData.lakiaroGameData.RootLists = rootLists;
 
         GameManager.Instance.dataManager.gameData.lakiaroGameData.LakiaroLevel = lakiaroLevel;
         GameManager.Instance.dataManager.gameData.lakiaroGameData.CurrLevel = currLakiaroLevel;
@@ -2017,7 +2030,6 @@ public class LakiaroManager : MonoBehaviour
                 rootLists[i].rootList.Add(root);
             }
         }
-        //rootLists = GameManager.Instance.dataManager.gameData.dailyChallengeData.RootLists;
 
         lakiaroLevel = GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel;
         currLakiaroLevel = GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrLevel;
@@ -2033,7 +2045,6 @@ public class LakiaroManager : MonoBehaviour
     public void SaveGameDailyData()
     {
         GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroRoot.Clear();
-        //GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroRoot = lakiaroRoot;
         for (int i = 0; i < lakiaroRoot.GetLength(0); i++)
         {
             GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroRoot.Add(new LakiaroListData());
@@ -2051,7 +2062,6 @@ public class LakiaroManager : MonoBehaviour
                 GameManager.Instance.dataManager.gameData.dailyChallengeData.RootLists[i].rootList.Add(new Root(rootLists[i].rootList[j]));
             }
         }
-        //GameManager.Instance.dataManager.gameData.dailyChallengeData.RootLists = rootLists;
 
         GameManager.Instance.dataManager.gameData.dailyChallengeData.LakiaroLevel = lakiaroLevel;
         GameManager.Instance.dataManager.gameData.dailyChallengeData.CurrLevel = currLakiaroLevel;

@@ -83,12 +83,18 @@ public class PlayerData
     bool isDailyChallengeClear = false;
     [SerializeField]
     bool isDailyChallengeCurrDig = false;
+    [SerializeField]
+    bool helperEvent = false;
+    [SerializeField]
+    bool helperEvent2 = false;
 
     public string UserIndate { get => userIndate; set => userIndate = value; }
     public long Gold { get => gold; set => gold = value; }
     public bool IsDailyChallengeClear { get => isDailyChallengeClear; set => isDailyChallengeClear = value; }
     public bool IsDailyChallengeCurrDig { get => isDailyChallengeCurrDig; set => isDailyChallengeCurrDig = value; }
     public bool HasSaveGameData { get => hasSaveGameData; set => hasSaveGameData = value; }
+    public bool HelperEvent { get => helperEvent; set => helperEvent = value; }
+    public bool HelperEvent2 { get => helperEvent2; set => helperEvent2 = value; }
 }
 
 [System.Serializable]

@@ -39,6 +39,8 @@ public class InGame_UI : MonoBehaviour
 
     public Text timerText;
 
+    public GameObject helperObj;
+    public bool isFinishHelper;
 
     void OnDisable()
     {
@@ -80,6 +82,7 @@ public class InGame_UI : MonoBehaviour
         viewMax = Camera.main.ScreenToViewportPoint(max);
         viewMin = new Vector3(0f, (two[0].GetComponent<RectTransform>().sizeDelta.y / 1920f), 0f);
         viewMax = new Vector3(1f, (1920f - two[1].GetComponent<RectTransform>().sizeDelta.y) / 1920f, 0f);
+        helperObj.GetComponent<Helper_UI>().SetHelperSize(topH, botH);
     }
     
     public void UpdateTimer(int time)
@@ -276,5 +279,16 @@ public class InGame_UI : MonoBehaviour
     {
         GameManager.Instance.AdPause();
         alertObj.SetActive(true);
+    }
+
+    public void CallHelper()
+    {
+        isFinishHelper = false;
+        helperObj.SetActive(true);
+    }
+    public void OffHelper()
+    {
+        isFinishHelper = true;
+        helperObj.SetActive(false);
     }
 }

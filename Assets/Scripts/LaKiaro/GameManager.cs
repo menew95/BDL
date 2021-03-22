@@ -81,6 +81,10 @@ public class GameManager : MonoBehaviour
                     {
                         UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OffCurrDigging();
                     }
+                    else if(UIManager.Instance.newGame_UI.currState == NewGame_UI.State.Helper)
+                    {
+                        UIManager.Instance.newGame_UI.GetComponent<NewGame_UI>().OffHelper2();
+                    }
                 }
                 else if (UIManager.Instance.lobby_UI.currState == Lobby_UI.LobbyState.Shop)
                 {
@@ -95,22 +99,20 @@ public class GameManager : MonoBehaviour
             {
                 if (lakiaroManager.gamePause)
                 {
-                    SaveGame();
+                    if (lakiaroManager.inGame_UI.helperObj.activeSelf)
+                    {
+                        lakiaroManager.inGame_UI.helperObj.GetComponent<Helper_UI>().Next();
+                    }
+                    else
+                    {
+                        SaveGame();
+                    }
                 }
                 else
                 {
                     Pause();
                 }
             }
-        }
-        if (Input.GetKeyUp(KeyCode.S))
-        {
-            dataManager.tempTest_AddStaticData();
-        }
-
-        if (Input.GetKeyUp(KeyCode.C))
-        {
-            dataManager.CheckGold(2000);
         }
     }
 
